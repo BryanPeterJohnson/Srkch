@@ -8,7 +8,18 @@ import { useState, useRef, useEffect } from "react";
 const NAV_ITEMS = [
     {
         label: "Our Services",
-        links: ["Personal Care", "Skilled Nursing", "Therapy Services", "Companion Care", "Pediatric Care"],
+        links: [
+            "Personal Care & Daily Living Assistance",
+            "Companion & Social Engagement Care",
+            "Memory Care & Safety Monitoring",
+            "Household & Nutrition Support",
+            "Family Respite & Caregiver Support",
+            "Disability Support Services",
+            "Recovery & Post-Hospital Support",
+            "Medication Reminders & Wellness Checks",
+            "Transportation & Appointment Assistance",
+            "Pediatric & Child Care Services",
+        ],
     },
     {
         label: "Find Care",
@@ -147,7 +158,7 @@ export default function Header() {
             </div>
 
             {/* ── Main header ── */}
-            <header className="w-full bg-white border-b border-gray-200 sticky top-0 left-0 right-0 z-[100] shadow-sm">                <div className="max-w-[1400px] mx-auto px-8 h-[46px] flex items-center justify-between">
+            <header className="w-full bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-[100] shadow-sm">                   <div className="max-w-[1400px] mx-auto px-8 h-[46px] flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center">
                     <Image
@@ -161,46 +172,64 @@ export default function Header() {
                 </Link>
 
                 {/* Desktop nav */}
+                {/* Desktop nav */}
                 <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8">
                     {NAV_ITEMS.map((item) => (
                         <div key={item.label} className="relative">
-                            <button
-                                className={`flex items-center gap-1 text-[13px] font-medium hover:text-blue-700 transition-colors ${openDropdown === item.label ? "text-blue-700" : "text-gray-800"
-                                    }`}
-                                onClick={() =>
-                                    setOpenDropdown(openDropdown === item.label ? null : item.label)
-                                }
-                                aria-expanded={openDropdown === item.label}
-                            >
-                                {item.label}
-                                <ChevronDown
-                                    size={14}
-                                    className={`transition-transform duration-200 ${openDropdown === item.label ? "rotate-180" : ""
-                                        }`}
-                                />
-                            </button>
 
-                            {/* Dropdown */}
-                            {openDropdown === item.label && (
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-[110]">
-                                    {/* Arrow */}
-                                    <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-200 rotate-45" />
-                                    {item.links.map((link) => (
-                                        <Link
-                                            key={link}
-                                            href="#"
-                                            className="block px-4 py-2.5 text-[13px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                                            onClick={() => setOpenDropdown(null)}
-                                        >
-                                            {link}
-                                        </Link>
-                                    ))}
-                                </div>
+                            {/* Careers = Direct Link */}
+                            {item.label === "Careers" ? (
+                                <Link
+                                    href="/careers"
+                                    className="flex items-center gap-1 text-[13px] font-medium text-gray-800 hover:text-blue-700 transition-colors"
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <>
+                                    <button
+                                        className={`flex items-center gap-1 text-[13px] font-medium hover:text-blue-700 transition-colors ${openDropdown === item.label
+                                            ? "text-blue-700"
+                                            : "text-gray-800"
+                                            }`}
+                                        onClick={() =>
+                                            setOpenDropdown(
+                                                openDropdown === item.label ? null : item.label
+                                            )
+                                        }
+                                        aria-expanded={openDropdown === item.label}
+                                    >
+                                        {item.label}
+                                        <ChevronDown
+                                            size={14}
+                                            className={`transition-transform duration-200 ${openDropdown === item.label
+                                                ? "rotate-180"
+                                                : ""
+                                                }`}
+                                        />
+                                    </button>
+
+                                    {openDropdown === item.label && (
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-[110]">
+                                            <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-gray-200 rotate-45" />
+
+                                            {item.links.map((link) => (
+                                                <Link
+                                                    key={link}
+                                                    href="#"
+                                                    onClick={() => setOpenDropdown(null)}
+                                                    className="block w-full px-4 py-3 text-[13px] text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-b border-gray-100 last:border-b-0"
+                                                >
+                                                    {link}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     ))}
 
-                    {/* Search trigger */}
                     <button
                         onClick={() => setSearchOpen(true)}
                         aria-label="Open search"
