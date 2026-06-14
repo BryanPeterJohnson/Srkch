@@ -43,7 +43,7 @@ const heroSlides = [
         headline: "Care Beyond Compare— So You Can Focus on What Matters Most",
         sub: "Driven by purpose and led by our hearts, we deliver the highest-quality home health care to keep you or your loved ones safe, comfortable, and independent.",
         cta1: { label: "Find a Service ♥", to: "/services" },
-        cta2: { label: "Explore Careers ↗", to: "/careers" },
+        cta2: { label: "Get Started ↗", to: "/get-started" },
     },
     {
         img: "https://images.unsplash.com/photo-1758686253708-f0e21317d2aa?w=1440&h=600&fit=crop&auto=format",
@@ -297,22 +297,22 @@ function HeroSlider() {
                             </div>
 
                             {/* STATIC BUTTONS */}
-                            <div className="flex gap-3 sm:gap-6 flex-wrap items-center">
-                                <PrimaryButton
-                                    onClick={() => {
-                                        document.getElementById("services")?.scrollIntoView({
-                                            behavior: "smooth",
-                                            block: "start",
-                                        });
-                                    }}
-                                >
-                                    Find a Service ♥
-                                </PrimaryButton>
+                      <div className="flex gap-3 sm:gap-6 flex-wrap items-center">
+    <PrimaryButton
+        onClick={() => {
+            document.getElementById("services")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }}
+    >
+        Find a Service ♥
+    </PrimaryButton>
 
-                                <SecondaryButton to="/careers">
-                                    Explore Careers ↗
-                                </SecondaryButton>
-                            </div>
+    <SecondaryButton to="/get-started">
+        Get Started ↗
+    </SecondaryButton>
+</div>
 
                         </div>
                     </div>
