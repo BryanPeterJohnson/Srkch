@@ -27,8 +27,9 @@ function ApplyCard({
   liked: boolean;
   setLiked: (v: boolean) => void;
   onApply: () => void;
-  leftColRef: React.RefObject<HTMLDivElement>;
-}) {
+  // Update this line:
+  leftColRef: React.RefObject<HTMLDivElement | null>; 
+}){
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const initialTopRef = useRef<number | null>(null);
