@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-    ChevronDown,
+
     ChevronLeft,
     ChevronRight,
     Plus,
@@ -15,12 +15,12 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
-    PillLabel,
+
     SectionHeader,
     PrimaryButton,
     SecondaryButton,
     CTABanner,
-    StatsBar,
+
     PaymentBanner,
 } from "@/components/shared";
 import {
@@ -31,7 +31,6 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import ScrollReveal from "../components/animations/ScrollReveal";
 
 
 
@@ -231,7 +230,7 @@ function HeroSlider() {
     const activeImage = heroSlides[current].img;
 
     return (
-        <section className="relative h-[calc(100vh-80px)] min-h-[580px] max-h-[760px] overflow-hidden">
+<section className="relative h-[55vh] min-h-[500px] max-h-[550px] overflow-hidden">
 
             {/* SINGLE BACKGROUND IMAGE (prevents flick) */}
             <Image
@@ -342,7 +341,7 @@ function HeroSlider() {
 
 // ─── Services by Category ─────────────────────────────────────────────────────
 function ServicesByCategory() {
-    const [openCat, setOpenCat] = useState<number | null>(0);
+    const [openCat, setOpenCat] = useState<number | null>(null);
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -350,7 +349,7 @@ function ServicesByCategory() {
     const CARD_GAP = 20;
 
     const currentCat = categoryData[openCat ?? 0];
-    const total = currentCat.services.length;
+    const total = currentCat?.services?.length ?? 0;
 
     const handleCatClick = (i: number) => {
         setOpenCat(openCat === i ? null : i);
@@ -370,9 +369,9 @@ function ServicesByCategory() {
     }, [slideIndex]);
 
     return (
-        <section className="py-16 sm:py-10 lg:py-12 px-4 sm:px-6 bg-white"
-            id="services">
+        <section className="py-16 sm:py-10 lg:py-12 px-4 sm:px-6 bg-white font-source-sans" id="services">
             <div className="max-w-[1200px] mx-auto">
+                
                 {/* Header */}
                 <div className="text-center mb-10 sm:mb-12">
                     <motion.h2
@@ -380,12 +379,8 @@ function ServicesByCategory() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6 }}
-                        className="text-[#1A1A2E] mb-4"
-                        style={{
-                            fontFamily: "'Playfair Display', serif",
-                            fontSize: "clamp(26px, 3vw, 40px)",
-                            fontWeight: 700,
-                        }}
+                        className="text-[#1A1A2E] mb-4 font-serif text-[clamp(26px,3vw,40px)] font-bold"
+                        style={{ fontFamily: "'Playfair Display', serif" }}
                     >
                         SRK&apos;s Services by Category
                     </motion.h2>
@@ -395,83 +390,76 @@ function ServicesByCategory() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6, delay: 0.15 }}
-                        className="text-[#6B7280] mx-auto text-base sm:text-lg"
-                        style={{
-                            fontFamily: "'Source Sans 3', sans-serif",
-                            maxWidth: 700,
-                        }}
+                        className="text-[#6B7280] mx-auto text-base sm:text-lg max-w-[700px] leading-relaxed"
+                        style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                     >
-                        SRK's offers a wide range of home care services for every age and stage
+                        SRK&apos;s offers a wide range of home care services for every age and stage
                         of life, tailored to your unique needs, preferences, and goals.
                         Explore our offerings by age group.
                     </motion.p>
                 </div>
 
                 {/* Two-column layout */}
-                <div className="flex flex-col lg:flex-row gap-7 justify-between items-start">                    {/* LEFT: Accordion */}
+                <div className="flex flex-col lg:flex-row gap-7 justify-between items-start">
+                    
+                    {/* LEFT: Accordion */}
                     <div className="w-full lg:w-[320px] shrink-0">
                         {categoryData.map((cat, i) => {
                             const isOpen = openCat === i;
                             const CatIcon = cat.Icon;
                             return (
-                                <div key={cat.id} className="border-b border-[#E5E7EB] pb-2">
+                                <div key={cat.id} className="border-b border-gray-200 pb-2">
                                     <button
-                                        className="w-full flex items-center justify-between py-4 text-left"
+                                        className="w-full flex items-center justify-between py-4 text-left group"
                                         onClick={() => handleCatClick(i)}
                                     >
                                         <div className="flex items-start gap-3 pr-3">
                                             <CatIcon
                                                 size={18}
-                                                className="flex-shrink-0 mt-0.5"
-                                                style={{ color: isOpen ? "#005B8E" : "#6B7280" }}
+                                                className={`flex-shrink-0 mt-1 transition-colors ${
+                                                    isOpen ? "text-[#005B8E]" : "text-gray-500"
+                                                }`}
                                             />
                                             <div>
                                                 <div
-                                                    className="font-semibold transition-colors"
-                                                    style={{
-                                                        fontFamily: "'Source Sans 3', sans-serif",
-                                                        fontSize: 20,
-                                                        color: isOpen ? "#005B8E" : "#1A1A2E",
-                                                    }}
+                                                    className={`text-[20px] font-semibold transition-colors ${
+                                                        isOpen ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
+                                                    }`}
+                                                    style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                                 >
                                                     {cat.title}
                                                 </div>
                                                 <div
-                                                    className="text-[#6B7280] mt-0.5"
-                                                    style={{
-                                                        fontFamily: "'Source Sans 3', sans-serif",
-                                                        fontSize: 14,
-                                                    }}
+                                                    className="text-gray-500 text-[14px] mt-0.5"
+                                                    style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                                 >
                                                     {cat.ageLabel}
                                                 </div>
                                             </div>
                                         </div>
                                         {isOpen ? (
-                                            <Minus size={20} className="text-[#6B7280] flex-shrink-0" />
+                                            <Minus size={20} className="text-gray-500 flex-shrink-0" />
                                         ) : (
-                                            <Plus size={20} className="text-[#6B7280] flex-shrink-0" />
+                                            <Plus size={20} className="text-gray-500 flex-shrink-0" />
                                         )}
                                     </button>
 
-                                    {/* Bullet list */}
+                                    {/* Bullet list container with conditional dynamic height */}
                                     <div
-                                        className="overflow-hidden transition-all duration-250"
-                                        style={{ maxHeight: isOpen ? 300 : 0 }}
+                                        className="overflow-hidden transition-all duration-300 ease-in-out"
+                                        style={{ maxHeight: isOpen ? "400px" : "0px" }}
                                     >
-                                        <ul className="pb-4 pl-9 space-y-1.5">
+                                        <ul className="pb-4 pl-9 space-y-2">
                                             {cat.services.map((svc, si) => (
                                                 <li key={svc.title}>
                                                     <button
                                                         onClick={() => setSlideIndex(si)}
-                                                        className="text-left text-sm transition-all hover:underline"
-                                                        style={{
-                                                            fontFamily: "'Source Sans 3', sans-serif",
-                                                            fontSize: 15,
-                                                            color:
-                                                                slideIndex === si ? "#1A1A2E" : "#1A1A2E",
-                                                            fontWeight: slideIndex === si ? 700 : 400,
-                                                        }}
+                                                        className={`text-left text-[15px] transition-all hover:underline ${
+                                                            slideIndex === si 
+                                                                ? "text-[#1A1A2E] font-bold" 
+                                                                : "text-gray-600 font-normal"
+                                                        }`}
+                                                        style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                                     >
                                                         • {svc.title}
                                                     </button>
@@ -485,72 +473,52 @@ function ServicesByCategory() {
                     </div>
 
                     {/* RIGHT: Card Slider + Navigation */}
-                    <div className="w-full max-w-[800px] flex flex-col items-center">
+                    <div className="w-full max-w-[800px] flex flex-col items-center overflow-hidden">
 
-                        {/* Slider */}
+                        {/* Slider Container */}
                         <div
                             ref={sliderRef}
-                            className="flex gap-5 overflow-x-auto pb-2 scroll-smooth w-full"
+                            className="flex gap-5 overflow-x-auto pb-4 scroll-smooth w-full no-scrollbar"
                             style={{
                                 scrollbarWidth: "none",
                                 msOverflowStyle: "none",
                             }}
                         >
-                            {currentCat.services.map((svc, i) => (
+                            {currentCat?.services.map((svc, i) => (
                                 <Link
                                     key={`${openCat}-${i}`}
                                     href={svc.path}
-                                    className="flex-shrink-0 flex flex-col overflow-hidden group transition-all duration-300 hover:-translate-y-1"
-                                    style={{
-                                        width: CARD_W,
-                                        height: 380,
-                                        borderRadius: 16,
-                                        background: "white",
-                                        border: "1px solid #E5E7EB",
-                                        boxShadow: "0px 4px 20px rgba(0, 91, 142, 0.10)",
-                                    }}
+                                    className="group flex flex-col flex-shrink-0 overflow-hidden h-[420px] rounded-2xl bg-white border border-gray-200 shadow-[0_4px_20px_rgba(0,91,142,0.10)] transition-all duration-300 hover:-translate-y-1"
+                                    style={{ width: CARD_W }}
                                 >
-                                    {/* Top text */}
-                                    <div className="p-5" style={{ height: 140, flexShrink: 0 }}>
-                                        <div
-                                            className="font-semibold text-[#1A1A2E] mb-2"
-                                            style={{
-                                                fontFamily: "'Source Sans 3', sans-serif",
-                                                fontSize: 18,
-                                            }}
+                                    {/* Top text container */}
+                                    <div className="p-5 flex flex-col flex-shrink-0 justify-start">
+                                        <h3
+                                            className="font-semibold text-[#1A1A2E] mb-2 line-clamp-2 min-h-[54px] text-[18px] leading-snug"
+                                            style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                         >
                                             {svc.title}
-                                        </div>
+                                        </h3>
 
                                         <p
-                                            className="text-[#6B7280] leading-relaxed"
-                                            style={{
-                                                fontFamily: "'Source Sans 3', sans-serif",
-                                                fontSize: 14,
-                                                display: "-webkit-box",
-                                                WebkitLineClamp: 3,
-                                                WebkitBoxOrient: "vertical",
-                                                overflow: "hidden",
-                                            }}
+                                            className="text-[#6B7280] leading-relaxed line-clamp-3 text-[14px]"
+                                            style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                         >
                                             {svc.desc}
                                         </p>
                                     </div>
 
-                                    {/* Image */}
-                                    <div
-                                        className="relative flex-1 overflow-hidden"
-                                        style={{ borderRadius: "0 0 16px 16px" }}
-                                    >
+                                    {/* Image container */}
+                                    <div className="relative flex-1 min-h-[160px] overflow-hidden mt-auto rounded-b-2xl">
                                         <Image
                                             src={svc.img}
                                             alt={svc.title}
                                             fill
                                             className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                                            sizes="280px"
+                                            sizes="350px"
                                         />
 
-                                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E5E7EB] text-sm">
+                                        <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-sm">
                                             <span>{svc.icon}</span>
                                         </div>
                                     </div>
@@ -558,25 +526,22 @@ function ServicesByCategory() {
                             ))}
                         </div>
 
-                        {/* Navigation (CENTERED UNDER FULL WIDTH) */}
-                        <div className="w-full flex justify-center mt-6">
-                            <div className="flex items-center gap-4 mr-90">
-
+                        {/* Navigation Buttons */}
+                        <div className="w-full flex justify-center mt-6 mr-95">
+                            <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => canPrev && setSlideIndex(slideIndex - 1)}
                                     disabled={!canPrev}
-                                    className="w-11 h-11 rounded-full flex items-center justify-center border border-[#D1D5DB] bg-white transition-all"
-                                    style={{
-                                        opacity: canPrev ? 1 : 0.4,
-                                        cursor: canPrev ? "pointer" : "not-allowed",
-                                    }}
+                                    className={`w-11 h-11 rounded-full flex items-center justify-center border border-gray-300 bg-white transition-all ${
+                                        canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40超 cursor-not-allowed"
+                                    }`}
                                     aria-label="Previous card"
                                 >
-                                    <ChevronLeft size={18} color="#1A1A2E" />
+                                    <ChevronLeft size={18} className="text-[#1A1A2E]" />
                                 </button>
 
                                 <span
-                                    className="text-[#6B7280] text-sm"
+                                    className="text-[#6B7280] text-sm font-medium min-w-[110px] text-center"
                                     style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                 >
                                     {slideIndex + 1} of {total} Services
@@ -585,23 +550,20 @@ function ServicesByCategory() {
                                 <button
                                     onClick={() => canNext && setSlideIndex(slideIndex + 1)}
                                     disabled={!canNext}
-                                    className="w-11 h-11 rounded-full flex items-center justify-center transition-all"
-                                    style={{
-                                        background: canNext ? "#005B8E" : "#D1D5DB",
-                                        opacity: canNext ? 1 : 0.6,
-                                        cursor: canNext ? "pointer" : "not-allowed",
-                                    }}
+                                    className={`w-11 h-11 rounded-full flex items-center justify-center transition-all ${
+                                        canNext ? "bg-[#005B8E] text-white cursor-pointer hover:bg-[#004b75]" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    }`}
                                     aria-label="Next card"
                                 >
-                                    <ChevronRight size={18} color="white" />
+                                    <ChevronRight size={18} />
                                 </button>
-
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </section >
+        </section>
     );
 }
 

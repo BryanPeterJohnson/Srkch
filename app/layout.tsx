@@ -14,8 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="pt-[45px]">
+    // Added suppressHydrationWarning here to stop extension mismatch errors
+    <html lang="en" suppressHydrationWarning>
+      {/* Adjusted padding from pt-[45px] to pt-[64px] to match your header height */}
+      <body className="pt-[64px]">
         <LenisProvider>
           <Header />
           {children}

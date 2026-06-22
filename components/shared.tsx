@@ -87,9 +87,9 @@ export function PrimaryButton({
   children: ReactNode;
   icon?: boolean;
 }) {
-  const cls =
-    "inline-flex items-center gap-2 px-7 py-3.5 rounded-md text-white font-bold text-base transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#003A5C] hover:shadow-lg";
-
+ const cls =
+  "inline-flex items-center gap-2 px-7 py-3.5 rounded-md text-white font-bold text-base transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#003A5C] hover:shadow-lg cursor-pointer";
+ 
   const style = {
     background: "#005B8E",
     fontFamily: "'Source Sans 3', sans-serif",
@@ -145,18 +145,14 @@ export function SecondaryButton({
   white?: boolean;
 }) {
   const base =
-    "inline-flex items-center gap-2 px-7 py-3.5 rounded-md font-bold text-base transition-all duration-200";
+    "inline-flex items-center justify-center gap-2 px-10 py-3 rounded-md font-bold text-base transition-all duration-200";
 
   const cls = white
     ? `${base} border-2 border-white text-white hover:bg-white hover:text-[#005B8E]`
     : `${base} border-2 border-[#005B8E] text-[#005B8E] hover:bg-[#005B8E] hover:text-white`;
 
   if (to) {
-    return (
-      <Link href={to} className={cls}>
-        {children}
-      </Link>
-    );
+    return <Link href={to} className={cls}>{children}</Link>;
   }
 
   return <button className={cls}>{children}</button>;

@@ -1,61 +1,52 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, Search, X, Menu } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
 // ─── COLOR TOKENS ─────────────────────────────────────────────────────────────
-// Primary Navy  #003A5C
-// Mid Blue      #005B8E
-// Accent Teal   #00A693
+// Primary Navy:  #003A5C
+// Mid Blue:      #005B8E
+// Accent Teal:   #00A693
 // ─────────────────────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
   {
     label: "Our Services",
+    href: "/services",
     links: [
-      "Personal Care & Daily Living Assistance",
-      "Companion & Social Engagement Care",
-      "Memory Care & Safety Monitoring",
-      "Household & Nutrition Support",
-      "Family Respite & Caregiver Support",
-      "Disability Support Services",
-      "Recovery & Post-Hospital Support",
-      "Medication Reminders & Wellness Checks",
-      "Transportation & Appointment Assistance",
-      "Pediatric & Child Care Services",
+      { id: "1", label: "Personal Care & Daily Living Assistance", slug: "/services/1" },
+      { id: "2", label: "Companion & Social Engagement Care", slug: "/services/2" },
+      { id: "3", label: "Memory Care & Safety Monitoring", slug: "/services/3" },
+      { id: "4", label: "Household & Nutrition Support", slug: "/services/4" },
+      { id: "5", label: "Family Respite & Caregiver Support", slug: "/services/5" },
+      { id: "6", label: "Disability Support Services", slug: "/services/6" },
+      { id: "7", label: "Recovery & Post-Hospital Support", slug: "/services/7" },
+      { id: "8", label: "Medication Reminders & Wellness Checks", slug: "/services/8" },
+      { id: "9", label: "Transportation & Appointment Assistance", slug: "/services/9" },
+      { id: "10", label: "Pediatric & Child Care Services", slug: "/services/10" },
     ],
   },
-  {
-    label: "Find Care",
-    links: ["Search by Location", "Care Assessment", "Insurance & Billing", "Request a Consultation"],
-  },
-  {
-    label: "Careers",
-   href: "/careers",
-  },
-  {
-    label: "Employees",
-    links: ["Employee Portal", "Training & Education", "HR Resources", "Time & Attendance"],
-  },
-  {
-    label: "Work with Us",
-    links: ["Referral Partners", "Healthcare Facilities", "Payers & Insurers", "Become a Partner"],
-  },
-  {
-    label: "About SRK",
+  { 
+    label: "About Us", 
     href: "/about",
+    links: [
+      { id: "history", label: "History", slug: "/about/history" },
+      { id: "mission", label: "Mission", slug: "/about/mission" },
+      { id: "diversity", label: "Diversity", slug: "/about/diversity" },
+    ]
   },
+  { label: "Careers", href: "/careers" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export default function Header() {
-  const [searchOpen, setSearchOpen]       = useState(false);
-  const [mobileOpen, setMobileOpen]       = useState(false);
-  const [openDropdown, setOpenDropdown]   = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-  const dropdownRef   = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -68,11 +59,6 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Focus search input when overlay opens
-  useEffect(() => {
-    if (searchOpen) setTimeout(() => searchInputRef.current?.focus(), 50);
-  }, [searchOpen]);
-
   // Prevent body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -81,119 +67,89 @@ export default function Header() {
 
   return (
     <>
-      {/* ── Search overlay ── */}
-      <div
-        className={`fixed top-0 left-0 right-0 z-[200] bg-white border-b shadow-sm transition-all duration-300 ${
-          searchOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="max-w-[1400px] mx-auto h-[64px] px-8 flex items-center gap-6">
-          <Link href="/" onClick={() => setSearchOpen(false)}>
-            <Image src="/images/logo1.png" alt="SRK Care At Home" width={160} height={58} priority />
-          </Link>
-
-          <div className="flex-1">
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Search..."
-              className="w-full h-[44px] px-4 border border-gray-300 rounded-md text-base outline-none"
-              style={{ borderColor: "#D1D5DB" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#005B8E")}
-              onBlur={(e)  => (e.currentTarget.style.borderColor = "#D1D5DB")}
-            />
-          </div>
-
-          <button
-            onClick={() => setSearchOpen(false)}
-            className="flex items-center gap-2 text-sm font-semibold"
-            style={{ color: "#003A5C" }}
-            aria-label="Close search"
-          >
-            <X size={20} />
-            Close
-          </button>
-        </div>
-      </div>
-
       {/* ── Mobile menu overlay ── */}
       <div
         className={`fixed inset-0 z-[150] bg-white overflow-y-auto transition-transform duration-300 lg:hidden ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Mobile header bar */}
-        <div
-          className="flex items-center justify-between px-6 h-[72px] border-b"
-          style={{ borderColor: "#E5E7EB" }}
-        >
+        <div className="flex items-center justify-between px-6 h-[72px] border-b border-gray-100">
           <Link href="/" onClick={() => setMobileOpen(false)}>
-            <Image src="/images/logo1.png" alt="SRK Care At Home" width={160} height={46} priority />
+            <Image src="/images/logo1.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
           </Link>
-          <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-            <X size={26} style={{ color: "#003A5C" }} />
+          <button onClick={() => setMobileOpen(false)} className="p-1">
+            <X size={26} className="text-[#003A5C]" />
           </button>
         </div>
 
-        <nav className="px-6 py-4 divide-y" style={{ borderColor: "#F3F4F6" }}>
-          {/* Contact CTA */}
-          <div className="pb-4">
+        <nav className="px-6 py-4 divide-y divide-gray-100">
+          {NAV_ITEMS.map((item) => (
+            <div key={item.label} className="py-2">
+              {"links" in item ? (
+                <>
+                  <div className="w-full flex items-center justify-between py-1">
+                    <Link
+                      href={item.href || "#"}
+                      className="text-[15px] font-semibold text-slate-900 hover:text-[#005B8E] py-2 flex-1"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                    <button
+                      className="p-2 text-[#005B8E] focus:outline-none"
+                      onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
+                    >
+                      <ChevronDown
+                        size={18}
+                        className="transition-transform duration-200"
+                        style={{ transform: mobileExpanded === item.label ? "rotate(180deg)" : "rotate(0deg)" }}
+                      />
+                    </button>
+                  </div>
+
+                  {mobileExpanded === item.label && (
+                    <ul className="pb-3 pl-3 mt-1 space-y-1">
+                      {item.links?.map((link) => (
+                        <li key={link.label} className="border-l-2 border-slate-100 pl-3">
+                          <Link
+                            href={link.slug}
+                            className="block py-2 text-[14px] font-medium text-slate-600 hover:text-[#005B8E] transition-colors"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <Link
+                  href={item.href || "#"}
+                  className="block py-3 text-[15px] font-semibold text-slate-900 hover:text-[#005B8E] transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              )}
+            </div>
+          ))}
+
+          <div className="pt-6">
             <Link
-              href="/contact-us"
+              href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="block w-full text-center py-3 rounded-md font-semibold text-white text-[15px] transition-opacity hover:opacity-90"
-              style={{ background: "#003A5C" }}
+              className="block w-full text-center py-3.5 rounded-xl font-bold text-white text-[15px] bg-[#003A5C] hover:bg-[#002b44] transition-colors shadow-sm"
             >
               Contact Us
             </Link>
           </div>
-
-          {/* Nav items */}
-          {NAV_ITEMS.map((item) => (
-            <div key={item.label}>
-              <button
-                className="w-full flex items-center justify-between py-4 text-[15px] font-semibold"
-                style={{ color: "black" }}
-                onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
-              >
-                {item.label}
-                <ChevronDown
-                  size={16}
-                  style={{ color: "#005B8E", transition: "transform 0.2s", transform: mobileExpanded === item.label ? "rotate(180deg)" : "rotate(0deg)" }}
-                />
-              </button>
-
-              {mobileExpanded === item.label && (
-                <ul className="pb-3 pl-3 space-y-1">
-                  {item.links?.map((link) => (
-                    <li key={link}>
-                      <Link
-                        href="#"
-                        className="block py-2 text-[14px] transition-colors text-black"
-                        style={{ color: "black" }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = "#005B8E")}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = "black")}
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {link}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
         </nav>
       </div>
 
-      {/* ── Main header ── */}
-      <header
-        className="w-full bg-white fixed top-0 left-0 right-0 z-[100] shadow-sm"
-        style={{ borderBottom: "1px solid #E5E7EB" }}
-      >
-        <div className="max-w-[1400px] mx-auto px-8 h-[64px] flex items-center justify-between">
-
-          {/* Logo */}
+      {/* ── Main Desktop Header ── */}
+      <header className="w-full bg-white fixed top-0 left-0 right-0 z-[100] shadow-sm border-b border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
           <Link href="/" className="flex items-center flex-shrink-0">
             <Image
               src="/images/logo1.png"
@@ -201,98 +157,72 @@ export default function Header() {
               width={220}
               height={90}
               priority
-              className="h-15 w-auto"
+              className="h-12 w-auto"
             />
           </Link>
 
-          {/* Desktop nav */}
-          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-7">
+          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8">
             {NAV_ITEMS.map((item) => (
-  <div key={item.label} className="relative">
+              <div key={item.label} className="relative">
+                {"links" in item ? (
+                  <div className="flex items-center gap-0.5 group py-4">
+                    <Link
+                      href={item.href || "#"}
+                      className="text-[14px] font-semibold text-slate-800 hover:text-[#005B8E] transition-colors cursor-pointer focus:outline-none"
+                      style={{ color: openDropdown === item.label ? "#005B8E" : "" }}
+                    >
+                      {item.label}
+                    </Link>
+                    
+                    <button
+                      onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                      className="p-1 text-slate-400 hover:text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center"
+                    >
+                      <ChevronDown 
+                        size={14} 
+                        className={`transform transition-transform duration-200 ${openDropdown === item.label ? "rotate(180deg)" : ""}`} 
+                      />
+                    </button>
 
-{"href" in item && item.href ? (
-  <Link href={item.href}
-        className="text-[13px] font-medium transition-colors text-black"
-        style={{ color: "black" }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#005B8E")}
-        onMouseLeave={(e) => (e.currentTarget.style.color = "black")}
-      >
-        {item.label}
-      </Link>
-    ) : (
-      <>
-        <button
-          className="flex items-center gap-1 text-[13px] font-medium"
-          style={{ color: openDropdown === item.label ? "#005B8E" : "black" }}
-          onClick={() =>
-            setOpenDropdown(openDropdown === item.label ? null : item.label)
-          }
-        >
-          {item.label}
-          <ChevronDown size={13} />
-        </button>
-
-        {openDropdown === item.label && (
-          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-white rounded-lg shadow-xl py-2 z-[110]">
-            {item.links?.map((link) => (
-              <Link
-                key={link}
-                href="#"
-                className="block px-4 py-2 text-[13px] text-black"
-              >
-                {link}
-              </Link>
+                    {openDropdown === item.label && (
+                      <div className="absolute top-[85%] left-1/2 -translate-x-1/2 mt-2 w-[280px] bg-white rounded-xl shadow-xl py-3 border border-slate-100 z-[110] flex flex-col gap-0.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        {item.links?.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.slug}
+                            className="px-4 py-2.5 text-[13.5px] font-medium text-slate-700 hover:bg-slate-50 hover:text-[#005B8E] transition-all block leading-snug"
+                            onClick={() => setOpenDropdown(null)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href || "#"}
+                    className="text-[14px] font-semibold text-slate-800 hover:text-[#005B8E] transition-colors py-4 block"
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
             ))}
-          </div>
-        )}
-      </>
-    )}
 
-  </div>
-))}
-
-            {/* Contact Us CTA */}
             <Link
               href="/contact"
-              className="px-4 py-2 rounded-md text-[13px] font-semibold text-white transition-opacity hover:opacity-90"
-              style={{ background: "#003A5C" }}
+              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#003A5C] hover:bg-[#002b44] transition-colors shadow-sm ml-2"
             >
               Contact Us
             </Link>
-
-            {/* Search icon */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label="Open search"
-              className="p-1.5 transition-colors"
-              style={{ color: "black" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#005B8E")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "black")}
-            >
-              <Search size={18} />
-            </button>
           </nav>
 
-          {/* Mobile: search + hamburger */}
-          <div className="flex items-center gap-3 lg:hidden">
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label="Open search"
-              className="p-1.5"
-              style={{ color: "black" }}
-            >
-              <Search size={20} />
-            </button>
-            <button
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-              className="p-1.5"
-              style={{ color: "#003A5C" }}
-            >
-              <Menu size={24} />
+          <div className="flex items-center gap-2 lg:hidden">
+            <button onClick={() => setMobileOpen(true)} className="p-2 text-[#003A5C] hover:text-[#005B8E] transition-colors">
+              <Menu size={26} />
             </button>
           </div>
-
         </div>
       </header>
     </>
