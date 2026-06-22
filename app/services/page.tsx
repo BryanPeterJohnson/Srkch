@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image"; // Imported Next.js Image component
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Heart, Phone, Sparkles, Shield, Award, CheckCircle, Star, MapPin, ArrowRight,
-  User, UserCheck, Activity 
+  Heart, Sparkles, Shield, Award, CheckCircle, Star, MapPin, ArrowRight,
+  User, UserCheck, Activity, Search
 } from "lucide-react";
 import { services } from "./data";
 
@@ -18,39 +18,36 @@ const TRUST_BADGES = [
 ];
 
 const FILTER_OPTIONS = [
-  { id: "all", title: "All Services", desc: "Show all care options", icon: Heart },
-  { id: "seniors", title: "Care for Seniors", desc: "Age 65 and up", icon: User },
-  { id: "adults", title: "Care for Adults", desc: "Age 19 to 64", icon: UserCheck },
-  { id: "children", title: "Care for Children", desc: "Age 2 to 18", icon: Activity },
+  { id: "all", title: "All Services", icon: Heart },
+  { id: "seniors", title: "Care for Seniors", icon: User },
+  { id: "adults", title: "Care for Adults", icon: UserCheck },
+  { id: "children", title: "Care for Children", icon: Activity },
 ];
 
 export default function ServicesPage() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter logic (Matches against your service data category/tags)
   const filteredServices = services.filter((service) => {
-    if (activeFilter === "all") return true;
-    
-    // Fallback safely if exact data tags aren't set up yet in your data.js
-    const categoryLower = service.category?.toLowerCase() || "";
-    const titleLower = service.title?.toLowerCase() || "";
-    const descLower = service.description?.toLowerCase() || "";
+    let matchesFilter = true;
+    if (activeFilter !== "all") {
+      const categoryLower = service.category?.toLowerCase() || "";
+      const descLower = service.description?.toLowerCase() || "";
+      if (activeFilter === "seniors") matchesFilter = categoryLower.includes("senior") || categoryLower.includes("elder") || descLower.includes("senior") || descLower.includes("elder");
+      else if (activeFilter === "adults") matchesFilter = categoryLower.includes("adult") || descLower.includes("adult");
+      else if (activeFilter === "children") matchesFilter = categoryLower.includes("child") || categoryLower.includes("pediatric") || descLower.includes("child");
+    }
 
-    if (activeFilter === "seniors") {
-      return categoryLower.includes("senior") || categoryLower.includes("elder") || descLower.includes("senior") || descLower.includes("elder");
-    }
-    if (activeFilter === "adults") {
-      return categoryLower.includes("adult") || descLower.includes("adult");
-    }
-    if (activeFilter === "children") {
-      return categoryLower.includes("child") || categoryLower.includes("pediatric") || descLower.includes("child");
-    }
-    return true;
+    const matchesSearch = 
+      service.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      service.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesFilter && matchesSearch;
   });
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      {/* Hero */}
+      {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-[#112240] via-[#1a365d] to-[#0f172a] overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:40px_40px]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
@@ -81,118 +78,86 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      {/* Services Grid & Filters */}
+      {/* Services Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a365d] tracking-tight mb-4">Our Care Services</h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">Ten specialized service areas — each designed to address a specific dimension of home health.</p>
         </div>
 
-        {/* Filters Section */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200/80 shadow-inner">
-            {FILTER_OPTIONS.map((option) => {
-              const Icon = option.icon;
-              const isActive = activeFilter === option.id;
-              return (
-                <button
-                  key={option.id}
-                  onClick={() => setActiveFilter(option.id)}
-                  className={`flex items-start gap-4 p-4 rounded-xl text-left transition-all duration-200 border ${
-                    isActive
-                      ? "bg-white border-blue-200 shadow-md ring-1 ring-blue-500/10"
-                      : "border-transparent hover:bg-white/60 hover:border-slate-200"
-                  }`}
-                >
-                  <div className={`mt-0.5 p-2 rounded-lg transition-colors ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-400 group-hover:text-slate-600"}`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className={`text-[15px] font-bold tracking-tight transition-colors ${isActive ? "text-blue-900" : "text-slate-800"}`}>
-                      {option.title}
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">{option.desc}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Grid Display */}
-        <motion.div 
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredServices.map((service) => {
-              const Icon = service.icon;
-              return (
-                <motion.div
-                  layout
-                  key={service.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Link
-                    href={`/services/${service.id}`}
-                    className="group block text-left bg-slate-50 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden h-full flex flex-col justify-between"
+        <div className="flex flex-col md:flex-row gap-12">
+          {/* Sidebar */}
+          <aside className="w-full md:w-64 flex-shrink-0">
+            <h3 className="font-bold text-[#1a365d] mb-4 text-lg">Filter Categories</h3>
+            <div className="space-y-1">
+              {FILTER_OPTIONS.map((option) => {
+                const Icon = option.icon;
+                const isActive = activeFilter === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => setActiveFilter(option.id)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                      isActive ? "bg-[#f0f6fb] text-[#1a365d] border border-[#1a365d]/20" : "text-gray-600 hover:bg-gray-50"
+                    }`}
                   >
-                    <div>
-                      {/* Service Image Header Container */}
-                      <div className="relative w-full h-48 bg-slate-200 overflow-hidden">
-                        <Image
-                          src={service.image || "/images/placeholder-care.jpg"} 
-                          alt={service.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-w-7xl) 33vw, 100vw"
-                        />
-                        {/* Dynamic Floating Category Badge */}
-                        <div className="absolute top-4 right-4 z-10">
-                          <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm" style={{ backgroundColor: service.accentLight, color: service.accent }}>
-                            {service.category}
-                          </span>
-                        </div>
-                      </div>
+                    <Icon className={`w-4 h-4 ${isActive ? "text-[#1a365d]" : "text-gray-400"}`} />
+                    {option.title}
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
 
-                      {/* Card Content body */}
-                      <div className="p-8 pb-0">
-                        <div className="flex items-start justify-between mb-5">
-                          <div className="w-12 h-12 rounded-xl flex items-center justify-center -mt-14 relative z-20 shadow-md border border-white" style={{ backgroundColor: service.accentLight, color: service.accent }}>
-                            <Icon className="w-6 h-6" />
+          {/* Main Grid */}
+          <div className="flex-1">
+            <div className="relative mb-8 max-w-lg">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search services..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-11 pl-10 pr-4 text-sm text-black bg-gray-50 border border-gray-200 rounded-lg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 transition"
+              />
+            </div>
+
+            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence mode="popLayout">
+                {filteredServices.map((service) => {
+                  const Icon = service.icon;
+                  return (
+                    <motion.div layout key={service.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+                      <Link href={`/services/${service.id}`} className="group block h-full bg-slate-50 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between">
+                        <div>
+                          <div className="relative w-full h-40 bg-slate-200 overflow-hidden">
+                            <Image src={service.image || "/images/placeholder-care.jpg"} alt={service.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-w-7xl) 33vw, 100vw" />
+                            <div className="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-white/90 shadow-sm" style={{ color: service.accent }}>{service.category}</div>
+                          </div>
+                          <div className="p-6">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 shadow-sm" style={{ backgroundColor: service.accentLight, color: service.accent }}>
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-lg font-bold text-[#1a365d] mb-2">{service.title}</h3>
+                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{service.description}</p>
                           </div>
                         </div>
-
-                        <h3 className="text-[17px] font-bold text-[#1a365d] leading-snug mb-3 group-hover:text-[#164e9a] transition-colors">
-                          {service.title}
-                        </h3>
-                        <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{service.description}</p>
-                      </div>
-                    </div>
-
-                    <div className="mx-8 mt-6 pb-6 pt-5 border-t border-slate-200/60 flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
-                        <MapPin className="w-3.5 h-3.5" /> {service.coverage}
-                      </div>
-                      <div className="flex items-center gap-1 text-sm font-bold transition-colors" style={{ color: service.accent }}>
-                        Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
-        
-        {filteredServices.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-slate-400">No services found matching this filter group.</p>
+                        <div className="px-6 pb-6 pt-2 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
+                            <MapPin className="w-3.5 h-3.5" /> {service.coverage}
+                          </div>
+                          <div className="flex items-center gap-1 text-sm font-bold" style={{ color: service.accent }}>
+                            Learn <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
