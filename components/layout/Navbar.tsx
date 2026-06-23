@@ -75,7 +75,7 @@ export default function Header() {
       >
         <div className="flex items-center justify-between px-6 h-[72px] border-b border-gray-100">
           <Link href="/" onClick={() => setMobileOpen(false)}>
-            <Image src="/images/logo1.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
+            <Image src="/images/logo2.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
           </Link>
           <button onClick={() => setMobileOpen(false)} className="p-1">
             <X size={26} className="text-[#003A5C]" />
@@ -152,12 +152,12 @@ export default function Header() {
         <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
           <Link href="/" className="flex items-center flex-shrink-0">
             <Image
-              src="/images/logo1.png"
+              src="/images/logo2.png"
               alt="SRK Care At Home"
               width={220}
-              height={90}
+              height={170}
               priority
-              className="h-12 w-auto"
+              className="h-20 w-auto"
             />
           </Link>
 
