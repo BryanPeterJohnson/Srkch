@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Heart, Sparkles, Shield, Award, CheckCircle, Star, MapPin, ArrowRight,
-  User, UserCheck, Activity, Search
+  User, UserCheck, Activity, Search, Plus, Minus
 } from "lucide-react";
 import { services } from "./data";
 
@@ -25,12 +25,18 @@ const FILTER_OPTIONS = [
 ];
 
 export default function ServicesPage() {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleFilterChange = (id: string) => {
+    setActiveFilter((prev) => (prev === id ? "" : id));
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const filteredServices = services.filter((service) => {
     let matchesFilter = true;
-    if (activeFilter !== "all") {
+    if (activeFilter !== "all" && activeFilter !== "") {
       const categoryLower = service.category?.toLowerCase() || "";
       const descLower = service.description?.toLowerCase() || "";
       if (activeFilter === "seniors") matchesFilter = categoryLower.includes("senior") || categoryLower.includes("elder") || descLower.includes("senior") || descLower.includes("elder");
@@ -86,31 +92,64 @@ export default function ServicesPage() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-12">
-          {/* Sidebar */}
+          {/* Sidebar Accordion */}
           <aside className="w-full md:w-64 flex-shrink-0">
             <h3 className="font-bold text-[#1a365d] mb-4 text-lg">Filter Categories</h3>
-            <div className="space-y-1">
+            <div className="border border-gray-200 rounded-xl overflow-hidden">
               {FILTER_OPTIONS.map((option) => {
                 const Icon = option.icon;
                 const isActive = activeFilter === option.id;
+                
+                const categoryServices = services.filter((s) => {
+                  if (option.id === "all") return true;
+                  const cat = s.category?.toLowerCase() || "";
+                  const desc = s.description?.toLowerCase() || "";
+                  if (option.id === "seniors") return cat.includes("senior") || cat.includes("elder") || desc.includes("senior") || desc.includes("elder");
+                  if (option.id === "adults") return cat.includes("adult") || desc.includes("adult");
+                  if (option.id === "children") return cat.includes("child") || cat.includes("pediatric") || desc.includes("child");
+                  return false;
+                });
+
                 return (
-                  <button
-                    key={option.id}
-                    onClick={() => setActiveFilter(option.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                      isActive ? "bg-[#f0f6fb] text-[#1a365d] border border-[#1a365d]/20" : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${isActive ? "text-[#1a365d]" : "text-gray-400"}`} />
-                    {option.title}
-                  </button>
+                  <div key={option.id} className="border-b last:border-0">
+                    <button
+                      onClick={() => handleFilterChange(option.id)}
+                      className={`w-full flex items-center justify-between px-4 py-4 text-sm font-semibold transition-colors ${
+                        isActive ? "bg-[#1a365d] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-gray-400"}`} />
+                        {option.title}
+                      </div>
+                      {isActive ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                    </button>
+
+                    <motion.div
+                      initial={false}
+                      animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
+                      className="overflow-hidden bg-gray-50"
+                    >
+                      <div className="p-2 space-y-1">
+                        {categoryServices.map((service) => (
+                          <Link 
+                            key={service.id} 
+                            href={`/services/${service.id}`}
+                            className="block px-4 py-2 text-xs text-gray-600 hover:text-[#1a365d] hover:bg-white rounded-md transition-colors"
+                          >
+                            • {service.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
                 );
               })}
             </div>
           </aside>
 
           {/* Main Grid */}
-          <div className="flex-1">
+          <div className="flex-1" ref={gridRef}>
             <div className="relative mb-8 max-w-lg">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
