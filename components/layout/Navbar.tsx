@@ -213,9 +213,9 @@ export default function Header() {
               Contact Us
             </Link>
 
-            <a href="tel:+14439859368" className="flex items-center gap-2 text-[14px] font-bold text-[#005B8E] hover:text-[#004770] transition-colors ml-2">
-              <Phone size={16} /> +1 (443) 985-9368
-            </a>
+        <a href="tel:+14439859368" className="flex items-center gap-2 text-[15px] font-extrabold text-[#005B8E] hover:text-[#004770] transition-colors ml-4">
+  <Phone size={18} /> +1 (443) 985-9368
+</a>
 
       
           </nav>
