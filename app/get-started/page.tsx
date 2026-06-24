@@ -240,12 +240,12 @@ export default function GetStartedPage() {
 
           {/* ── LEFT: Form ──────────────────────────────────────────────────── */}
           <div>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6 }}>
-              Start Here:
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6, font:'Playfair Display'}}>
+              Speak With Our 24/7 Care Team
             </h2>
             <p style={{ fontSize: 14, color: "#5A6A7A", marginBottom: 28, lineHeight: 1.6 }}>
-              When you fill out this form you can expect information, pricing, and communication
-              with a caring staff member from our office.
+            No matter what time of day, our Care Services Center is always available, 365 days a year. Give us a call and our team will aim to pick up within 30 seconds. 
+            Or fill out the form to book your Caring Consult.
             </p>
 
             {submitted ? (
@@ -371,37 +371,50 @@ export default function GetStartedPage() {
             )}
           </div>
 
-          {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
-         {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
-<div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
+      {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {/* Caregiver photo */}
+            <div style={{ borderRadius: 10, overflow: "hidden" }}>
+              <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover" }} />
+            </div>
 
-  {/* Caregiver photo */}
-  <div style={{ borderRadius: 10, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,91,142,0.12)" }}>
-    <img
-      src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80"
-      alt="SRK Care at Home caregiver with client"
-      style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }}
-    />
-  </div>
-
-  {/* NEW: Assessment Card from image_db31c9.png */}
-  <div style={{ 
-    background: "#fff", 
-    borderRadius: 10, 
-    padding: 32, 
-    border: "1px solid #D8DFE8",
-    textAlign: "center" 
-  }}>
-    <h3 style={{ color: "#005B8E", fontSize: 24, fontWeight: 700, margin: "0 0 16px 0", lineHeight: 1.2 }}>
-      Need help deciding if home healthcare is right for you?
-    </h3>
-    <p style={{ fontSize: 15, color: "#5A6A7A", marginBottom: 24 }}>
-      Take our quick home healthcare assessment.
-    </p>
-
-  </div>
-
+   {/* Assessment Card */}
+<div style={{ 
+  background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)", 
+  borderRadius: 16, 
+  padding: 32, 
+  textAlign: "center",
+  boxShadow: "0 4px 24px rgba(0,91,142,0.18)"
+}}>
+  <h3 style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: "0 0 16px 0" }}>Get Free Care Assessment</h3>
+  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, margin: 0 }}>Request a free consultation by completing the form and our team can help answer all your questions.</p>
 </div>
+
+            {/* NEW: What You Can Expect */}
+            <div style={{ background: "#fff", borderRadius: 10, padding: 32, border: "1px solid #D8DFE8" }}>
+              <h3 style={{ color: "#005B8E", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>What you can Expect</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                {[
+                  { num: "1", title: "Initial in-home assessment", text: "Your first step is to contact us to schedule a time to meet with you and your loved one in your home. One of our registered nurses and our certified nursing assistant (CNA) manager come to conduct a nursing assessment and an in-home safety check." },
+                  { num: "2", title: "Personalized care plan", text: "After our visit, we work closely with you to decide which of our services best meet your needs and those of your loved one. We work within your budget to customize a care plan that includes the services and number of hours you need." },
+                  { num: "3", title: "Thoughtful caregiver matching", text: "When we come to your home, we spend time learning about your loved one, their interests and their preferences. We then match your loved one with a trained, experienced CNA caregiver based on those personal factors." },
+                  { num: "4", title: "Adjustments to the care plan", text: "One of our registered nurses reviews your loved one’s care plan with you every 90 days or more often, if needed. We help ensure that your family receives the care you need, when you need it, by adjusting the plan to meet your evolving needs." }
+                ].map((item, idx) => (
+                  <div key={idx} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#005B8E", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
+                      {item.num}
+                    </div>
+                    <div>
+                      <p style={{ margin: 0, fontWeight: 700, color: "#1A2B3C", fontSize: 14 }}>{item.title}</p>
+                      <p style={{ margin: "4px 0 0 0", fontSize: 13, color: "#5A6A7A", lineHeight: 1.6 }}>{item.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
       </main>
 

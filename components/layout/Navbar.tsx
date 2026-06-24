@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
@@ -75,6 +75,10 @@ export default function Header() {
         </div>
 
         <nav className="px-6 py-4 divide-y divide-gray-100">
+          <a href="tel:+14439859368" className="flex items-center gap-2 py-4 text-[#005B8E] font-bold text-[16px]">
+            <Phone size={18} /> +1 (443) 985-9368
+          </a>
+          
           {NAV_ITEMS.map((item) => (
             <div key={item.label} className="py-2">
               {"links" in item ? (
@@ -202,12 +206,18 @@ export default function Header() {
               </div>
             ))}
 
-            <Link
+                  <Link
               href="/contact"
-              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm ml-2"
+              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               Contact Us
             </Link>
+
+            <a href="tel:+14439859368" className="flex items-center gap-2 text-[14px] font-bold text-[#005B8E] hover:text-[#004770] transition-colors ml-2">
+              <Phone size={16} /> +1 (443) 985-9368
+            </a>
+
+      
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">

@@ -19,18 +19,19 @@ const TRUST_BADGES = [
 
 const FILTER_OPTIONS = [
   { id: "all", title: "All Services", icon: Heart },
-  { id: "seniors", title: "Care for Seniors", icon: User },
-  { id: "adults", title: "Care for Adults", icon: UserCheck },
-  { id: "children", title: "Care for Children", icon: Activity },
+  { id: "seniors", title: "Care for Seniors", subtitle: "Age 65 and up", icon: User },
+  { id: "adults", title: "Care for Adults", subtitle: "Age 19 to 64", icon: UserCheck },
+  { id: "children", title: "Care for Children", subtitle: "Age 2 to 18", icon: Activity },
 ];
 
 export default function ServicesPage() {
-  const [activeFilter, setActiveFilter] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleFilterChange = (id: string) => {
-    setActiveFilter((prev) => (prev === id ? "" : id));
+    const next = activeFilter === id && id !== "all" ? "all" : id;
+    setActiveFilter(next);
     gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -93,60 +94,77 @@ export default function ServicesPage() {
 
         <div className="flex flex-col md:flex-row gap-12">
           {/* Sidebar Accordion */}
-          <aside className="w-full md:w-64 flex-shrink-0">
-            <h3 className="font-bold text-[#1a365d] mb-4 text-lg">Filter Categories</h3>
-            <div className="border border-gray-200 rounded-xl overflow-hidden">
-              {FILTER_OPTIONS.map((option) => {
-                const Icon = option.icon;
-                const isActive = activeFilter === option.id;
-                
-                const categoryServices = services.filter((s) => {
-                  if (option.id === "all") return true;
-                  const cat = s.category?.toLowerCase() || "";
-                  const desc = s.description?.toLowerCase() || "";
-                  if (option.id === "seniors") return cat.includes("senior") || cat.includes("elder") || desc.includes("senior") || desc.includes("elder");
-                  if (option.id === "adults") return cat.includes("adult") || desc.includes("adult");
-                  if (option.id === "children") return cat.includes("child") || cat.includes("pediatric") || desc.includes("child");
-                  return false;
-                });
+          <aside className="w-full md:w-80 flex-shrink-0">
+  <h3 className="font-bold text-black mb-6 text-xl">Filter Categories</h3>
+  <div className="flex flex-col">
+    {FILTER_OPTIONS.map((option) => {
+      const Icon = option.icon;
+      const isActive = activeFilter === option.id;
+      const isAll = option.id === "all";
 
-                return (
-                  <div key={option.id} className="border-b last:border-0">
-                    <button
-                      onClick={() => handleFilterChange(option.id)}
-                      className={`w-full flex items-center justify-between px-4 py-4 text-sm font-semibold transition-colors cursor-pointer ${
-                        isActive ? "bg-[#1a365d] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-gray-400"}`} />
-                        {option.title}
-                      </div>
-                      {isActive ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                    </button>
+      const categoryServices = services.filter((s) => {
+        if (isAll) return true;
+        const cat = s.category?.toLowerCase() || "";
+        const desc = s.description?.toLowerCase() || "";
+        if (option.id === "seniors") return cat.includes("senior") || cat.includes("elder") || desc.includes("senior") || desc.includes("elder");
+        if (option.id === "adults") return cat.includes("adult") || desc.includes("adult");
+        if (option.id === "children") return cat.includes("child") || cat.includes("pediatric") || desc.includes("child");
+        return false;
+      });
 
-                    <motion.div
-                      initial={false}
-                      animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
-                      className="overflow-hidden bg-gray-50"
-                    >
-                      <div className="p-2 space-y-1">
-                        {categoryServices.map((service) => (
-                          <Link 
-                            key={service.id} 
-                            href={`/services/${service.id}`}
-                            className="block px-4 py-2 text-xs text-gray-600 hover:text-[#1a365d] hover:bg-white rounded-md transition-colors cursor-pointer"
-                          >
-                            • {service.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  </div>
-                );
-              })}
+      return (
+        <div key={option.id} className="border-b border-gray-200 last:border-0">
+          <button
+            onClick={() => handleFilterChange(option.id)}
+            className="w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50"
+          >
+            <div className="flex items-center gap-3 pr-3">
+              <Icon className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${
+                isActive ? "text-[#005B8E]" : "text-gray-500"
+              }`} />
+              <div>
+                <div className={`font-semibold text-[20px] transition-colors duration-200 ${
+                  isActive ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
+                }`}>
+                  {option.title}
+                </div>
+                {option.subtitle && (
+                  <div className="text-[14px] text-gray-500 mt-0.5">{option.subtitle}</div>
+                )}
+              </div>
             </div>
-          </aside>
+
+            {!isAll && (
+              <div className={`transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"}`}>
+                {isActive ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+              </div>
+            )}
+          </button>
+
+          {!isAll && (
+            <motion.div
+              initial={false}
+              animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
+              className="overflow-hidden"
+            >
+              <div className="pb-4 pt-1 pl-16 space-y-2">
+                {categoryServices.map((service) => (
+                  <Link 
+                    key={service.id} 
+                    href={`/services/${service.id}`}
+                    className="block text-[15px] text-gray-600 hover:text-[#005B8E] hover:underline transition-all"
+                  >
+                    • {service.title}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</aside>
 
           {/* Main Grid */}
           <div className="flex-1" ref={gridRef}>

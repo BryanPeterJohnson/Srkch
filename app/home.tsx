@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-
     ChevronLeft,
     ChevronRight,
     Plus,
@@ -15,12 +14,10 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import {
-
     SectionHeader,
     PrimaryButton,
     SecondaryButton,
     CTABanner,
-
     PaymentBanner,
 } from "@/components/shared";
 import {
@@ -39,10 +36,10 @@ const heroSlides = [
     {
         img: "https://images.unsplash.com/photo-1758691462321-9b6c98c40f7e?w=1440&h=600&fit=crop&auto=format",
         pill: "Compassionate Home Care",
-        headline: "Care Beyond Compare— So You Can Focus on What Matters Most",
+        headline: "Trusted Home Care— So You Can Focus on What Matters Most",
         sub: "Driven by purpose and led by our hearts, we deliver the highest-quality home health care to keep you or your loved ones safe, comfortable, and independent.",
         cta1: { label: "Find a Service ♥", to: "/services" },
-        cta2: { label: "Get Started ↗", to: "/get-started" },
+        cta2: { label: "Request Care ↗", to: "/get-started" },
     },
     {
         img: "https://images.unsplash.com/photo-1758686253708-f0e21317d2aa?w=1440&h=600&fit=crop&auto=format",
@@ -62,7 +59,6 @@ const heroSlides = [
     },
 ];
 
-// ─── Services-by-Category Data ────────────────────────────────────────────────
 // ─── Services-by-Category Data ────────────────────────────────────────────────
 const categoryData = [
     {
@@ -173,7 +169,7 @@ const categoryData = [
         services: [
             {
                 title: "Pediatric Companion & Personal Care Assistance",
-                desc: "Gentle personal care and companionship tailored for children’s comfort and well-being.",
+                desc: "Gentle personal care and companionship tailored for children's comfort and well-being.",
                 img: "https://images.unsplash.com/photo-1666887360680-9dc27a1d2753?w=560&h=480&fit=crop&auto=format",
                 path: "/services/pediatric-care",
                 icon: "🧸",
@@ -194,7 +190,7 @@ const categoryData = [
             },
             {
                 title: "Meal Preparation & Feeding Assistance",
-                desc: "Healthy meal preparation and feeding support tailored to children’s nutritional needs.",
+                desc: "Healthy meal preparation and feeding support tailored to children's nutritional needs.",
                 img: "https://images.unsplash.com/photo-1653233797467-1a528819fd4f?w=560&h=480&fit=crop&auto=format",
                 path: "/services/child-nutrition",
                 icon: "🍎",
@@ -209,6 +205,7 @@ const categoryData = [
         ],
     },
 ];
+
 
 
 // ─── Hero Slider ──────────────────────────────────────────────────────────────
@@ -230,7 +227,7 @@ function HeroSlider() {
     const activeImage = heroSlides[current].img;
 
     return (
-<section className="relative h-[55vh] min-h-[500px] max-h-[550px] overflow-hidden">
+        <section className="relative h-[55vh] min-h-[500px] max-h-[550px] overflow-hidden">
 
             {/* SINGLE BACKGROUND IMAGE (prevents flick) */}
             <Image
@@ -246,7 +243,6 @@ function HeroSlider() {
                 }}
             />
 
-
             {/* Gradient overlay */}
             <div
                 className="absolute inset-0 z-[1] pointer-events-none"
@@ -255,6 +251,7 @@ function HeroSlider() {
                         "linear-gradient(125deg, #ffffff 0%, #ffffff 27%, rgba(255,255,255,0.95) 39%, rgba(255,255,255,0.80) 48%, rgba(255,255,255,0.50) 57%, rgba(255,255,255,0.18) 67%, rgba(255,255,255,0) 76%)",
                 }}
             />
+
             {/* STATIC CONTENT (never changes) */}
             <div className="absolute inset-0 z-[10]">
                 <div className="max-w-[1440px] mx-auto h-full px-6 lg:px-16">
@@ -265,53 +262,43 @@ function HeroSlider() {
                         <div className="space-y-10">
 
                             {/* STATIC TEXT */}
-                            <div className="space-y-5">
+                            <div className="space-y-5 mt-10">
                                 <h1
                                     className="text-[#1A1A2E]"
                                     style={{
-                                        fontFamily:
-                                            "Inter",
+                                        fontFamily: "Playfair Display",
                                         fontSize: "clamp(38px, 4.8vw, 48px)",
                                         fontWeight: 700,
                                         lineHeight: "1.06",
                                         letterSpacing: "-0.3px",
                                     }}
                                 >
-                                    Care Beyond Compare<br />
-                                    — So You Can Focus on What Matters Most
+                                    Trusted Home Care<br />
+                                    Everything Changes <br /> when you  choose your <br />
+                                    own caregiver 
+                                
                                 </h1>
 
-                                <p
-                                    className="text-[#4B5563]"
-                                    style={{
-                                        fontFamily: "Inter, sans-serif",
-                                        color: "#4f5154",
-                                        fontSize: "clamp(16px, 1.4vw, 20px)",
-                                        lineHeight: "1.75",
-                                        maxWidth: 500,
-                                    }}
-                                >
-                                    Driven by purpose and led by our hearts, we deliver the highest-quality home health care to keep you or your loved ones safe, comfortable, and independent.
-                                </p>
+                            
                             </div>
 
                             {/* STATIC BUTTONS */}
-                      <div className="flex gap-3 sm:gap-6 flex-wrap items-center">
-    <PrimaryButton
-        onClick={() => {
-            document.getElementById("services")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }}
-    >
-        Find a Service ♥
-    </PrimaryButton>
+                            <div className="flex gap-3 sm:gap-6 flex-wrap items-center">
+                                <PrimaryButton
+                                    onClick={() => {
+                                        document.getElementById("services")?.scrollIntoView({
+                                            behavior: "smooth",
+                                            block: "start",
+                                        });
+                                    }}
+                                >
+                                    Find a Service ♥
+                                </PrimaryButton>
 
-    <SecondaryButton to="/get-started">
-        Get Started ↗
-    </SecondaryButton>
-</div>
+                                <SecondaryButton to="/get-started">
+                                   Schedule a Consultation↗
+                                </SecondaryButton>
+                            </div>
 
                         </div>
                     </div>
@@ -335,7 +322,7 @@ function HeroSlider() {
                     />
                 ))}
             </div>
-        </section >
+        </section>
     );
 }
 
@@ -369,20 +356,25 @@ function ServicesByCategory() {
     }, [slideIndex]);
 
     return (
-        <section className="py-16 sm:py-10 lg:py-12 px-4 sm:px-6 bg-white font-source-sans" id="services">
+        <section className="py-16 sm:py-10 lg:py-12 px-4 sm:px-6 bg-white" id="services">
             <div className="max-w-[1200px] mx-auto">
-                
-                {/* Header */}
+
+                {/* Header — FIXED: font-weight 400 (normal), correct color, correct paragraph font */}
                 <div className="text-center mb-10 sm:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6 }}
-                        className="text-[#1A1A2E] mb-4 font-serif text-[clamp(26px,3vw,40px)] font-bold"
-                        style={{ fontFamily: "'Playfair Display', serif" }}
+                        style={{
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: "clamp(26px, 3vw, 40px)",
+                            fontWeight: 400,          // ✅ FIXED: was 700 (bold) — now elegant 400
+                            color: "#003E41",          // ✅ FIXED: was #1A1A2E (near-black) — now dark teal
+                            marginBottom: "1rem",
+                        }}
                     >
-                        SRK&apos;s Services by Category
+                        We Offer a Full Spectrum of Personalized Care
                     </motion.h2>
 
                     <motion.p
@@ -390,18 +382,24 @@ function ServicesByCategory() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6, delay: 0.15 }}
-                        className="text-[#6B7280] mx-auto text-base sm:text-lg max-w-[700px] leading-relaxed"
-                        style={{ fontFamily: "'Source Sans 3', sans-serif" }}
+                        style={{
+                            fontFamily: "'Source Sans 3', sans-serif",  // ✅ FIXED: was wrongly set to Playfair Display
+                            color: "#6B7280",
+                            fontSize: "clamp(15px, 1.2vw, 18px)",
+                            maxWidth: 2650,
+                            margin: "0 auto",
+                            lineHeight: 1.7,
+                        }}
                     >
-                        SRK&apos;s offers a wide range of home care services for every age and stage
-                        of life, tailored to your unique needs, preferences, and goals.
-                        Explore our offerings by age group.
+                        We offers a wide range of home care services for every age and stage
+                        of life. We tailor your care plan to your unique needs and what services 
+                        we offer in your area, providing support in the space you feel most comfortable.
                     </motion.p>
                 </div>
 
                 {/* Two-column layout */}
                 <div className="flex flex-col lg:flex-row gap-7 justify-between items-start">
-                    
+
                     {/* LEFT: Accordion */}
                     <div className="w-full lg:w-[320px] shrink-0">
                         {categoryData.map((cat, i) => {
@@ -455,8 +453,8 @@ function ServicesByCategory() {
                                                     <button
                                                         onClick={() => setSlideIndex(si)}
                                                         className={`text-left text-[15px] transition-all hover:underline cursor-pointer ${
-                                                            slideIndex === si 
-                                                                ? "text-[#1A1A2E] font-bold" 
+                                                            slideIndex === si
+                                                                ? "text-[#1A1A2E] font-bold"
                                                                 : "text-gray-600 font-normal"
                                                         }`}
                                                         style={{ fontFamily: "'Source Sans 3', sans-serif" }}
@@ -533,7 +531,7 @@ function ServicesByCategory() {
                                     onClick={() => canPrev && setSlideIndex(slideIndex - 1)}
                                     disabled={!canPrev}
                                     className={`w-11 h-11 rounded-full flex items-center justify-center border border-gray-300 bg-white transition-all ${
-                                        canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40超 cursor-not-allowed"
+                                        canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
                                     }`}
                                     aria-label="Previous card"
                                 >
@@ -646,12 +644,8 @@ export default function HomePage() {
             {/* ── Hero Slider ───────────────────────────────────────────────────── */}
             <HeroSlider />
 
-
-
             {/* ── Services by Category ──────────────────────────────────────────── */}
-
             <ServicesByCategory />
-
 
 
             {/* ── Care at Home ──────────────────────────────────────────────────── */}
@@ -670,13 +664,14 @@ export default function HomePage() {
                                 The care you need in a place you love. At Home.
                             </h2>
 
-                            <p className="text-gray-700 mb-5 sm:mb-6 leading-relaxed text-base sm:text-[17px]">
-                                Receiving care at home from us means having access to a
-                                dedicated team of skilled clinicians who come to you to deliver
-                                the services you need. Our care includes skilled nursing,
-                                rehabilitation therapy, and emotional support to ensure a smooth
-                                transition home from the hospital or an inpatient rehab center.
-                            </p>
+                         <p 
+  className="text-gray-700 mb-5 sm:mb-6 leading-relaxed text-base sm:text-[17px]" 
+  style={{ textAlign: "justify" }}
+>
+  We match your loved one with compassionate, certified caregivers 
+  who provide personalized in-home care, helping seniors live safely,
+  independently, and comfortably while giving your family 24/7 peace of mind.
+</p>
 
                             <h3 className="text-lg sm:text-xl font-semibold text-[#1a365d] mb-4">
                                 You can count on our experienced team for:
@@ -724,7 +719,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
-
 
             {/* ── News Section (Compact) ─────────────────────────────────────── */}
             <section className="py-8 sm:py-10 bg-white">
@@ -906,6 +900,6 @@ export default function HomePage() {
 
             {/* ── CTA Banner ────────────────────────────────────────────────────── */}
             <CTABanner />
-        </main >
+        </main>
     );
 }
