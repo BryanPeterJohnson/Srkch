@@ -372,79 +372,36 @@ export default function GetStartedPage() {
           </div>
 
           {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+         {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
+<div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
-            {/* Caregiver photo */}
-            <div style={{ borderRadius: 10, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,91,142,0.12)" }}>
-              <img
-                src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80"
-                alt="SRK Care at Home caregiver with client"
-                style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }}
-              />
-            </div>
+  {/* Caregiver photo */}
+  <div style={{ borderRadius: 10, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,91,142,0.12)" }}>
+    <img
+      src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80"
+      alt="SRK Care at Home caregiver with client"
+      style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }}
+    />
+  </div>
 
-            {/* Contact info card */}
-            <div style={{ background: "#fff", borderRadius: 10, padding: 24, border: "1px solid #D8DFE8" }}>
-              <h3 style={{ color: "#005B8E", fontSize: 17, fontWeight: 700, marginTop: 0, marginBottom: 14 }}>
-                Contact Us About Our In-Home Care Services
-              </h3>
-              <p style={{ fontSize: 13, color: "#5A6A7A", lineHeight: 1.7, marginBottom: 14 }}>
-                We are available after hours (24/7) via our toll free number for urgent needs. Rest
-                assured any personal information you provide will ONLY be used by SRK Care at Home
-                to continue communication regarding your inquiry. We offer a{" "}
-                <strong>48 Hour Caregiver Guarantee</strong> — if within the first 48 hours you are
-                not satisfied with your caregiver for any reason, your care will be absolutely FREE.
-              </p>
-              <p style={{ fontSize: 13, color: "#5A6A7A", marginBottom: 8 }}>
-                For immediate assistance, call us toll free at{" "}
-                <a href="tel:7324525875" style={{ color: "#005B8E", fontWeight: 700, textDecoration: "none" }}>
-                  732-452-5875
-                </a>
-                .
-              </p>
-              <p style={{ fontSize: 13, color: "#5A6A7A", marginBottom: 0 }}>
-                Or, simply fill out the form.
-              </p>
-              <p style={{ fontSize: 13, color: "#1A2B3C", fontWeight: 700, marginTop: 12, marginBottom: 0 }}>
-                Please note we don&apos;t accept Medicare / Medicaid.
-              </p>
-            </div>
+  {/* NEW: Assessment Card from image_db31c9.png */}
+  <div style={{ 
+    background: "#fff", 
+    borderRadius: 10, 
+    padding: 32, 
+    border: "1px solid #D8DFE8",
+    textAlign: "center" 
+  }}>
+    <h3 style={{ color: "#005B8E", fontSize: 24, fontWeight: 700, margin: "0 0 16px 0", lineHeight: 1.2 }}>
+      Need help deciding if home healthcare is right for you?
+    </h3>
+    <p style={{ fontSize: 15, color: "#5A6A7A", marginBottom: 24 }}>
+      Take our quick home healthcare assessment.
+    </p>
 
-            {/* Services links */}
-            <div style={{ background: "#fff", borderRadius: 10, padding: 24, border: "1px solid #D8DFE8" }}>
-              <h3 style={{ color: "#005B8E", fontSize: 17, fontWeight: 700, marginTop: 0, marginBottom: 14 }}>
-                Learn More About Our New Jersey Home Care Services
-              </h3>
-              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-                {NJ_SERVICES.map((s) => (
-                  <li key={s.href}>
-                    <Link href={s.href} style={{ color: "#005B8E", fontSize: 13, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ width: 6, height: 6, background: "#E8A020", borderRadius: "50%", flexShrink: 0, display: "inline-block" }} />
-                      {s.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+  </div>
 
-            {/* Locations links */}
-            <div style={{ background: "#fff", borderRadius: 10, padding: 24, border: "1px solid #D8DFE8" }}>
-              <h3 style={{ color: "#005B8E", fontSize: 17, fontWeight: 700, marginTop: 0, marginBottom: 14 }}>
-                Learn More About Our New Jersey Home Care Locations
-              </h3>
-              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-                {NJ_LOCATIONS.map((loc) => (
-                  <li key={loc}>
-                    <Link href={`/locations/${loc.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
-                      style={{ color: "#005B8E", fontSize: 13, textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ width: 6, height: 6, background: "#E8A020", borderRadius: "50%", flexShrink: 0, display: "inline-block" }} />
-                      {loc}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+</div>
         </div>
       </main>
 

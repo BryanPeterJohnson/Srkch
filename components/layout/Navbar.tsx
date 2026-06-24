@@ -70,7 +70,7 @@ export default function Header() {
             <Image src="/images/logo2.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
           </Link>
           <button onClick={() => setMobileOpen(false)} className="p-1 cursor-pointer">
-            <X size={26} className="text-[#003A5C]" />
+            <X size={26} className="text-[#005B8E]" />
           </button>
         </div>
 
@@ -82,7 +82,7 @@ export default function Header() {
                   <div className="w-full flex items-center justify-between py-1">
                     <Link
                       href={item.href || "#"}
-                      className="text-[15px] font-semibold text-slate-900 hover:text-[#005B8E] py-2 flex-1"
+                      className="text-[15px] font-semibold text-[#005B8E] hover:text-[#005B8E] py-2 flex-1"
                       onClick={() => setMobileOpen(false)}
                     >
                       {item.label}
@@ -118,7 +118,7 @@ export default function Header() {
               ) : (
                 <Link
                   href={item.href || "#"}
-                  className="block py-3 text-[15px] font-semibold text-slate-900 hover:text-[#005B8E] transition-colors"
+                  className="block py-3 text-[15px] font-semibold text-[#005B8E] hover:text-[#005B8E] transition-colors"
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
@@ -131,7 +131,7 @@ export default function Header() {
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="block w-full text-center py-3.5 rounded-xl font-bold text-white text-[15px] bg-[#003A5C] hover:bg-[#002b44] transition-colors shadow-sm"
+              className="block w-full text-center py-3.5 rounded-xl font-bold text-white text-[15px] bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               Contact Us
             </Link>
@@ -155,12 +155,12 @@ export default function Header() {
 
           <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8">
             {NAV_ITEMS.map((item) => (
-              <div key={item.label} className="relative">
+              <div key={item.label} className="relative group/nav">
                 {"links" in item ? (
-                  <div className="flex items-center gap-0.5 group py-4">
+                  <div className="flex items-center gap-0.5 py-4">
                     <Link
                       href={item.href || "#"}
-                      className="text-[14px] font-semibold text-slate-800 hover:text-[#005B8E] transition-colors cursor-pointer focus:outline-none"
+                      className="relative text-[14px] font-semibold text-[#005B8E] transition-colors cursor-pointer focus:outline-none after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                       style={{ color: openDropdown === item.label ? "#005B8E" : "" }}
                     >
                       {item.label}
@@ -168,7 +168,7 @@ export default function Header() {
                     
                     <button
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-                      className="p-1 text-slate-400 hover:text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center cursor-pointer"
+                      className="p-1 text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center cursor-pointer"
                     >
                       <ChevronDown 
                         size={14} 
@@ -194,7 +194,7 @@ export default function Header() {
                 ) : (
                   <Link
                     href={item.href || "#"}
-                    className="text-[14px] font-semibold text-slate-800 hover:text-[#005B8E] transition-colors py-4 block"
+                    className="relative text-[14px] font-semibold text-[#005B8E] transition-colors block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                   >
                     {item.label}
                   </Link>
@@ -204,14 +204,14 @@ export default function Header() {
 
             <Link
               href="/contact"
-              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#003A5C] hover:bg-[#002b44] transition-colors shadow-sm ml-2"
+              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm ml-2"
             >
               Contact Us
             </Link>
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <button onClick={() => setMobileOpen(true)} className="p-2 text-[#003A5C] hover:text-[#005B8E] transition-colors cursor-pointer">
+            <button onClick={() => setMobileOpen(true)} className="p-2 text-[#005B8E] hover:text-[#005B8E] transition-colors cursor-pointer">
               <Menu size={26} />
             </button>
           </div>
