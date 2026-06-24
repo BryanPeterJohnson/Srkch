@@ -5,12 +5,6 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
-// ─── COLOR TOKENS ─────────────────────────────────────────────────────────────
-// Primary Navy:  #003A5C
-// Mid Blue:      #005B8E
-// Accent Teal:   #00A693
-// ─────────────────────────────────────────────────────────────────────────────
-
 const NAV_ITEMS = [
   {
     label: "Our Services",
@@ -48,7 +42,6 @@ export default function Header() {
   
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -59,7 +52,6 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Prevent body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -77,7 +69,7 @@ export default function Header() {
           <Link href="/" onClick={() => setMobileOpen(false)}>
             <Image src="/images/logo2.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
           </Link>
-          <button onClick={() => setMobileOpen(false)} className="p-1">
+          <button onClick={() => setMobileOpen(false)} className="p-1 cursor-pointer">
             <X size={26} className="text-[#003A5C]" />
           </button>
         </div>
@@ -96,7 +88,7 @@ export default function Header() {
                       {item.label}
                     </Link>
                     <button
-                      className="p-2 text-[#005B8E] focus:outline-none"
+                      className="p-2 text-[#005B8E] focus:outline-none cursor-pointer"
                       onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
                     >
                       <ChevronDown
@@ -176,7 +168,7 @@ export default function Header() {
                     
                     <button
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-                      className="p-1 text-slate-400 hover:text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center"
+                      className="p-1 text-slate-400 hover:text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center cursor-pointer"
                     >
                       <ChevronDown 
                         size={14} 
@@ -219,7 +211,7 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <button onClick={() => setMobileOpen(true)} className="p-2 text-[#003A5C] hover:text-[#005B8E] transition-colors">
+            <button onClick={() => setMobileOpen(true)} className="p-2 text-[#003A5C] hover:text-[#005B8E] transition-colors cursor-pointer">
               <Menu size={26} />
             </button>
           </div>

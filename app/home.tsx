@@ -410,7 +410,7 @@ function ServicesByCategory() {
                             return (
                                 <div key={cat.id} className="border-b border-gray-200 pb-2">
                                     <button
-                                        className="w-full flex items-center justify-between py-4 text-left group"
+                                        className="w-full flex items-center justify-between py-4 text-left group cursor-pointer"
                                         onClick={() => handleCatClick(i)}
                                     >
                                         <div className="flex items-start gap-3 pr-3">
@@ -454,7 +454,7 @@ function ServicesByCategory() {
                                                 <li key={svc.title}>
                                                     <button
                                                         onClick={() => setSlideIndex(si)}
-                                                        className={`text-left text-[15px] transition-all hover:underline ${
+                                                        className={`text-left text-[15px] transition-all hover:underline cursor-pointer ${
                                                             slideIndex === si 
                                                                 ? "text-[#1A1A2E] font-bold" 
                                                                 : "text-gray-600 font-normal"
