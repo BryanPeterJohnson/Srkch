@@ -114,7 +114,7 @@ export default function ServicesPage() {
                   <div key={option.id} className="border-b last:border-0">
                     <button
                       onClick={() => handleFilterChange(option.id)}
-                      className={`w-full flex items-center justify-between px-4 py-4 text-sm font-semibold transition-colors ${
+                      className={`w-full flex items-center justify-between px-4 py-4 text-sm font-semibold transition-colors cursor-pointer ${
                         isActive ? "bg-[#1a365d] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
                       }`}
                     >
@@ -135,7 +135,7 @@ export default function ServicesPage() {
                           <Link 
                             key={service.id} 
                             href={`/services/${service.id}`}
-                            className="block px-4 py-2 text-xs text-gray-600 hover:text-[#1a365d] hover:bg-white rounded-md transition-colors"
+                            className="block px-4 py-2 text-xs text-gray-600 hover:text-[#1a365d] hover:bg-white rounded-md transition-colors cursor-pointer"
                           >
                             • {service.title}
                           </Link>
@@ -167,7 +167,7 @@ export default function ServicesPage() {
                   const Icon = service.icon;
                   return (
                     <motion.div layout key={service.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-                      <Link href={`/services/${service.id}`} className="group block h-full bg-slate-50 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between">
+                      <Link href={`/services/${service.id}`} className="group block h-full bg-slate-50 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer">
                         <div>
                           <div className="relative w-full h-40 bg-slate-200 overflow-hidden">
                             <Image src={service.image || "/images/placeholder-care.jpg"} alt={service.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-w-7xl) 33vw, 100vw" />
