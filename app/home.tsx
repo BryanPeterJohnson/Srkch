@@ -273,9 +273,8 @@ function HeroSlider() {
                                         letterSpacing: "-0.3px",
                                     }}
                                 >
-                                    Trusted Home Care<br />
-                                    Everything Changes <br /> when you  choose your <br />
-                                    own caregiver 
+                                    Compassionate Care. <br/>Diverse Hearts. Trusted Support.
+                                      Everything changes when care feels like family
                                 
                                 </h1>
 

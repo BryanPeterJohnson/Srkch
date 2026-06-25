@@ -69,19 +69,30 @@ export default function ServiceDetailPage({ params }: PageProps) {
           </section>
 
           {/* Features */}
-          <section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-            <h2 className="text-xl font-bold text-[#1a365d] mb-6 flex items-center gap-2">
-              <div className="w-1.5 h-5 rounded-full bg-blue-600" /> What This Service Includes
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {service.features.map((feature, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/50">
-                  <Check className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-slate-700 font-medium leading-normal">{feature}</span>
-                </div>
-              ))}
+      {/* Replace the existing Features section in page.tsx */}
+<section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+  <h2 className="text-xl font-bold text-[#1a365d] mb-8 flex items-center gap-2">
+    <div className="w-1.5 h-5 rounded-full bg-[#005B8E]" /> What This Service Includes
+  </h2>
+  
+  <div className="space-y-8">
+    {service.categorizedFeatures.map((category, idx) => (
+      <div key={idx}>
+        <h3 className="font-bold text-sm uppercase tracking-wider text-[#005B8E] mb-4">
+          {category.title}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {category.items.map((item, i) => (
+            <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <Check className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-slate-700">{item}</span>
             </div>
-          </section>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
           {/* Steps */}
           <section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
@@ -112,6 +123,23 @@ export default function ServiceDetailPage({ params }: PageProps) {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          <div className="rounded-2xl p-8 text-white flex flex-col justify-between relative overflow-hidden bg-[#1a365d]">
+            <div>
+              <h3 className="font-bold text-xl mb-2 relative z-10">Ready to get started?</h3>
+              <p className="text-sm text-blue-200 mb-6 relative z-10 leading-relaxed">
+                Speak with our care coordinators to customize this plan for your specific requirements.
+              </p>
+            </div>
+            <div className="space-y-3 w-full relative z-10">
+              <button className="w-full py-3 px-4 bg-white text-[#1a365d] font-bold text-sm rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                <Calendar className="w-4 h-4" />  Schedule a Consultation
+              </button>
+            </div>
+          </div>
+
+
+
+
           <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
             <h2 className="text-lg font-bold text-[#1a365d] mb-4">Who This Is For</h2>
             <ul className="space-y-4">
@@ -124,19 +152,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </ul>
           </div>
 
-          <div className="rounded-2xl p-8 text-white flex flex-col justify-between relative overflow-hidden bg-[#1a365d]">
-            <div>
-              <h3 className="font-bold text-xl mb-2 relative z-10">Ready to get started?</h3>
-              <p className="text-sm text-blue-200 mb-6 relative z-10 leading-relaxed">
-                Speak with our care coordinators to customize this plan for your specific requirements.
-              </p>
-            </div>
-            <div className="space-y-3 w-full relative z-10">
-              <button className="w-full py-3 px-4 bg-white text-[#1a365d] font-bold text-sm rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-                <Calendar className="w-4 h-4" /> Book Assessment
-              </button>
-            </div>
-          </div>
+         
         </div>
       </div>
     </div>
