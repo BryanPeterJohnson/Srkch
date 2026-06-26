@@ -273,12 +273,12 @@ function HeroSlider() {
                                         letterSpacing: "-0.3px",
                                     }}
                                 >
-                                    Compassionate Care. <br/>Diverse Hearts. Trusted Support.
-                                      Everything changes when care feels like family
-                                
+                                    Compassionate Care. <br />Diverse Hearts. Trusted Support.
+                                    Everything changes when care feels like family
+
                                 </h1>
 
-                            
+
                             </div>
 
                             {/* STATIC BUTTONS */}
@@ -295,7 +295,7 @@ function HeroSlider() {
                                 </PrimaryButton>
 
                                 <SecondaryButton to="/get-started">
-                                   Schedule a Consultation↗
+                                    Request a Free Consultation↗
                                 </SecondaryButton>
                             </div>
 
@@ -391,7 +391,7 @@ function ServicesByCategory() {
                         }}
                     >
                         We offers a wide range of home care services for every age and stage
-                        of life. We tailor your care plan to your unique needs and what services 
+                        of life. We tailor your care plan to your unique needs and what services
                         we offer in your area, providing support in the space you feel most comfortable.
                     </motion.p>
                 </div>
@@ -413,15 +413,13 @@ function ServicesByCategory() {
                                         <div className="flex items-start gap-3 pr-3">
                                             <CatIcon
                                                 size={18}
-                                                className={`flex-shrink-0 mt-1 transition-colors ${
-                                                    isOpen ? "text-[#005B8E]" : "text-gray-500"
-                                                }`}
+                                                className={`flex-shrink-0 mt-1 transition-colors ${isOpen ? "text-[#005B8E]" : "text-gray-500"
+                                                    }`}
                                             />
                                             <div>
                                                 <div
-                                                    className={`text-[20px] font-semibold transition-colors ${
-                                                        isOpen ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
-                                                    }`}
+                                                    className={`text-[20px] font-semibold transition-colors ${isOpen ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
+                                                        }`}
                                                     style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                                 >
                                                     {cat.title}
@@ -451,11 +449,10 @@ function ServicesByCategory() {
                                                 <li key={svc.title}>
                                                     <button
                                                         onClick={() => setSlideIndex(si)}
-                                                        className={`text-left text-[15px] transition-all hover:underline cursor-pointer ${
-                                                            slideIndex === si
-                                                                ? "text-[#1A1A2E] font-bold"
-                                                                : "text-gray-600 font-normal"
-                                                        }`}
+                                                        className={`text-left text-[15px] transition-all hover:underline cursor-pointer ${slideIndex === si
+                                                            ? "text-[#1A1A2E] font-bold"
+                                                            : "text-gray-600 font-normal"
+                                                            }`}
                                                         style={{ fontFamily: "'Source Sans 3', sans-serif" }}
                                                     >
                                                         • {svc.title}
@@ -529,9 +526,8 @@ function ServicesByCategory() {
                                 <button
                                     onClick={() => canPrev && setSlideIndex(slideIndex - 1)}
                                     disabled={!canPrev}
-                                    className={`w-11 h-11 rounded-full flex items-center justify-center border border-gray-300 bg-white transition-all ${
-                                        canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
-                                    }`}
+                                    className={`w-11 h-11 rounded-full flex items-center justify-center border border-gray-300 bg-white transition-all ${canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
+                                        }`}
                                     aria-label="Previous card"
                                 >
                                     <ChevronLeft size={18} className="text-[#1A1A2E]" />
@@ -547,9 +543,8 @@ function ServicesByCategory() {
                                 <button
                                     onClick={() => canNext && setSlideIndex(slideIndex + 1)}
                                     disabled={!canNext}
-                                    className={`w-11 h-11 rounded-full flex items-center justify-center transition-all ${
-                                        canNext ? "bg-[#005B8E] text-white cursor-pointer hover:bg-[#004b75]" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                    }`}
+                                    className={`w-11 h-11 rounded-full flex items-center justify-center transition-all ${canNext ? "bg-[#005B8E] text-white cursor-pointer hover:bg-[#004b75]" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                        }`}
                                     aria-label="Next card"
                                 >
                                     <ChevronRight size={18} />
@@ -663,14 +658,14 @@ export default function HomePage() {
                                 The care you need in a place you love. At Home.
                             </h2>
 
-                         <p 
-  className="text-gray-700 mb-5 sm:mb-6 leading-relaxed text-base sm:text-[17px]" 
-  style={{ textAlign: "justify" }}
->
-  We match your loved one with compassionate, certified caregivers 
-  who provide personalized in-home care, helping seniors live safely,
-  independently, and comfortably while giving your family 24/7 peace of mind.
-</p>
+                            <p
+                                className="text-gray-700 mb-5 sm:mb-6 leading-relaxed text-base sm:text-[17px]"
+                                style={{ textAlign: "justify" }}
+                            >
+                                We match your loved one with compassionate, certified caregivers
+                                who provide personalized in-home care, helping seniors live safely,
+                                independently, and comfortably while giving your family 24/7 peace of mind.
+                            </p>
 
                             <h3 className="text-lg sm:text-xl font-semibold text-[#1a365d] mb-4">
                                 You can count on our experienced team for:

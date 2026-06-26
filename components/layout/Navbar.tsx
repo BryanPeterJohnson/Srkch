@@ -22,8 +22,8 @@ const NAV_ITEMS = [
       { id: "10", label: "Pediatric & Child Care Services", slug: "/services/10" },
     ],
   },
-  { 
-    label: "About Us", 
+  {
+    label: "About Us",
     href: "/about",
     links: [
       { id: "history", label: "History", slug: "/about/history" },
@@ -39,7 +39,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-  
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,9 +61,8 @@ export default function Header() {
     <>
       {/* ── Mobile menu overlay ── */}
       <div
-        className={`fixed inset-0 z-[150] bg-white overflow-y-auto transition-transform duration-300 lg:hidden ${
-          mobileOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-0 z-[150] bg-white overflow-y-auto transition-transform duration-300 lg:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="flex items-center justify-between px-6 h-[72px] border-b border-gray-100">
           <Link href="/" onClick={() => setMobileOpen(false)}>
@@ -78,7 +77,7 @@ export default function Header() {
           <a href="tel:+14439859368" className="flex items-center gap-2 py-4 text-[#005B8E] font-bold text-[16px]">
             <Phone size={18} /> +1 (443) 985-9368
           </a>
-          
+
           {NAV_ITEMS.map((item) => (
             <div key={item.label} className="py-2">
               {"links" in item ? (
@@ -169,14 +168,14 @@ export default function Header() {
                     >
                       {item.label}
                     </Link>
-                    
+
                     <button
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
                       className="p-1 text-[#005B8E] transition-colors focus:outline-none flex items-center justify-center cursor-pointer"
                     >
-                      <ChevronDown 
-                        size={14} 
-                        className={`transform transition-transform duration-200 ${openDropdown === item.label ? "rotate(180deg)" : ""}`} 
+                      <ChevronDown
+                        size={14}
+                        className={`transform transition-transform duration-200 ${openDropdown === item.label ? "rotate(180deg)" : ""}`}
                       />
                     </button>
 
@@ -206,18 +205,22 @@ export default function Header() {
               </div>
             ))}
 
-                  <Link
+            <Link
               href="/contact"
-              className="px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
+              className="px-5 py-2.5  text-[14px] font-bold text-[#005B8E]  transition-colors"
             >
               Contact Us
             </Link>
 
-        <a href="tel:+14439859368" className="flex items-center gap-2 text-[15px] font-extrabold text-[#005B8E] hover:text-[#004770] transition-colors ml-4">
-  <Phone size={18} /> +1 (443) 985-9368
-</a>
+            <a
+              href="tel:+14439859368"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
+            >
+              <Phone size={18} />
+              <span>+1 (443) 985-9368</span>
+            </a>
 
-      
+
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">
