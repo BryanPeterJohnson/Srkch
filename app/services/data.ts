@@ -1,63 +1,64 @@
-import { 
-  Heart, Users, Brain, Home, Smile, ShieldAlert, Activity, Clock, Car, Baby 
+import {
+  Heart, Users, Brain, Home, Smile, ShieldAlert, Activity, Clock, Car, Baby
 } from "lucide-react";
 
 export const services = [
-{
-  id: 0,
-  slug: "personal-care",
-  title: "Personal Care & Daily Living Assistance",
-  shortTitle: "Personal Care",
-  tagline: "Dignity and independence, every single day.",
-  description: "Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.",
-  icon: Heart,
-  image: "https://images.unsplash.com/photo-1576765608866-5b51f8d8c2ab?auto=format&fit=crop&w=1200&q=80",
-  accent: "#e53e8c",
-  accentLight: "#fdf0f7",
-  category: "Core Care",
-  duration: "Hourly / Daily / 24/7",
-  coverage: "Home, Assisted Living & Community",
-  // Replacing 'features' with 'categorizedFeatures'
-  categorizedFeatures: [
-    {
-      title: "Personal Hygiene & Grooming",
-      items: ["Bathing and showering assistance", "Sponge baths", "Oral hygiene and denture care", "Hair care and grooming", "Shaving assistance", "Skin care assistance", "Routine nail care assistance"]
-    },
-    {
-      title: "Dressing & Appearance Support",
-      items: ["Dressing and undressing", "Clothing selection assistance", "Assistance with shoes and outerwear", "Personal grooming support"]
-    },
-    {
-      title: "Toileting & Continence Care",
-      items: ["Toileting assistance", "Incontinence care", "Changing briefs and protective garments", "Perineal care", "Bathroom safety assistance"]
-    },
-    {
-      title: "Mobility & Transfer Support",
-      items: ["Ambulation assistance", "Walking support", "Bed-to-chair transfers", "Chair-to-wheelchair transfers", "Positioning and repositioning", "Stair navigation assistance"]
-    },
-    {
-      title: "Eating & Hydration Assistance",
-      items: ["Meal setup", "Feeding assistance", "Hydration encouragement", "Assistance with adaptive eating devices"]
-    },
-    {
-      title: "Independence & Wellness Support",
-      items: ["Daily routine assistance", "Encouragement of self-care activities", "Monitoring of functional abilities", "Assistance maintaining independence"]
-    }
-  ],
-  whoFor: [
-    "Seniors aging in place who need hands-on daily living support",
-    "Individuals recovering from major illness, stroke, or orthopedic surgery",
-    "Adults living with progressive physical disabilities or chronic conditions",
-    "Individuals at high risk of falls who require continuous standby assistance",
-    "Those who just need an extra pair of hands during peak morning or evening hours"
-  ],
-  howItWorks: [
-    { step: "01", title: "Free Registered Nurse Consultation", desc: "Our care team assesses physical needs, home safety layout, and personal preferences during a comprehensive, no-obligation home visit." },
-    { step: "02", title: "Customized Care Plan & Caregiver Match", desc: "We develop a tailored care plan and pair you with a certified caregiver suited to your personality, routine, and required care level." },
-    { step: "03", title: "Care Begins with Supervised Introduction", desc: "Your dedicated caregiver arrives on your preferred schedule, often accompanied by a supervisor to ensure a smooth, comfortable transition." },
-    { step: "04", title: "Ongoing Clinical Review & Adjustments", desc: "We conduct regular quality checks and formal care plan reviews to adjust service hours or techniques as your medical or physical needs evolve." },
-  ],
-},
+  {
+    id: 0,
+    slug: "personal-care",
+    title: "Personal Care & Daily Living Assistance",
+    shortTitle: "Personal Care",
+    tagline: "Dignity and independence, every single day.",
+    description: "Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.",
+    icon: Heart,
+    image: "https://images.unsplash.com/photo-1576765608866-5b51f8d8c2ab?auto=format&fit=crop&w=1200&q=80",
+    accent: "#e53e8c",
+    accentLight: "#fdf0f7",
+    category: "Core Care",
+    duration: "Hourly / Daily / 24/7",
+    coverage: "Home, Assisted Living & Community",
+    // Replacing 'features' with 'categorizedFeatures'
+    categorizedFeatures: [
+      {
+        title: "Personal Hygiene & Grooming",
+        items: ["Bathing and showering assistance", "Sponge baths", "Oral hygiene and denture care", "Hair care and grooming", "Shaving assistance", "Skin care assistance", "Routine nail care assistance"]
+      },
+      {
+        title: "Dressing & Appearance Support",
+        items: ["Dressing and undressing", "Clothing selection assistance", "Assistance with shoes and outerwear", "Personal grooming support"]
+      },
+      {
+        title: "Toileting & Continence Care",
+        items: ["Toileting assistance", "Incontinence care", "Changing briefs and protective garments", "Perineal care", "Bathroom safety assistance"]
+      },
+      {
+        title: "Mobility & Transfer Support",
+        items: ["Ambulation assistance", "Walking support", "Bed-to-chair transfers", "Chair-to-wheelchair transfers", "Positioning and repositioning", "Stair navigation assistance"]
+      },
+
+      {
+        title: "Independence & Wellness Support",
+        items: ["Daily routine assistance", "Encouragement of self-care activities", "Monitoring of functional abilities", "Assistance maintaining independence"]
+      },
+      {
+        title: "Eating & Hydration Assistance",
+        items: ["Meal setup", "Feeding assistance", "Hydration encouragement", "Assistance with adaptive eating devices"]
+      }
+    ],
+    whoFor: [
+      "Seniors aging in place who need hands-on daily living support",
+      "Individuals recovering from major illness, stroke, or orthopedic surgery",
+      "Adults living with progressive physical disabilities or chronic conditions",
+      "Individuals at high risk of falls who require continuous standby assistance",
+      "Those who just need an extra pair of hands during peak morning or evening hours"
+    ],
+    howItWorks: [
+      { step: "01", title: "Free Registered Nurse Consultation", desc: "Our care team assesses physical needs, home safety layout, and personal preferences during a comprehensive, no-obligation home visit." },
+      { step: "02", title: "Customized Care Plan & Caregiver Match", desc: "We develop a tailored care plan and pair you with a certified caregiver suited to your personality, routine, and required care level." },
+      { step: "03", title: "Care Begins with Supervised Introduction", desc: "Your dedicated caregiver arrives on your preferred schedule, often accompanied by a supervisor to ensure a smooth, comfortable transition." },
+      { step: "04", title: "Ongoing Clinical Review & Adjustments", desc: "We conduct regular quality checks and formal care plan reviews to adjust service hours or techniques as your medical or physical needs evolve." },
+    ],
+  },
   {
     id: 1,
     slug: "companion-care",
@@ -72,29 +73,29 @@ export const services = [
     category: "Wellness",
     duration: "Flexible hourly schedules",
     coverage: "Home, Senior Centers & Community",
- // Inside the service object (id: 1) in data.ts
-categorizedFeatures: [
-  {
-    title: "Companionship & Emotional Support",
-    items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"]
-  },
-  {
-    title: "Recreational & Leisure Activities",
-    items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"]
-  },
-  {
-    title: "Cognitive Engagement",
-    items: ["Memory stimulation activities", "Orientation reminders", "Brain fitness exercises", "Structured daily routines"]
-  },
-  {
-    title: "Community & Social Participation",
-    items: ["Accompaniment on walks", "Religious services attendance", "Family gatherings", "Community events and activities"]
-  },
-  {
-    title: "Emotional Wellness & Mental Health Support",
-    items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"]
-  }
-],
+    // Inside the service object (id: 1) in data.ts
+    categorizedFeatures: [
+      {
+        title: "Companionship & Emotional Support",
+        items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"]
+      },
+      {
+        title: "Recreational & Leisure Activities",
+        items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"]
+      },
+      {
+        title: "Cognitive Engagement",
+        items: ["Memory stimulation activities", "Orientation reminders", "Brain fitness exercises", "Structured daily routines"]
+      },
+      {
+        title: "Community & Social Participation",
+        items: ["Accompaniment on walks", "Religious services attendance", "Family gatherings", "Community events and activities"]
+      },
+      {
+        title: "Emotional Wellness & Mental Health Support",
+        items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"]
+      }
+    ],
     whoFor: [
       "Seniors living alone who feel isolated or are at risk of depression",
       "Individuals whose families live out of town or have busy work schedules",
@@ -123,33 +124,33 @@ categorizedFeatures: [
     category: "Specialized Care",
     duration: "Daily / Overnight / Live-In",
     coverage: "Home-Based Secure Environments",
-   // Inside the service object (id: 2) in data.ts
-categorizedFeatures: [
-  {
-    title: "Alzheimer's & Dementia Support",
-    items: ["Memory cueing and reminders", "Routine reinforcement", "Orientation assistance", "Structured daily schedules", "Redirection and reassurance"]
-  },
-  {
-    title: "Cognitive Wellness Support",
-    items: ["Reminiscence activities", "Memory games and exercises", "Cognitive engagement activities", "Social interaction for cognitive stimulation"]
-  },
-  {
-    title: "Fall Prevention Services",
-    items: ["Transfer supervision", "Mobility monitoring", "Ambulation assistance", "Assistive device support", "Fall-risk observation"]
-  },
-  {
-    title: "Home Safety Monitoring",
-    items: ["Environmental safety observations", "Clutter and trip hazard monitoring", "Lighting and accessibility review", "Bathroom safety monitoring"]
-  },
-  {
-    title: "Wellness Observation & Monitoring",
-    items: ["Observation of physical condition", "Observation of behavioral changes", "Observation of mobility changes", "Observation of nutritional and hydration status", "Reporting significant concerns to supervisors and family"]
-  },
-  {
-    title: "Emergency Preparedness & Response Support",
-    items: ["Emergency contact verification", "Emergency planning assistance", "Emergency response coordination", "Wellness and safety checks"]
-  }
-],
+    // Inside the service object (id: 2) in data.ts
+    categorizedFeatures: [
+      {
+        title: "Alzheimer's & Dementia Support",
+        items: ["Memory cueing and reminders", "Routine reinforcement", "Orientation assistance", "Structured daily schedules", "Redirection and reassurance"]
+      },
+      {
+        title: "Cognitive Wellness Support",
+        items: ["Reminiscence activities", "Memory games and exercises", "Cognitive engagement activities", "Social interaction for cognitive stimulation"]
+      },
+      {
+        title: "Fall Prevention Services",
+        items: ["Transfer supervision", "Mobility monitoring", "Ambulation assistance", "Assistive device support", "Fall-risk observation"]
+      },
+      {
+        title: "Home Safety Monitoring",
+        items: ["Environmental safety observations", "Clutter and trip hazard monitoring", "Lighting and accessibility review", "Bathroom safety monitoring"]
+      },
+      {
+        title: "Wellness Observation & Monitoring",
+        items: ["Observation of physical condition", "Observation of behavioral changes", "Observation of mobility changes", "Observation of nutritional and hydration status", "Reporting significant concerns to supervisors and family"]
+      },
+      {
+        title: "Emergency Preparedness & Response Support",
+        items: ["Emergency contact verification", "Emergency planning assistance", "Emergency response coordination", "Wellness and safety checks"]
+      }
+    ],
     whoFor: [
       "Individuals diagnosed with Alzheimer's disease, Lewy Body, or Vascular Dementia",
       "Families experiencing caregiving exhaustion from handling progressive memory loss",
@@ -177,33 +178,33 @@ categorizedFeatures: [
     category: "Home Support",
     duration: "Scheduled part-time / Daily visits",
     coverage: "Home Interior",
-  // Inside the service object (id: 3) in data.ts
-categorizedFeatures: [
-  {
-    title: "Meal Planning & Preparation",
-    items: ["Meal planning", "Grocery list preparation", "Meal preparation", "Healthy snack preparation", "Special dietary accommodation support"]
-  },
-  {
-    title: "Nutrition & Hydration Support",
-    items: ["Feeding assistance", "Hydration reminders", "Nutrition encouragement", "Monitoring food intake"]
-  },
-  {
-    title: "Kitchen Management",
-    items: ["Kitchen cleanup", "Food storage organization", "Food safety monitoring", "Expiration date checks"]
-  },
-  {
-    title: "Light Housekeeping Services",
-    items: ["Dusting", "Vacuuming", "Sweeping and mopping", "Dishwashing", "General tidying of living spaces"]
-  },
-  {
-    title: "Laundry & Linen Services",
-    items: ["Laundry and folding clothes", "Changing bed linens", "Making beds", "Organizing clothing"]
-  },
-  {
-    title: "Errands & Shopping Assistance",
-    items: ["Grocery shopping", "Pharmacy pickup", "Household supply shopping", "Mailing and personal errands"]
-  }
-],
+    // Inside the service object (id: 3) in data.ts
+    categorizedFeatures: [
+      {
+        title: "Meal Planning & Preparation",
+        items: ["Meal planning", "Grocery list preparation", "Meal preparation", "Healthy snack preparation", "Special dietary accommodation support"]
+      },
+      {
+        title: "Nutrition & Hydration Support",
+        items: ["Feeding assistance", "Hydration reminders", "Nutrition encouragement", "Monitoring food intake"]
+      },
+      {
+        title: "Kitchen Management",
+        items: ["Kitchen cleanup", "Food storage organization", "Food safety monitoring", "Expiration date checks"]
+      },
+      {
+        title: "Light Housekeeping Services",
+        items: ["Dusting", "Vacuuming", "Sweeping and mopping", "Dishwashing", "General tidying of living spaces"]
+      },
+      {
+        title: "Laundry & Linen Services",
+        items: ["Laundry and folding clothes", "Changing bed linens", "Making beds", "Organizing clothing"]
+      },
+      {
+        title: "Errands & Shopping Assistance",
+        items: ["Grocery shopping", "Pharmacy pickup", "Household supply shopping", "Mailing and personal errands"]
+      }
+    ],
     whoFor: [
       "Seniors who find heavy household cleaning tasks painful or physically unsafe",
       "Individuals with limited mobility, severe arthritis, or low daily energy levels",
@@ -231,29 +232,29 @@ categorizedFeatures: [
     category: "Family Support",
     duration: "Hourly up to multi-week blocks",
     coverage: "Home & Short-term Travel",
-   // Inside the service object (id: 4) in data.ts
-categorizedFeatures: [
-  {
-    title: "In-Home Respite Care",
-    items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"]
-  },
-  {
-    title: "Overnight Respite Support",
-    items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"]
-  },
-  {
-    title: "Caregiver Wellness Support",
-    items: ["Reducing caregiver burden", "Providing peace of mind", "Supporting caregiver work-life balance", "Temporary relief during emergencies"]
-  },
-  {
-    title: "Family Communication & Updates",
-    items: ["Care updates for family members", "Reporting observations and concerns", "Coordination with authorized family representatives", "Care continuity support"]
-  },
-  {
-    title: "Recovery & Transitional Support",
-    items: ["Temporary assistance during caregiver absence", "Support following hospitalization of a family caregiver", "Assistance during family travel or emergencies"]
-  }
-],
+    // Inside the service object (id: 4) in data.ts
+    categorizedFeatures: [
+      {
+        title: "In-Home Respite Care",
+        items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"]
+      },
+      {
+        title: "Overnight Respite Support",
+        items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"]
+      },
+      {
+        title: "Caregiver Wellness Support",
+        items: ["Reducing caregiver burden", "Providing peace of mind", "Supporting caregiver work-life balance", "Temporary relief during emergencies"]
+      },
+      {
+        title: "Family Communication & Updates",
+        items: ["Care updates for family members", "Reporting observations and concerns", "Coordination with authorized family representatives", "Care continuity support"]
+      },
+      {
+        title: "Recovery & Transitional Support",
+        items: ["Temporary assistance during caregiver absence", "Support following hospitalization of a family caregiver", "Assistance during family travel or emergencies"]
+      }
+    ],
     whoFor: [
       "Family members operating as the 24/7 primary caregiver for a relative",
       "Caregivers showing clinical signs of physical exhaustion, chronic stress, or illness",
