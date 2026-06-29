@@ -2,6 +2,44 @@ import {
   Heart, Users, Brain, Home, Smile, ShieldAlert, Activity, Clock, Car, Baby
 } from "lucide-react";
 
+import {
+  ShowerHead,
+  Shirt,
+  Toilet,
+  Accessibility,
+  Sparkles,
+  UtensilsCrossed,
+  MessageCircle,
+  Gamepad2,
+  Lightbulb,
+  MapPin,
+  HeartHandshake,
+  ShieldCheck,
+  Eye,
+  AlertTriangle,
+  ChefHat,
+  Droplets,
+  CookingPot,
+  WashingMachine,
+  ShoppingCart,
+  CalendarCheck,
+  MoonStar,
+  PhoneCall,
+  RefreshCw,
+  Globe,
+  ClipboardList,
+  TrendingUp,
+  Stethoscope,
+  Bell,
+  ScanLine,
+  UserCheck,
+  HeartPulse,
+  Building2,
+  Layers,
+} from "lucide-react";
+
+export type PatientGroup = "seniors" | "adults" | "children";
+
 export const services = [
   {
     id: 0,
@@ -17,41 +55,16 @@ export const services = [
     category: "Core Care",
     duration: "Hourly / Daily / 24/7",
     coverage: "Home, Assisted Living & Community",
-    // Replacing 'features' with 'categorizedFeatures'
+    patientGroups: ["seniors", "adults"] as PatientGroup[],
     categorizedFeatures: [
-      {
-        title: "Personal Hygiene & Grooming",
-        items: ["Bathing and showering assistance", "Sponge baths", "Oral hygiene and denture care", "Hair care and grooming", "Shaving assistance", "Skin care assistance", "Routine nail care assistance"]
-      },
-      {
-        title: "Dressing & Appearance Support",
-        items: ["Dressing and undressing", "Clothing selection assistance", "Assistance with shoes and outerwear", "Personal grooming support"]
-      },
-      {
-        title: "Toileting & Continence Care",
-        items: ["Toileting assistance", "Incontinence care", "Changing briefs and protective garments", "Perineal care", "Bathroom safety assistance"]
-      },
-      {
-        title: "Mobility & Transfer Support",
-        items: ["Ambulation assistance", "Walking support", "Bed-to-chair transfers", "Chair-to-wheelchair transfers", "Positioning and repositioning", "Stair navigation assistance"]
-      },
-
-      {
-        title: "Independence & Wellness Support",
-        items: ["Daily routine assistance", "Encouragement of self-care activities", "Monitoring of functional abilities", "Assistance maintaining independence"]
-      },
-      {
-        title: "Eating & Hydration Assistance",
-        items: ["Meal setup", "Feeding assistance", "Hydration encouragement", "Assistance with adaptive eating devices"]
-      }
+      { title: "Personal Hygiene & Grooming", icon: ShowerHead, items: ["Bathing and showering assistance", "Sponge baths", "Oral hygiene and denture care", "Hair care and grooming", "Shaving assistance", "Skin care assistance", "Routine nail care assistance"] },
+      { title: "Dressing & Appearance Support", icon: Shirt, items: ["Dressing and undressing", "Clothing selection assistance", "Assistance with shoes and outerwear", "Personal grooming support"] },
+      { title: "Toileting & Continence Care", icon: Toilet, items: ["Toileting assistance", "Incontinence care", "Changing briefs and protective garments", "Perineal care", "Bathroom safety assistance"] },
+      { title: "Mobility & Transfer Support", icon: Accessibility, items: ["Ambulation assistance", "Walking support", "Bed-to-chair transfers", "Chair-to-wheelchair transfers", "Positioning and repositioning", "Stair navigation assistance"] },
+      { title: "Independence & Wellness Support", icon: Sparkles, items: ["Daily routine assistance", "Encouragement of self-care activities", "Monitoring of functional abilities", "Assistance maintaining independence"] },
+      { title: "Eating & Hydration Assistance", icon: UtensilsCrossed, items: ["Meal setup", "Feeding assistance", "Hydration encouragement", "Assistance with adaptive eating devices"] },
     ],
-    whoFor: [
-      "Seniors aging in place who need hands-on daily living support",
-      "Individuals recovering from major illness, stroke, or orthopedic surgery",
-      "Adults living with progressive physical disabilities or chronic conditions",
-      "Individuals at high risk of falls who require continuous standby assistance",
-      "Those who just need an extra pair of hands during peak morning or evening hours"
-    ],
+    whoFor: ["Seniors aging in place who need hands-on daily living support", "Individuals recovering from major illness, stroke, or orthopedic surgery", "Adults living with progressive physical disabilities or chronic conditions", "Individuals at high risk of falls who require continuous standby assistance", "Those who just need an extra pair of hands during peak morning or evening hours"],
     howItWorks: [
       { step: "01", title: "Free Registered Nurse Consultation", desc: "Our care team assesses physical needs, home safety layout, and personal preferences during a comprehensive, no-obligation home visit." },
       { step: "02", title: "Customized Care Plan & Caregiver Match", desc: "We develop a tailored care plan and pair you with a certified caregiver suited to your personality, routine, and required care level." },
@@ -73,41 +86,20 @@ export const services = [
     category: "Wellness",
     duration: "Flexible hourly schedules",
     coverage: "Home, Senior Centers & Community",
-    // Inside the service object (id: 1) in data.ts
+    patientGroups: ["seniors", "adults"] as PatientGroup[],
     categorizedFeatures: [
-      {
-        title: "Companionship & Emotional Support",
-        items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"]
-      },
-      {
-        title: "Recreational & Leisure Activities",
-        items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"]
-      },
-      {
-        title: "Cognitive Engagement",
-        items: ["Memory stimulation activities", "Orientation reminders", "Brain fitness exercises", "Structured daily routines"]
-      },
-      {
-        title: "Community & Social Participation",
-        items: ["Accompaniment on walks", "Religious services attendance", "Family gatherings", "Community events and activities"]
-      },
-      {
-        title: "Emotional Wellness & Mental Health Support",
-        items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"]
-      }
+      { title: "Companionship & Emotional Support", icon: MessageCircle, items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"] },
+      { title: "Recreational & Leisure Activities", icon: Gamepad2, items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"] },
+      { title: "Cognitive Engagement", icon: Lightbulb, items: ["Memory stimulation activities", "Orientation reminders", "Brain fitness exercises", "Structured daily routines"] },
+      { title: "Community & Social Participation", icon: MapPin, items: ["Accompaniment on walks", "Religious services attendance", "Family gatherings", "Community events and activities"] },
+      { title: "Emotional Wellness & Mental Health Support", icon: HeartHandshake, items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"] },
     ],
-    whoFor: [
-      "Seniors living alone who feel isolated or are at risk of depression",
-      "Individuals whose families live out of town or have busy work schedules",
-      "Those with early-stage memory concerns who benefit from mental stimulation",
-      "Active seniors looking for an outgoing peer to share in hobbies and outings",
-      "Anyone who would benefit from a consistent, joyful, and encouraging presence"
-    ],
+    whoFor: ["Seniors living alone who feel isolated or are at risk of depression", "Individuals whose families live out of town or have busy work schedules", "Those with early-stage memory concerns who benefit from mental stimulation", "Active seniors looking for an outgoing peer to share in hobbies and outings", "Anyone who would benefit from a consistent, joyful, and encouraging presence"],
     howItWorks: [
       { step: "01", title: "Interest & Personality Profile", desc: "We map out the client's life history, favorite hobbies, literacy interests, and personality traits to define an ideal companion archetype." },
       { step: "02", title: "Companion Pairing & Meet-and-Greet", desc: "A compatible companion caregiver with shared interests is introduced gently to ensure mutual chemistry before regular shifts begin." },
       { step: "03", title: "Scheduled Engagement Visits", desc: "Regularly scheduled visits take place on your preferred days, focusing on purposeful activities that stimulate joy and mental agility." },
-      { step: "04", title: "Family Portal Updates & Continuity", desc: "Families receive digital logs and brief updates after each visit, keeping you connected to your loved one’s emotional and mental state." },
+      { step: "04", title: "Family Portal Updates & Continuity", desc: "Families receive digital logs and brief updates after each visit, keeping you connected to your loved one's emotional and mental state." },
     ],
   },
   {
@@ -124,39 +116,16 @@ export const services = [
     category: "Specialized Care",
     duration: "Daily / Overnight / Live-In",
     coverage: "Home-Based Secure Environments",
-    // Inside the service object (id: 2) in data.ts
+    patientGroups: ["seniors"] as PatientGroup[],
     categorizedFeatures: [
-      {
-        title: "Alzheimer's & Dementia Support",
-        items: ["Memory cueing and reminders", "Routine reinforcement", "Orientation assistance", "Structured daily schedules", "Redirection and reassurance"]
-      },
-      {
-        title: "Cognitive Wellness Support",
-        items: ["Reminiscence activities", "Memory games and exercises", "Cognitive engagement activities", "Social interaction for cognitive stimulation"]
-      },
-      {
-        title: "Fall Prevention Services",
-        items: ["Transfer supervision", "Mobility monitoring", "Ambulation assistance", "Assistive device support", "Fall-risk observation"]
-      },
-      {
-        title: "Home Safety Monitoring",
-        items: ["Environmental safety observations", "Clutter and trip hazard monitoring", "Lighting and accessibility review", "Bathroom safety monitoring"]
-      },
-      {
-        title: "Wellness Observation & Monitoring",
-        items: ["Observation of physical condition", "Observation of behavioral changes", "Observation of mobility changes", "Observation of nutritional and hydration status", "Reporting significant concerns to supervisors and family"]
-      },
-      {
-        title: "Emergency Preparedness & Response Support",
-        items: ["Emergency contact verification", "Emergency planning assistance", "Emergency response coordination", "Wellness and safety checks"]
-      }
+      { title: "Alzheimer's & Dementia Support", icon: Brain, items: ["Memory cueing and reminders", "Routine reinforcement", "Orientation assistance", "Structured daily schedules", "Redirection and reassurance"] },
+      { title: "Cognitive Wellness Support", icon: Lightbulb, items: ["Reminiscence activities", "Memory games and exercises", "Cognitive engagement activities", "Social interaction for cognitive stimulation"] },
+      { title: "Fall Prevention Services", icon: ShieldCheck, items: ["Transfer supervision", "Mobility monitoring", "Ambulation assistance", "Assistive device support", "Fall-risk observation"] },
+      { title: "Home Safety Monitoring", icon: Eye, items: ["Environmental safety observations", "Clutter and trip hazard monitoring", "Lighting and accessibility review", "Bathroom safety monitoring"] },
+      { title: "Wellness Observation & Monitoring", icon: Activity, items: ["Observation of physical condition", "Observation of behavioral changes", "Observation of mobility changes", "Observation of nutritional and hydration status", "Reporting significant concerns to supervisors and family"] },
+      { title: "Emergency Preparedness & Response Support", icon: AlertTriangle, items: ["Emergency contact verification", "Emergency planning assistance", "Emergency response coordination", "Wellness and safety checks"] },
     ],
-    whoFor: [
-      "Individuals diagnosed with Alzheimer's disease, Lewy Body, or Vascular Dementia",
-      "Families experiencing caregiving exhaustion from handling progressive memory loss",
-      "Those experiencing frequent confusion, wandering behaviors, or evening agitation",
-      "Clients who need a consistent, calming presence to prevent home accidents or panic"
-    ],
+    whoFor: ["Individuals diagnosed with Alzheimer's disease, Lewy Body, or Vascular Dementia", "Families experiencing caregiving exhaustion from handling progressive memory loss", "Those experiencing frequent confusion, wandering behaviors, or evening agitation", "Clients who need a consistent, calming presence to prevent home accidents or panic"],
     howItWorks: [
       { step: "01", title: "Comprehensive Cognitive Assessment", desc: "We collaborate with the family and primary doctors to map out the current dementia stage, triggers, and baseline cognitive functions." },
       { step: "02", title: "Custom Behavioral Care Plan", desc: "We design a customized, structured daily plan built around existing life habits, sleep patterns, and preferred historical routines." },
@@ -178,39 +147,16 @@ export const services = [
     category: "Home Support",
     duration: "Scheduled part-time / Daily visits",
     coverage: "Home Interior",
-    // Inside the service object (id: 3) in data.ts
+    patientGroups: ["seniors"] as PatientGroup[],
     categorizedFeatures: [
-      {
-        title: "Meal Planning & Preparation",
-        items: ["Meal planning", "Grocery list preparation", "Meal preparation", "Healthy snack preparation", "Special dietary accommodation support"]
-      },
-      {
-        title: "Nutrition & Hydration Support",
-        items: ["Feeding assistance", "Hydration reminders", "Nutrition encouragement", "Monitoring food intake"]
-      },
-      {
-        title: "Kitchen Management",
-        items: ["Kitchen cleanup", "Food storage organization", "Food safety monitoring", "Expiration date checks"]
-      },
-      {
-        title: "Light Housekeeping Services",
-        items: ["Dusting", "Vacuuming", "Sweeping and mopping", "Dishwashing", "General tidying of living spaces"]
-      },
-      {
-        title: "Laundry & Linen Services",
-        items: ["Laundry and folding clothes", "Changing bed linens", "Making beds", "Organizing clothing"]
-      },
-      {
-        title: "Errands & Shopping Assistance",
-        items: ["Grocery shopping", "Pharmacy pickup", "Household supply shopping", "Mailing and personal errands"]
-      }
+      { title: "Meal Planning & Preparation", icon: ChefHat, items: ["Meal planning", "Grocery list preparation", "Meal preparation", "Healthy snack preparation", "Special dietary accommodation support"] },
+      { title: "Nutrition & Hydration Support", icon: Droplets, items: ["Feeding assistance", "Hydration reminders", "Nutrition encouragement", "Monitoring food intake"] },
+      { title: "Kitchen Management", icon: CookingPot, items: ["Kitchen cleanup", "Food storage organization", "Food safety monitoring", "Expiration date checks"] },
+      { title: "Light Housekeeping Services", icon: Sparkles, items: ["Dusting", "Vacuuming", "Sweeping and mopping", "Dishwashing", "General tidying of living spaces"] },
+      { title: "Laundry & Linen Services", icon: WashingMachine, items: ["Laundry and folding clothes", "Changing bed linens", "Making beds", "Organizing clothing"] },
+      { title: "Errands & Shopping Assistance", icon: ShoppingCart, items: ["Grocery shopping", "Pharmacy pickup", "Household supply shopping", "Mailing and personal errands"] },
     ],
-    whoFor: [
-      "Seniors who find heavy household cleaning tasks painful or physically unsafe",
-      "Individuals with limited mobility, severe arthritis, or low daily energy levels",
-      "Those managing chronic conditions requiring complex, strict dietary guidelines",
-      "Busy families who want to guarantee a clean, sanitary living space for an aging relative"
-    ],
+    whoFor: ["Seniors who find heavy household cleaning tasks painful or physically unsafe", "Individuals with limited mobility, severe arthritis, or low daily energy levels", "Those managing chronic conditions requiring complex, strict dietary guidelines", "Busy families who want to guarantee a clean, sanitary living space for an aging relative"],
     howItWorks: [
       { step: "01", title: "Home Environment & Diet Assessment", desc: "We tour the home to catalog cleaning priorities, identify safety red flags, and review dietary rules or physician restrictions." },
       { step: "02", title: "Customized Menu & Chore Checklist", desc: "A personalized, rotating meal plan is created alongside a highly specific daily and weekly household task schedule." },
@@ -232,35 +178,15 @@ export const services = [
     category: "Family Support",
     duration: "Hourly up to multi-week blocks",
     coverage: "Home & Short-term Travel",
-    // Inside the service object (id: 4) in data.ts
+    patientGroups: ["seniors", "adults", "children"] as PatientGroup[],
     categorizedFeatures: [
-      {
-        title: "In-Home Respite Care",
-        items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"]
-      },
-      {
-        title: "Overnight Respite Support",
-        items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"]
-      },
-      {
-        title: "Caregiver Wellness Support",
-        items: ["Reducing caregiver burden", "Providing peace of mind", "Supporting caregiver work-life balance", "Temporary relief during emergencies"]
-      },
-      {
-        title: "Family Communication & Updates",
-        items: ["Care updates for family members", "Reporting observations and concerns", "Coordination with authorized family representatives", "Care continuity support"]
-      },
-      {
-        title: "Recovery & Transitional Support",
-        items: ["Temporary assistance during caregiver absence", "Support following hospitalization of a family caregiver", "Assistance during family travel or emergencies"]
-      }
+      { title: "In-Home Respite Care", icon: Home, items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"] },
+      { title: "Overnight Respite Support", icon: MoonStar, items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"] },
+      { title: "Caregiver Wellness Support", icon: HeartHandshake, items: ["Reducing caregiver burden", "Providing peace of mind", "Supporting caregiver work-life balance", "Temporary relief during emergencies"] },
+      { title: "Family Communication & Updates", icon: PhoneCall, items: ["Care updates for family members", "Reporting observations and concerns", "Coordination with authorized family representatives", "Care continuity support"] },
+      { title: "Recovery & Transitional Support", icon: RefreshCw, items: ["Temporary assistance during caregiver absence", "Support following hospitalization of a family caregiver", "Assistance during family travel or emergencies"] },
     ],
-    whoFor: [
-      "Family members operating as the 24/7 primary caregiver for a relative",
-      "Caregivers showing clinical signs of physical exhaustion, chronic stress, or illness",
-      "Families preparing for an upcoming vacation, wedding, or major career change",
-      "Anyone needing a trustworthy, fully vetted backup care safety net on short notice"
-    ],
+    whoFor: ["Family members operating as the 24/7 primary caregiver for a relative", "Caregivers showing clinical signs of physical exhaustion, chronic stress, or illness", "Families preparing for an upcoming vacation, wedding, or major career change", "Anyone needing a trustworthy, fully vetted backup care safety net on short notice"],
     howItWorks: [
       { step: "01", title: "Meticulous Primary Caregiver Interview", desc: "We extract all the nuanced details of your loved one's care — routines, specific quirks, favorite phrases, and hidden medical triggers." },
       { step: "02", title: "Introductory Trial Visit", desc: "We coordinate a brief, fully paid introductory visit so the client can bond with the relief caregiver while you are still present." },
@@ -282,22 +208,16 @@ export const services = [
     category: "Specialized Care",
     duration: "Flexible scheduled shifts",
     coverage: "Home, Workplace & Community Integration",
-    features: [
-      "Individualized support plans focused strictly on personal independence milestones",
-      "Seamless coordination with assigned physical, occupational, and speech therapies",
-      "Expert adaptive equipment assistance, transfer training, and hoist/lift utilization",
-      "Active community integration, vocational support, and social group participation",
-      "Life-skill development, including budget tracking, meal prep, and public transport training",
-      "System navigation, NDIS/insurance form tracking, and legal self-advocacy support",
-      "Sensory processing support and customized environmental modification guidance",
-      "Transport and physical assistance during continuing education courses or workplaces"
+    patientGroups: ["adults"] as PatientGroup[],
+    categorizedFeatures: [
+      { title: "Physical Disability Support", icon: Accessibility, items: ["Mobility assistance", "Transfer assistance", "Personal care support", "Daily activity assistance", "Adaptive equipment support"] },
+      { title: "Developmental Disability Support", icon: Layers, items: ["Structured daily routines", "Personal assistance services", "Community participation support", "Life skills reinforcement", "Independence-building activities"] },
+      { title: "Cognitive & Behavioral Support", icon: Brain, items: ["Routine reinforcement", "Orientation assistance", "Redirection and reassurance", "Behavioral observation", "Cognitive engagement activities"] },
+      { title: "Community Integration Services", icon: Globe, items: ["Community participation support", "Recreational activity assistance", "Social engagement opportunities", "Volunteer and community involvement support"] },
+      { title: "Independent Living Services", icon: Home, items: ["Assistance with household tasks", "Personal organization support", "Appointment coordination", "Daily living skill development"] },
+      { title: "Wellness & Safety Monitoring", icon: ShieldCheck, items: ["Observation of health status", "Monitoring functional abilities", "Safety supervision", "Reporting significant changes in condition"] },
     ],
-    whoFor: [
-      "Adults and young adults managing severe physical or neurological disabilities",
-      "Individuals navigating developmental, learning, or complex intellectual disabilities",
-      "People actively transitioning from clinical facilities to autonomous community living",
-      "Families seeking structured, highly goal-oriented physical or cognitive support workers"
-    ],
+    whoFor: ["Adults and young adults managing severe physical or neurological disabilities", "Individuals navigating developmental, learning, or complex intellectual disabilities", "People actively transitioning from clinical facilities to autonomous community living", "Families seeking structured, highly goal-oriented physical or cognitive support workers"],
     howItWorks: [
       { step: "01", title: "Collaborative Goal-Setting Session", desc: "The client, family, and case manager meet to establish specific independence milestones (e.g., vocational goals, motor skill training)." },
       { step: "02", title: "Adaptive Support Framework Design", desc: "We map out a structured strategy prioritizing client autonomy, communication preferences, and physical safety loops." },
@@ -319,22 +239,15 @@ export const services = [
     category: "Clinical Support",
     duration: "Short-term targeted (weeks to months)",
     coverage: "Home-Based Transition",
-    features: [
-      "Rigorous discharge instruction review, timeline compliance, and tracking",
-      "Wound care tracking, surgical incision observation, and early infection checks",
-      "Home physical/occupational therapy exercise coaching and mobility supervision",
-      "Complex medication reconciliation, setting up pill organizers, and timing tracking",
-      "Targeted nutritional planning optimized for tissue repair and post-surgical healing",
-      "Instant, clear communication loops with primary physicians and surgeons",
-      "Transportation and physical chaperone service for follow-up clinical appointments",
-      "Vigilant monitoring for signs of deep vein thrombosis (DVT) or fluid retention"
+    patientGroups: ["seniors", "adults", "children"] as PatientGroup[],
+    categorizedFeatures: [
+      { title: "Hospital-to-Home Transition Services", icon: RefreshCw, items: ["Support following hospital discharge", "Assistance after rehabilitation stays", "Recovery support after illness", "Recovery support following surgery"] },
+      { title: "Daily Living Recovery Assistance", icon: ClipboardList, items: ["Personal care assistance", "Mobility support", "Meal preparation", "Household support"] },
+      { title: "Wellness Observation & Monitoring", icon: Eye, items: ["Observation for changes in condition", "Monitoring mobility and strength", "Observation of recovery progress", "Reporting concerns to authorized parties"] },
+      { title: "Follow-Up Care Coordination", icon: CalendarCheck, items: ["Appointment reminders", "Transportation to follow-up visits", "Coordination with family caregivers", "Recovery support planning"] },
+      { title: "Short-Term Recovery Support", icon: TrendingUp, items: ["Temporary care assistance", "Transitional support services", "Reinforcement of discharge instructions (non-clinical)", "Recovery-focused companionship"] },
     ],
-    whoFor: [
-      "Individuals recovering from orthopedic surgery, cardiac events, or complex illnesses",
-      "Seniors carrying a statistically high clinical risk of hospital readmission",
-      "Those who live alone and lack an immediate family safety net for overnight post-op care",
-      "Patients managing new, complex post-discharge medical devices or routines"
-    ],
+    whoFor: ["Individuals recovering from orthopedic surgery, cardiac events, or complex illnesses", "Seniors carrying a statistically high clinical risk of hospital readmission", "Those who live alone and lack an immediate family safety net for overnight post-op care", "Patients managing new, complex post-discharge medical devices or routines"],
     howItWorks: [
       { step: "01", title: "Pre-Discharge Hospital Liaison", desc: "Our nursing lead coordinates directly with your hospital discharge team before you leave to capture surgical history and prescriptions." },
       { step: "02", title: "Post-Op Home Setup & Sanitization", desc: "We prepare the home layout, install temporary grab bars, configure recovery equipment, and clear fall hazards." },
@@ -356,22 +269,15 @@ export const services = [
     category: "Wellness",
     duration: "Daily check-ins / Drop-in shifts",
     coverage: "In-Home Vitals Tracking & Remote Safety Logs",
-    features: [
-      "Highly precise, scheduled medication prompts aligned with strict physician timelines",
-      "Weekly/monthly pill organizer configuration, inventory audits, and refill coordination",
-      "Daily blood pressure, pulse, blood glucose, and oxygen saturation logs",
-      "Symptom tracking, pain metrics logging, and clear changes-in-condition documentation",
-      "Direct medical coordination with pharmacies and prescribing specialist teams",
-      "Instant automated family notifications for missed doses or vital sign warnings",
-      "Cognitive orientation checks and hydration status monitoring",
-      "Assistance setting up and maintaining digital medication dispensing systems"
+    patientGroups: ["seniors", "adults", "children"] as PatientGroup[],
+    categorizedFeatures: [
+      { title: "Medication Reminder Services", icon: Bell, items: ["Verbal medication reminders", "Medication schedule prompts", "Reminder documentation", "Observation of self-administration"] },
+      { title: "Medication Compliance Monitoring", icon: ScanLine, items: ["Reporting missed doses", "Reporting medication refusals", "Reporting medication-related concerns", "Family notification as authorized"] },
+      { title: "Wellness Checks", icon: HeartPulse, items: ["Routine wellness observations", "Monitoring changes in condition", "Observation of appetite and hydration", "Observation of mobility and function"] },
+      { title: "Safety Monitoring", icon: ShieldCheck, items: ["Observation for falls or safety concerns", "Monitoring environmental safety", "Wellness and reassurance visits", "Escalation of urgent concerns"] },
+      { title: "Health & Wellness Support", icon: Activity, items: ["Healthy habit encouragement", "Hydration reminders", "Nutrition encouragement", "Wellness education reinforcement"] },
     ],
-    whoFor: [
-      "Seniors managing polypharmacy regimens (taking 5+ distinct medications daily)",
-      "Individuals dealing with chronic conditions like type-2 diabetes, hypertension, or heart failure",
-      "Those experiencing early memory changes who occasionally lose track of dosage timings",
-      "Anxious families who want a reliable, daily professional validation of their relative's vitals"
-    ],
+    whoFor: ["Seniors managing polypharmacy regimens (taking 5+ distinct medications daily)", "Individuals dealing with chronic conditions like type-2 diabetes, hypertension, or heart failure", "Those experiencing early memory changes who occasionally lose track of dosage timings", "Anxious families who want a reliable, daily professional validation of their relative's vitals"],
     howItWorks: [
       { step: "01", title: "Clinical Pharmacy & Medication Mapping", desc: "We catalog every single drug, supplement, dosage timeline, food restriction, and potential cross-interaction side effect." },
       { step: "02", title: "Customized Vitals Monitoring Schedule", desc: "We set up a tracking chart capturing exactly when and how blood pressure, glucose, or weight parameters must be recorded." },
@@ -393,22 +299,16 @@ export const services = [
     category: "Community Access",
     duration: "Per-trip booking / Recurring travel blocks",
     coverage: "Regional Door-to-Door Outings",
-    features: [
-      "Prompt medical appointment transport accompanied by a supportive caregiver",
-      "Physical, occupational, and outpatient rehabilitation transport loops",
-      "Prescription pickup runs, grocery errands, and department store trips",
-      "Escorted travel to weddings, family reunions, and holiday social gatherings",
-      "Full door-to-door physical assistance, walker management, and wheelchair loading",
-      "Appointment timeline planning, departure reminders, and wait-list coordination",
-      "Taking basic notes during non-confidential medical check-ups to share with family",
-      "Weather-contingent routing to ensure client safety during winter or heavy rain conditions"
+    patientGroups: ["adults", "children"] as PatientGroup[],
+    categorizedFeatures: [
+      { title: "Medical Transportation", icon: Stethoscope, items: ["Physician appointments", "Specialist appointments", "Therapy visits", "Diagnostic testing appointments", "Outpatient procedure transportation"] },
+      { title: "Healthcare Escort Services", icon: UserCheck, items: ["Accompaniment to appointments", "Assistance with check-in and registration", "Mobility assistance during appointments", "Return-home assistance"] },
+      { title: "Personal Transportation", icon: ShoppingCart, items: ["Grocery shopping", "Pharmacy visits", "Banking errands", "Personal errands and appointments"] },
+      { title: "Employment & Education Transportation", icon: Building2, items: ["Transportation to work", "Transportation to vocational programs", "Transportation to educational activities", "Transportation to job interviews"] },
+      { title: "Community Participation Transportation", icon: MapPin, items: ["Religious services", "Community programs", "Social events", "Recreational activities"] },
+      { title: "Transportation Safety Support", icon: ShieldCheck, items: ["Door-to-door assistance", "Vehicle entry and exit assistance", "Wheelchair and mobility support", "Travel safety supervision"] },
     ],
-    whoFor: [
-      "Seniors who have chosen to stop driving or live with vision impairments",
-      "Individuals dealing with severe mobility limitations or neurological conditions",
-      "Those who have frequent specialized clinical appointments throughout the week",
-      "Anyone who values a physical, encouraging chaperone rather than riding alone in a taxi or rideshare"
-    ],
+    whoFor: ["Seniors who have chosen to stop driving or live with vision impairments", "Individuals dealing with severe mobility limitations or neurological conditions", "Those who have frequent specialized clinical appointments throughout the week", "Anyone who values a physical, encouraging chaperone rather than riding alone in a taxi or rideshare"],
     howItWorks: [
       { step: "01", title: "Calendar Sync & Scheduling", desc: "We map out your upcoming outpatient schedules, medical checkups, and errands onto a unified master logistics calendar." },
       { step: "02", title: "Mobility & Vehicle Matching", desc: "We select the appropriate vehicle and caregiver support based on your physical equipment needs (e.g., folding walkers, extra legroom)." },
@@ -430,26 +330,25 @@ export const services = [
     category: "Pediatric",
     duration: "Flexible hourly / Overnight adjustments",
     coverage: "Home, School & Pediatric Facility Companion",
-    features: [
-      "Newborn care support, formula preparation, and sleep schedule tracking",
-      "Age-appropriate developmental play, motor skill exercises, and sensory activities",
-      "Pediatric chronic medical condition tracking and medication delivery tracking",
-      "School preparation routines, cognitive exercises, and structured homework support",
-      "Escort and companion assistance to physical therapy or speech pathology appointments",
-      "Specialized night-nursing options for medically fragile or high-monitoring infants",
-      "Allergy-conscious, specialized meal planning and dietary tracking for children",
-      "Behavioral reinforcement strategies aligned with child psychology frameworks"
+    patientGroups: ["children"] as PatientGroup[],
+    categorizedFeatures: [
+      { title: "Personal Hygiene & Grooming", icon: ShowerHead, items: ["Bathing assistance", "Oral hygiene assistance", "Hair care and grooming", "Dressing and undressing assistance", "Toileting assistance", "Diapering assistance", "Continence care assistance"] },
+      { title: "Mobility & Daily Living Support", icon: Accessibility, items: ["Ambulation assistance", "Transfer assistance", "Positioning and repositioning", "Assistance with mobility devices", "Daily routine assistance"] },
+      { title: "Feeding Assistance", icon: UtensilsCrossed, items: ["Meal setup", "Feeding assistance", "Hydration assistance", "Assistance during mealtimes"] },
+      { title: "Companionship & Supervision Services", icon: Users, items: ["Social interaction and companionship", "Recreational activities", "Reading and storytelling", "Games and age-appropriate activities", "Emotional support and encouragement", "General supervision", "Monitoring safety within the home", "Structured daily routine support", "Observation of well-being"] },
+      { title: "Special Needs & Routine Support", icon: ClipboardList, items: ["Assistance with activities of daily living", "Assistance following established routines", "Reinforcement of daily schedules", "Support with age-appropriate independence", "Supervision during daily activities"] },
+      { title: "Safety & Wellness Monitoring", icon: ShieldCheck, items: ["Observation of well-being", "Safety supervision", "Monitoring for changes in condition", "Reporting concerns to parents or guardians", "Emergency contact verification", "Emergency response assistance"] },
+      { title: "School & Community Transportation", icon: Car, items: ["Transportation to and from school", "Transportation to educational programs", "Transportation to school-sponsored activities", "Transportation to physician appointments", "Transportation to therapy appointments", "Transportation to recreational activities", "Transportation to religious services", "Door-to-door assistance and safety supervision"] },
+      { title: "Meal Preparation & Nutrition", icon: ChefHat, items: ["Preparation of meals and snacks", "Meal planning assistance", "Food preparation according to family instructions", "Kitchen cleanup following meal preparation", "Feeding support and hydration encouragement", "Following prescribed dietary preferences", "Encouraging healthy eating habits", "Monitoring meal consumption"] },
+      { title: "Medication Reminders", icon: Bell, items: ["Verbal medication reminders", "Scheduled medication prompts", "Observation of self-administration when appropriate", "Documentation of reminders provided", "Reporting missed doses to parents or guardians"] },
+      { title: "Respite Care for Parents", icon: HeartHandshake, items: ["Temporary caregiver relief", "Short-term supervision", "Scheduled respite visits", "Flexible respite scheduling", "Evening supervision and overnight monitoring", "Bedtime assistance and nighttime safety observation", "Temporary care during family emergencies"] },
+      { title: "Post-Hospital Recovery Support", icon: Activity, items: ["Personal care assistance during recovery", "Feeding and mobility assistance", "Supervision during recovery", "Observation for changes in condition", "Transportation to follow-up appointments", "Assistance with daily routines during recovery"] },
     ],
-    whoFor: [
-      "Families managing newborns or medically complex infants requiring close care",
-      "Parents raising children diagnosed with neurodivergent conditions, autism, or delays",
-      "Demanding professional households seeking elite, safety-certified in-home childcare professionals",
-      "Families navigating a child's short-term post-surgical recovery or rehabilitation plan"
-    ],
+    whoFor: ["Families managing newborns or medically complex infants requiring close care", "Parents raising children diagnosed with neurodivergent conditions, autism, or delays", "Demanding professional households seeking elite, safety-certified in-home childcare professionals", "Families navigating a child's short-term post-surgical recovery or rehabilitation plan"],
     howItWorks: [
-      { step: "01", title: "Family Routine & Medical Consultation", desc: "We sit down with parents and clinical histories to review your child’s emotional triggers, therapeutic goals, and favorite home routines." },
+      { step: "01", title: "Family Routine & Medical Consultation", desc: "We sit down with parents and clinical histories to review your child's emotional triggers, therapeutic goals, and favorite home routines." },
       { step: "02", title: "Pediatric Specialist Vetting & Matching", desc: "We pair your family with a certified professional possessing background experience in early childhood education or pediatric nursing fields." },
-      { step: "03", title: "Supervised Introductory Play Session", desc: "A carefully managed intro session builds safety, boundaries, and emotional comfort for your child before individual care kicks off." },
+      { step: "03", title: "Supervised Introductory Play Session", desc: "A carefully managed intro session builds safety, bounds, and emotional comfort for your child before individual care kicks off." },
       { step: "04", title: "Granular Daily Progress Tracking", desc: "Parents receive detailed daily logs mapping out nutritional values, mood metrics, educational wins, and biometric readings." },
     ],
   },

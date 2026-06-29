@@ -3,11 +3,25 @@
 import { useState, use, useEffect, useRef } from "react";
 import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { Clock, MapPin } from "lucide-react";
-import { services } from "../data";
+import {
+  Clock,
+  MapPin,
+  ShieldCheck,
+  HeartHandshake,
+  FileCheck,
+  Headset,
+  Users,
+  CalendarDays,
+} from "lucide-react"; import { services } from "../data";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+interface CategorizedFeature {
+  title: string;
+  icon?: React.ElementType;
+  items: string[];
 }
 
 // ── Sticky CTA Card ──
@@ -22,7 +36,7 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
   useEffect(() => {
     function captureInitial() {
       if (!wrapperRef.current || !cardRef.current || !leftColRef.current) return;
-      if (initialTopRef.current !== null) return; // already captured
+      if (initialTopRef.current !== null) return;
 
       const wrapperTop =
         wrapperRef.current.getBoundingClientRect().top + window.scrollY;
@@ -31,7 +45,6 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
         leftColRef.current.getBoundingClientRect().bottom + window.scrollY;
 
       initialTopRef.current = wrapperTop;
-      // The exact scrollY where card bottom touches left col bottom — fixed once
       stopScrollYRef.current = leftColBottomAbs - cardHeight - FIXED_TOP;
     }
 
@@ -53,7 +66,6 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
       const stopScrollY = stopScrollYRef.current;
 
       if (scrollY + FIXED_TOP < initialTopRef.current) {
-        // ── relative: not yet triggered
         if (stateRef.current !== "relative") {
           setTransition(false);
           cardRef.current.style.position = "relative";
@@ -64,9 +76,8 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
           stateRef.current = "relative";
         }
       } else if (scrollY >= stopScrollY) {
-        // ── docked: freeze card smoothly at stop point
         if (stateRef.current !== "docked") {
-          setTransition(stateRef.current === "fixed"); // smooth only from fixed→docked
+          setTransition(stateRef.current === "fixed");
           const dockedTop = stopScrollY - initialTopRef.current + FIXED_TOP;
           cardRef.current.style.position = "absolute";
           cardRef.current.style.top = `${dockedTop}px`;
@@ -76,7 +87,6 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
           stateRef.current = "docked";
         }
       } else {
-        // ── fixed: follow viewport
         if (stateRef.current !== "fixed") {
           setTransition(false);
           cardRef.current.style.position = "fixed";
@@ -95,7 +105,6 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
     }, 100);
 
     const handleResize = () => {
-      // Full reset on resize so measurements are recaptured
       initialTopRef.current = null;
       stopScrollYRef.current = null;
       stateRef.current = "relative";
@@ -129,18 +138,31 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
         </div>
 
         {[
-          "100% Satisfaction Guarantee",
-          "Experts in Around-the-Clock 24-Hour Home Care",
-          "No Long Term Contracts",
-          "Care Managers Available 24/7",
-          "High Caliber Caregivers",
-        ].map((text, i) => (
+          {
+            text: "100% Satisfaction Guarantee",
+            icon: ShieldCheck,
+          },
+          {
+            text: "Experts in Around-the-Clock 24-Hour Home Care",
+            icon: HeartHandshake,
+          },
+          {
+            text: "No Long Term Contracts",
+            icon: FileCheck,
+          },
+          {
+            text: "Care Managers Available 24/7",
+            icon: Headset,
+          },
+          {
+            text: "High Caliber Caregivers",
+            icon: Users,
+          },
+        ].map(({ text, icon: Icon }, i) => (
           <div key={i}>
             <div className="flex items-center gap-3 py-2.5">
-              <div className="w-[32px] h-[32px] rounded-full bg-[#2196F3] flex items-center justify-center flex-shrink-0">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                  <circle cx="12" cy="12" r="8" />
-                </svg>
+              <div className="w-10 h-10 rounded-xl bg-[#2196F3] flex items-center justify-center flex-shrink-0 shadow-md">
+                <Icon className="w-5 h-5 text-white" strokeWidth={2.3} />
               </div>
               <p className="text-white text-[13px] leading-[18px] font-semibold">
                 {text}
@@ -180,15 +202,15 @@ export default function ServiceDetailPage({ params }: PageProps) {
   const service = services.find((s) => s.id === serviceId);
 
   const [activeStep, setActiveStep] = useState(0);
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
 
   if (!service) notFound();
 
-  const categories: { title: string; items: string[] }[] =
-    "categorizedFeatures" in service && service.categorizedFeatures
-      ? (service.categorizedFeatures as { title: string; items: string[] }[])
-      : (service as any).features
+  // Resolve categorized features — supports both shapes
+  const categories: CategorizedFeature[] =
+    "categorizedFeatures" in service && Array.isArray(service.categorizedFeatures)
+      ? (service.categorizedFeatures as CategorizedFeature[])
+      : "features" in service && Array.isArray((service as any).features)
         ? [{ title: "What's Included", items: (service as any).features as string[] }]
         : [];
 
@@ -241,7 +263,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
           {/* Overview */}
           <section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
             <h2 className="text-xl font-bold text-[#1a365d] mb-4">
-              Personal Care & Daily Living Assistance
+              {service.title}
             </h2>
             <p className="text-slate-600 leading-relaxed text-base mb-1">
               {service.description}
@@ -252,29 +274,38 @@ export default function ServiceDetailPage({ params }: PageProps) {
 
             {/* TIMELINE LIST */}
             <div className="flex flex-col">
-              {categories.map((cat, idx) => (
-                <div key={idx} className="flex items-start gap-4">
-                  <div className="flex flex-col items-center flex-shrink-0 self-stretch">
-                    <div
-                      className="w-8 h-8 rounded-lg bg-[#005B8E] flex items-center justify-center flex-shrink-0"
-                      style={{ marginTop: "2px" }}
-                    >
-                      <div className="w-2 h-2 rounded-full bg-white/60" />
+              {categories.map((cat, idx) => {
+                const Icon = cat.icon;
+                return (
+                  <div key={idx} className="flex items-start gap-4">
+                    {/* icon + connector line */}
+                    <div className="flex flex-col items-center flex-shrink-0 self-stretch">
+                      <div
+                        className="w-10 h-10 rounded-xl bg-[#005B8E] flex items-center justify-center flex-shrink-0"
+                        style={{ marginTop: "2px" }}
+                      >
+                        {Icon ? (
+                          <Icon className="w-5 h-5 text-white" strokeWidth={2.2} />
+                        ) : (
+                          <div className="w-2 h-2 rounded-full bg-white/60" />
+                        )}
+                      </div>
+                      {idx !== categories.length - 1 && (
+                        <div className="w-[2px] bg-slate-200 flex-1 mt-1" />
+                      )}
                     </div>
-                    {idx !== categories.length - 1 && (
-                      <div className="w-[2px] bg-slate-200 flex-1 mt-1" />
-                    )}
+                    {/* text */}
+                    <div className="pb-7">
+                      <h3 className="text-[17px] font-bold text-[#112240] leading-8">
+                        {cat.title}
+                      </h3>
+                      <p className="text-sm text-slate-500 mt-[3px] leading-relaxed">
+                        {cat.items.join(", ")}
+                      </p>
+                    </div>
                   </div>
-                  <div className="pb-7">
-                    <h3 className="text-[17px] font-bold text-[#112240] leading-8">
-                      {cat.title}
-                    </h3>
-                    <p className="text-sm text-slate-500 mt-[3px] leading-relaxed">
-                      {cat.items.join(", ")}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
@@ -289,15 +320,23 @@ export default function ServiceDetailPage({ params }: PageProps) {
                   key={step.step}
                   onClick={() => setActiveStep(idx)}
                   className={`text-left p-4 rounded-xl border transition-all ${activeStep === idx
-                      ? "bg-slate-900 border-slate-900 shadow-md text-white"
-                      : "bg-slate-50 border-slate-100 text-slate-800 hover:bg-slate-100"
+                    ? "bg-slate-900 border-slate-900 shadow-md text-white"
+                    : "bg-slate-50 border-slate-100 text-slate-800 hover:bg-slate-100"
                     }`}
                 >
-                  <span className={`block text-xs font-bold tracking-wider uppercase mb-1 ${activeStep === idx ? "text-blue-400" : "text-slate-400"}`}>
+                  <span
+                    className={`block text-xs font-bold tracking-wider uppercase mb-1 ${activeStep === idx ? "text-blue-400" : "text-slate-400"
+                      }`}
+                  >
                     Step {step.step}
                   </span>
-                  <span className="block font-bold text-sm leading-tight mb-2">{step.title}</span>
-                  <p className={`text-xs leading-relaxed ${activeStep === idx ? "text-slate-300" : "text-slate-500"}`}>
+                  <span className="block font-bold text-sm leading-tight mb-2">
+                    {step.title}
+                  </span>
+                  <p
+                    className={`text-xs leading-relaxed ${activeStep === idx ? "text-slate-300" : "text-slate-500"
+                      }`}
+                  >
                     {step.desc}
                   </p>
                 </button>

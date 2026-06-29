@@ -42,30 +42,28 @@ function HeroSection({ onScroll }: { onScroll: () => void }) {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
       <div className="absolute -top-40 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      
+
       <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           <div className="lg:col-span-7 space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold uppercase tracking-wider">
               <Sparkles className="w-3 h-3 text-blue-400" />
               Direct Network Hiring
             </div>
-            
+
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
               Find Your Next Meaningful <br />
               <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-white bg-clip-text text-transparent">
                 Healthcare Role
               </span>
             </h1>
-            
+
             <p className="text-gray-300 text-base md:text-lg max-w-2xl leading-relaxed">
               Explore fully verified nursing, therapy, and community support positions. Connect directly with premier care facilities and independent home care networks built around your life.
             </p>
-
-          
           </div>
-          
+
           <div className="lg:col-span-5 grid grid-cols-2 gap-4 relative">
             <div className="p-4 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 flex flex-col justify-between">
               <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3">
@@ -133,17 +131,16 @@ function MultiSelectFilter({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-   const handler = (e: MouseEvent) => {
-  if (ref.current && !ref.current.contains(e.target as Node)) {
-    setOpen(false);
-    setSearchQuery("");
-  }
-};
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearchQuery("");
+      }
+    };
 
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
-
 
   const toggleOption = (option: string) => {
     if (values.includes(option)) {
@@ -160,11 +157,11 @@ function MultiSelectFilter({
 
   return (
     <div className="relative" ref={ref}>
- <button
-  onClick={() => {
-    if (open) setSearchQuery("");
-    setOpen(!open);
-  }}
+      <button
+        onClick={() => {
+          if (open) setSearchQuery("");
+          setOpen(!open);
+        }}
         className="flex items-center gap-2 px-4 h-10 border border-gray-300 rounded bg-white text-black text-sm font-medium transition hover:bg-gray-50 focus:outline-none"
       >
         <span className="max-w-[240px] truncate">
@@ -187,7 +184,7 @@ function MultiSelectFilter({
               autoFocus
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery("")}
                 className="text-gray-400 hover:text-gray-600 p-0.5"
               >
@@ -278,7 +275,7 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
               {job.partner && <PartnerBadge name={job.partner} />}
             </div>
           </div>
-          
+
           {/* Action Column Top-Right */}
           <div className="flex flex-col items-end flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -420,6 +417,8 @@ function BenefitsCard() {
 
 export default function CareersPage() {
   const jobsSectionRef = useRef<HTMLDivElement>(null);
+  const detailPanelRef = useRef<HTMLDivElement>(null);
+
   const scrollToJobs = () => {
     const yOffset = -80;
     const element = jobsSectionRef.current;
@@ -431,50 +430,57 @@ export default function CareersPage() {
   const [savedJobs, setSavedJobs] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
+  // Scroll detail panel to top whenever selected job changes
+  useEffect(() => {
+    if (selectedJob && detailPanelRef.current) {
+      detailPanelRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedJob]);
+
   // Filter state
   const [keyword, setKeyword] = useState("");
   const [appliedKeyword, setAppliedKeyword] = useState("");
   const [jobCategories, setJobCategories] = useState<string[]>([]);
   const [employmentTypes, setEmploymentTypes] = useState<string[]>([]);
   const [remoteTypes, setRemoteTypes] = useState<string[]>([]);
- const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
-const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-const handleRemoteTypesChange = (values: string[]) => {
-  setRemoteTypes(values);
-  setCurrentPage(1);
-};
+  const handleRemoteTypesChange = (values: string[]) => {
+    setRemoteTypes(values);
+    setCurrentPage(1);
+  };
 
-const handleJobCategoriesChange = (values: string[]) => {
-  setJobCategories(values);
-  setCurrentPage(1);
-};
+  const handleJobCategoriesChange = (values: string[]) => {
+    setJobCategories(values);
+    setCurrentPage(1);
+  };
 
-const handleEmploymentTypesChange = (values: string[]) => {
-  setEmploymentTypes(values);
-  setCurrentPage(1);
-};
+  const handleEmploymentTypesChange = (values: string[]) => {
+    setEmploymentTypes(values);
+    setCurrentPage(1);
+  };
 
-const handleLocationsChange = (values: string[]) => {
-  setSelectedLocations(values);
-  setCurrentPage(1);
-};
+  const handleLocationsChange = (values: string[]) => {
+    setSelectedLocations(values);
+    setCurrentPage(1);
+  };
 
   const filteredJobs = ALL_JOBS.filter((job) => {
     const kw = appliedKeyword.toLowerCase();
     const matchesKeyword = !kw || job.title.toLowerCase().includes(kw) || job.location.toLowerCase().includes(kw) || job.id.toString().includes(kw);
-    
+
     const matchesRemote = remoteTypes.length === 0 || remoteTypes.includes("All Types") || remoteTypes.includes(job.setting);
-    
-    const matchesCategory = jobCategories.length === 0 || jobCategories.some(cat => 
+
+    const matchesCategory = jobCategories.length === 0 || jobCategories.some(cat =>
       cat === "All Categories" || job.category.toLowerCase() === cat.toLowerCase() || job.title.toLowerCase().includes(cat.toLowerCase())
     );
-    
+
     const matchesEmployment = employmentTypes.length === 0 || employmentTypes.includes("All Types") || employmentTypes.includes(job.jobType);
-    
+
     const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes("All Locations") || selectedLocations.includes(job.location);
-    
+
     return matchesKeyword && matchesRemote && matchesCategory && matchesEmployment && matchesLocation;
   });
 
@@ -513,11 +519,11 @@ const handleLocationsChange = (values: string[]) => {
 
   return (
     <div className="w-full bg-white min-h-screen">
-      
+
       <HeroSection onScroll={scrollToJobs} />
-      
+
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
-        
+
         <h1 className="text-4xl md:text-5xl font-bold text-[#1a365d] mb-6">
           Explore Career Opportunities
         </h1>
@@ -537,10 +543,10 @@ const handleLocationsChange = (values: string[]) => {
               />
             </div>
             <button
-          onClick={() => {
-  setAppliedKeyword(keyword);
-  setCurrentPage(1);
-}}
+              onClick={() => {
+                setAppliedKeyword(keyword);
+                setCurrentPage(1);
+              }}
               className="h-10 px-6 bg-[#164e9a] hover:bg-[#1a365d] text-white font-semibold text-sm rounded transition tracking-wide"
             >
               Search
@@ -548,33 +554,33 @@ const handleLocationsChange = (values: string[]) => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-           <MultiSelectFilter
-  label="Location"
-  values={selectedLocations}
-  options={LOCATION_OPTIONS.filter(x => x !== "All Locations")}
-  onChange={handleLocationsChange}
-/>
+            <MultiSelectFilter
+              label="Location"
+              values={selectedLocations}
+              options={LOCATION_OPTIONS.filter(x => x !== "All Locations")}
+              onChange={handleLocationsChange}
+            />
 
-<MultiSelectFilter
-  label="Remote Type"
-  values={remoteTypes}
-  options={REMOTE_TYPES}
-  onChange={handleRemoteTypesChange}
-/>
+            <MultiSelectFilter
+              label="Remote Type"
+              values={remoteTypes}
+              options={REMOTE_TYPES}
+              onChange={handleRemoteTypesChange}
+            />
 
-<MultiSelectFilter
-  label="Job Category"
-  values={jobCategories}
-  options={JOB_CATEGORIES.filter(x => x !== "All Categories")}
-  onChange={handleJobCategoriesChange}
-/>
+            <MultiSelectFilter
+              label="Job Category"
+              values={jobCategories}
+              options={JOB_CATEGORIES.filter(x => x !== "All Categories")}
+              onChange={handleJobCategoriesChange}
+            />
 
-<MultiSelectFilter
-  label="Employment Type"
-  values={employmentTypes}
-  options={EMPLOYMENT_TYPES_LIST.filter(x => x !== "All Types")}
-  onChange={handleEmploymentTypesChange}
-/>
+            <MultiSelectFilter
+              label="Employment Type"
+              values={employmentTypes}
+              options={EMPLOYMENT_TYPES_LIST.filter(x => x !== "All Types")}
+              onChange={handleEmploymentTypesChange}
+            />
           </div>
 
           {activeFilters.length > 0 && (
@@ -612,11 +618,10 @@ const handleLocationsChange = (values: string[]) => {
                   <div
                     key={job.id}
                     onClick={() => setSelectedJob(isSelected ? null : job)}
-                    className={`flex items-start gap-3 p-3.5 rounded-lg border transition cursor-pointer relative ${
-                      isSelected
+                    className={`flex items-start gap-3 p-3.5 rounded-lg border transition cursor-pointer relative ${isSelected
                         ? "border-[#1a365d] bg-[#f0f6fb] ring-1 ring-[#1a365d]/20"
                         : "border-gray-200 bg-white hover:bg-gray-50"
-                    }`}
+                      }`}
                   >
                     <button
                       onClick={(e) => toggleSave(e, job.id)}
@@ -674,7 +679,7 @@ const handleLocationsChange = (values: string[]) => {
                   </div>
                 );
               })}
-              
+
               {filteredJobs.length === 0 && (
                 <div className="text-center py-12 text-gray-500 border border-dashed border-gray-200 rounded-lg">
                   No jobs found matching your criteria.
@@ -690,9 +695,8 @@ const handleLocationsChange = (values: string[]) => {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded text-sm transition ${
-                        currentPage === page ? "bg-[#1a365d] text-white" : "hover:bg-gray-100 text-gray-700"
-                      }`}
+                      className={`w-8 h-8 rounded text-sm transition ${currentPage === page ? "bg-[#1a365d] text-white" : "hover:bg-gray-100 text-gray-700"
+                        }`}
                     >
                       {page}
                     </button>
@@ -704,9 +708,9 @@ const handleLocationsChange = (values: string[]) => {
 
           {/* Right Column: Benefits / Detailed View Component */}
           <div
-            className={`sticky top-[80px] border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${
-              selectedJob ? "flex-1 min-w-0" : "w-[360px] flex-shrink-0"
-            }`}
+            ref={detailPanelRef}
+            className={`sticky top-[80px] border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${selectedJob ? "flex-1 min-w-0" : "w-[360px] flex-shrink-0"
+              }`}
             style={{ maxHeight: "calc(100vh - 120px)" }}
           >
             {selectedJob ? (
