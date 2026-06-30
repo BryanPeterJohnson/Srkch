@@ -1,18 +1,22 @@
 "use client";
 
-import { useState, use, useEffect, useRef } from "react";
+import { use, useEffect, useRef } from "react";
 import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Clock,
   MapPin,
   ShieldCheck,
-  HeartHandshake,
+  Clock4,
   FileCheck,
-  Headset,
-  Users,
-  CalendarDays,
-} from "lucide-react"; import { services } from "../data";
+  Star,
+  ArrowRight,
+  Users2,
+  ClipboardList,
+  Heart,
+  RefreshCw,
+} from "lucide-react";
+import { services } from "../data";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -25,7 +29,7 @@ interface CategorizedFeature {
 }
 
 // ── Sticky CTA Card ──
-function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | null> }) {
+function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLElement | null> }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const initialTopRef = useRef<number | null>(null);
@@ -122,74 +126,65 @@ function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLDivElement | 
     };
   }, [leftColRef]);
 
+  const promiseItems = [
+    {
+      icon: ShieldCheck,
+      title: "100% Satisfaction Guarantee",
+      desc: "If you're not satisfied, we make it right — no questions asked.",
+    },
+    {
+      icon: Clock4,
+      title: "Available Around the Clock 24/7",
+      desc: "Care when you need it, day or night, weekends and holidays.",
+    },
+    {
+      icon: FileCheck,
+      title: "No Long-Term Contracts",
+      desc: "Flexible care arrangements with no binding commitments required.",
+    },
+  ];
+
   return (
     <div ref={wrapperRef} className="relative w-full min-h-[200px]">
       <div
         ref={cardRef}
-        className="z-40 w-full max-w-[340px] rounded-[16px] bg-[#153B73] p-4 shadow-xl"
+        className="z-40 w-full max-w-[360px] rounded-[16px] bg-[#FAFAF9] border border-[#EBEBE9] p-5 shadow-sm"
         style={{ willChange: "top" }}
       >
-        <div className="flex items-center gap-2 mt-2 mb-1">
-          <div className="flex-1 h-[1px] bg-[#24A8F2]" />
-          <span className="text-[#24A8F2] italic font-semibold text-[12px] whitespace-nowrap">
-            Compassionate Care. Peace of Mind.
-          </span>
-          <div className="flex-1 h-[1px] bg-[#24A8F2]" />
+        <h3 className="text-[#2C2C2A] text-base font-bold mb-4">Our Promise</h3>
+
+        <div className="space-y-5 mb-2">
+          {promiseItems.map(({ icon: Icon, title, desc }, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center flex-shrink-0 border border-[#EBEBE9]">
+                <Icon className="w-[18px] h-[18px] text-[#5F5E5A]" strokeWidth={2.2} />
+              </div>
+              <div>
+                <p className="text-[#2C2C2A] text-[13px] font-bold leading-[18px]">
+                  {title}
+                </p>
+                <p className="text-[#5F5E5A] text-[12px] leading-[17px] mt-0.5">
+                  {desc}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {[
-          {
-            text: "100% Satisfaction Guarantee",
-            icon: ShieldCheck,
-          },
-          {
-            text: "Experts in Around-the-Clock 24-Hour Home Care",
-            icon: HeartHandshake,
-          },
-          {
-            text: "No Long Term Contracts",
-            icon: FileCheck,
-          },
-          {
-            text: "Care Managers Available 24/7",
-            icon: Headset,
-          },
-          {
-            text: "High Caliber Caregivers",
-            icon: Users,
-          },
-        ].map(({ text, icon: Icon }, i) => (
-          <div key={i}>
-            <div className="flex items-center gap-3 py-2.5">
-              <div className="w-10 h-10 rounded-xl bg-[#2196F3] flex items-center justify-center flex-shrink-0 shadow-md">
-                <Icon className="w-5 h-5 text-white" strokeWidth={2.3} />
-              </div>
-              <p className="text-white text-[13px] leading-[18px] font-semibold">
-                {text}
-              </p>
-            </div>
-            {i !== 4 && <div className="border-b border-[#3E5C87]" />}
+        <div className="mt-5 bg-white rounded-xl p-4 border border-[#EBEBE9]">
+          <div className="flex items-center gap-2 mb-2">
+            <Star className="w-[18px] h-[18px] text-[#2C2C2A] fill-[#2C2C2A]" strokeWidth={1.5} />
+            <p className="text-[#2C2C2A] text-[14px] font-bold">High Caliber Caregivers</p>
           </div>
-        ))}
-
-        <button className="mt-4 w-full h-[44px] rounded-[12px] bg-white flex items-center justify-center gap-2 font-bold text-[#173A72] text-[14px]">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#173A72"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <line x1="8" y1="2" x2="8" y2="6" />
-            <line x1="16" y1="2" x2="16" y2="6" />
-            <line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
-          Request a Free Consultation
-        </button>
+          <p className="text-[#5F5E5A] text-[13px] leading-[19px] mb-4">
+            Every caregiver is background-checked, insured, and rigorously
+            trained before entering a client&apos;s home.
+          </p>
+          <button className="w-full h-[44px] rounded-[12px] bg-[#0C447C] hover:bg-[#042C53] transition-colors flex items-center justify-center gap-2 font-bold text-white text-[14px]">
+            Request a Free Consultation
+            <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.2} />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -201,8 +196,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
   const serviceId = parseInt(resolvedParams.id, 10);
   const service = services.find((s) => s.id === serviceId);
 
-  const [activeStep, setActiveStep] = useState(0);
-  const leftColRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLElement>(null);
 
   if (!service) notFound();
 
@@ -258,10 +252,10 @@ export default function ServiceDetailPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
 
         {/* LEFT COLUMN */}
-        <div ref={leftColRef} className="lg:col-span-2 space-y-12">
+        <div className="lg:col-span-2 space-y-12">
 
           {/* Overview */}
-          <section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+          <section ref={leftColRef} className="py-2">
             <h2 className="text-xl font-bold text-[#1a365d] mb-4">
               {service.title}
             </h2>
@@ -309,41 +303,6 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </div>
           </section>
 
-          {/* How It Works */}
-          <section className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-            <h2 className="text-xl font-bold text-[#1a365d] mb-8 flex items-center gap-2">
-              <div className="w-1.5 h-5 rounded-full bg-blue-600" /> How It Works
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {service.howItWorks.map((step, idx) => (
-                <button
-                  key={step.step}
-                  onClick={() => setActiveStep(idx)}
-                  className={`text-left p-4 rounded-xl border transition-all ${activeStep === idx
-                    ? "bg-slate-900 border-slate-900 shadow-md text-white"
-                    : "bg-slate-50 border-slate-100 text-slate-800 hover:bg-slate-100"
-                    }`}
-                >
-                  <span
-                    className={`block text-xs font-bold tracking-wider uppercase mb-1 ${activeStep === idx ? "text-blue-400" : "text-slate-400"
-                      }`}
-                  >
-                    Step {step.step}
-                  </span>
-                  <span className="block font-bold text-sm leading-tight mb-2">
-                    {step.title}
-                  </span>
-                  <p
-                    className={`text-xs leading-relaxed ${activeStep === idx ? "text-slate-300" : "text-slate-500"
-                      }`}
-                  >
-                    {step.desc}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </section>
-
         </div>
 
         {/* SIDEBAR */}
@@ -352,6 +311,55 @@ export default function ServiceDetailPage({ params }: PageProps) {
         </aside>
 
       </div>
+
+      {/* How It Works — full width white section */}
+      <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="text-xs font-bold tracking-widest uppercase text-[#0C447C]">
+              The Process
+            </span>
+            <h2 className="text-2xl font-bold text-[#112240] mt-2 mb-3">
+              How It Works
+            </h2>
+            <div className="w-10 h-[3px] bg-[#0C447C] mx-auto" />
+          </div>
+
+          <div className="relative">
+            <div className="hidden md:block absolute top-[27px] left-0 right-0 px-[12.5%]">
+              <div className="h-[2px] w-full bg-slate-200" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-stretch relative">
+              {service.howItWorks.map((step, idx) => {
+                const stepIcons = [Users2, ClipboardList, Heart, RefreshCw];
+                const Icon = stepIcons[idx % stepIcons.length];
+                return (
+                  <div
+                    key={step.step}
+                    className="relative h-full flex flex-col text-left p-5 rounded-xl border bg-slate-50 border-slate-100"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#112240]">
+                        <Icon className="w-[18px] h-[18px] text-white" strokeWidth={2} />
+                      </div>
+                      <span className="text-xs font-medium tracking-wider text-slate-400">
+                        Step {String(step.step).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <span className="block font-bold text-[15px] text-[#112240] leading-tight mb-2">
+                      {step.title}
+                    </span>
+                    <p className="text-[13px] leading-relaxed text-slate-500">
+                      {step.desc}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

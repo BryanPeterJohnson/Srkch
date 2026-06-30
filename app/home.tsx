@@ -266,7 +266,7 @@ function HeroSlider() {
                                 <h1
                                     className="text-[#1A1A2E]"
                                     style={{
-                                        fontFamily: "Playfair Display",
+                                        fontFamily: "'Source Sans 3', sans-serif",
                                         fontSize: "clamp(38px, 4.8vw, 48px)",
                                         fontWeight: 700,
                                         lineHeight: "1.06",
@@ -358,7 +358,7 @@ function ServicesByCategory() {
         <section className="py-16 sm:py-10 lg:py-12 px-4 sm:px-6 bg-white" id="services">
             <div className="max-w-[1200px] mx-auto">
 
-                {/* Header — FIXED: font-weight 400 (normal), correct color, correct paragraph font */}
+                {/* Header */}
                 <div className="text-center mb-10 sm:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -366,10 +366,10 @@ function ServicesByCategory() {
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6 }}
                         style={{
-                            fontFamily: "'Playfair Display', serif",
+                            fontFamily: "'Source Sans 3', sans-serif",
                             fontSize: "clamp(26px, 3vw, 40px)",
-                            fontWeight: 400,          // ✅ FIXED: was 700 (bold) — now elegant 400
-                            color: "#003E41",          // ✅ FIXED: was #1A1A2E (near-black) — now dark teal
+                            fontWeight: 700,
+                            color: "#003E41",
                             marginBottom: "1rem",
                         }}
                     >
@@ -382,7 +382,7 @@ function ServicesByCategory() {
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6, delay: 0.15 }}
                         style={{
-                            fontFamily: "'Source Sans 3', sans-serif",  // ✅ FIXED: was wrongly set to Playfair Display
+                            fontFamily: "'Source Sans 3', sans-serif",
                             color: "#6B7280",
                             fontSize: "clamp(15px, 1.2vw, 18px)",
                             maxWidth: 2650,
@@ -634,7 +634,7 @@ const carePoints = [
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function HomePage() {
     return (
-        <main>
+        <main style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
             {/* ── Hero Slider ───────────────────────────────────────────────────── */}
             <HeroSlider />
 
@@ -854,7 +854,7 @@ export default function HomePage() {
                                 >
                                     <span
                                         style={{
-                                            fontFamily: "'Playfair Display', serif",
+                                            fontFamily: "'Source Sans 3', sans-serif",
                                             fontSize: "clamp(22px, 2vw, 28px)",
                                             fontWeight: 700,
                                             color: "#005B8E",
