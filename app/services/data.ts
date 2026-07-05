@@ -41,37 +41,127 @@ import {
 export type PatientGroup = "seniors" | "adults" | "children";
 
 export const services = [
-  {
-    id: 0,
-    slug: "personal-care",
-    title: "Personal Care & Daily Living Assistance",
-    shortTitle: "Personal Care",
-    tagline: "Dignity and independence, every single day.",
-    description: "Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.",
-    icon: Heart,
-    image: "https://images.unsplash.com/photo-1576765608866-5b51f8d8c2ab?auto=format&fit=crop&w=1200&q=80",
-    accent: "#e53e8c",
-    accentLight: "#fdf0f7",
-    category: "Core Care",
-    duration: "Hourly / Daily / 24/7",
-    coverage: "Home, Assisted Living & Community",
-    patientGroups: ["seniors", "adults"] as PatientGroup[],
-    categorizedFeatures: [
-      { title: "Personal Hygiene & Grooming", icon: ShowerHead, items: ["Bathing and showering assistance", "Sponge baths", "Oral hygiene and denture care", "Hair care and grooming", "Shaving assistance", "Skin care assistance", "Routine nail care assistance"] },
-      { title: "Dressing & Appearance Support", icon: Shirt, items: ["Dressing and undressing", "Clothing selection assistance", "Assistance with shoes and outerwear", "Personal grooming support"] },
-      { title: "Toileting & Continence Care", icon: Toilet, items: ["Toileting assistance", "Incontinence care", "Changing briefs and protective garments", "Perineal care", "Bathroom safety assistance"] },
-      { title: "Mobility & Transfer Support", icon: Accessibility, items: ["Ambulation assistance", "Walking support", "Bed-to-chair transfers", "Chair-to-wheelchair transfers", "Positioning and repositioning", "Stair navigation assistance"] },
-      { title: "Independence & Wellness Support", icon: Sparkles, items: ["Daily routine assistance", "Encouragement of self-care activities", "Monitoring of functional abilities", "Assistance maintaining independence"] },
-      { title: "Eating & Hydration Assistance", icon: UtensilsCrossed, items: ["Meal setup", "Feeding assistance", "Hydration encouragement", "Assistance with adaptive eating devices"] },
-    ],
-    whoFor: ["Seniors aging in place who need hands-on daily living support", "Individuals recovering from major illness, stroke, or orthopedic surgery", "Adults living with progressive physical disabilities or chronic conditions", "Individuals at high risk of falls who require continuous standby assistance", "Those who just need an extra pair of hands during peak morning or evening hours"],
-    howItWorks: [
-      { step: "01", title: "Free Registered Nurse Consultation", desc: "Our care team assesses physical needs, home safety layout, and personal preferences during a comprehensive, no-obligation home visit." },
-      { step: "02", title: "Customized Care Plan & Caregiver Match", desc: "We develop a tailored care plan and pair you with a certified caregiver suited to your personality, routine, and required care level." },
-      { step: "03", title: "Care Begins with Supervised Introduction", desc: "Your dedicated caregiver arrives on your preferred schedule, often accompanied by a supervisor to ensure a smooth, comfortable transition." },
-      { step: "04", title: "Ongoing Clinical Review & Adjustments", desc: "We conduct regular quality checks and formal care plan reviews to adjust service hours or techniques as your medical or physical needs evolve." },
-    ],
-  },
+{
+  id: 0,
+  slug: "personal-care",
+  title: "Personal Care & Daily Living Assistance",
+  shortTitle: "Personal Care",
+  tagline: "Dignity and independence, every single day.",
+  description:
+    "Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.",
+  icon: Heart,
+
+  // Updated image (professional caregiver assisting an elderly client at home)
+image: "/images/services/0.png",
+
+  accent: "#e53e8c",
+  accentLight: "#fdf0f7",
+  category: "Core Care",
+  duration: "Hourly / Daily / 24/7",
+  coverage: "Home, Assisted Living & Community",
+
+  patientGroups: ["seniors", "adults"] as PatientGroup[],
+
+  categorizedFeatures: [
+    {
+      title: "Personal Hygiene & Grooming",
+      icon: ShowerHead,
+      items: [
+        "Bathing and showering assistance",
+        "Sponge baths",
+        "Oral hygiene and denture care",
+        "Hair care and grooming",
+        "Shaving assistance",
+        "Skin care assistance",
+        "Routine nail care assistance",
+      ],
+    },
+    {
+      title: "Dressing & Appearance Support",
+      icon: Shirt,
+      items: [
+        "Dressing and undressing",
+        "Clothing selection assistance",
+        "Assistance with shoes and outerwear",
+        "Personal grooming support",
+      ],
+    },
+    {
+      title: "Toileting & Continence Care",
+      icon: Toilet,
+      items: [
+        "Toileting assistance",
+        "Incontinence care",
+        "Changing briefs and protective garments",
+        "Perineal care",
+        "Bathroom safety assistance",
+      ],
+    },
+    {
+      title: "Mobility & Transfer Support",
+      icon: Accessibility,
+      items: [
+        "Ambulation assistance",
+        "Walking support",
+        "Bed-to-chair transfers",
+        "Chair-to-wheelchair transfers",
+        "Positioning and repositioning",
+        "Stair navigation assistance",
+      ],
+    },
+    {
+      title: "Independence & Wellness Support",
+      icon: Sparkles,
+      items: [
+        "Daily routine assistance",
+        "Encouragement of self-care activities",
+        "Monitoring of functional abilities",
+        "Assistance maintaining independence",
+      ],
+    },
+    {
+      title: "Eating & Hydration Assistance",
+      icon: UtensilsCrossed,
+      items: [
+        "Meal setup",
+        "Feeding assistance",
+        "Hydration encouragement",
+        "Assistance with adaptive eating devices",
+      ],
+    },
+  ],
+
+  whoFor: [
+    "Seniors aging in place who need hands-on daily living support",
+    "Individuals recovering from major illness, stroke, or orthopedic surgery",
+    "Adults living with progressive physical disabilities or chronic conditions",
+    "Individuals at high risk of falls who require continuous standby assistance",
+    "Those who just need an extra pair of hands during peak morning or evening hours",
+  ],
+
+  howItWorks: [
+    {
+      step: "01",
+      title: "Free Registered Nurse Consultation",
+      desc: "Our care team assesses physical needs, home safety layout, and personal preferences during a comprehensive, no-obligation home visit.",
+    },
+    {
+      step: "02",
+      title: "Customized Care Plan & Caregiver Match",
+      desc: "We develop a tailored care plan and pair you with a certified caregiver suited to your personality, routine, and required care level.",
+    },
+    {
+      step: "03",
+      title: "Care Begins with Supervised Introduction",
+      desc: "Your dedicated caregiver arrives on your preferred schedule, often accompanied by a supervisor to ensure a smooth, comfortable transition.",
+    },
+    {
+      step: "04",
+      title: "Ongoing Clinical Review & Adjustments",
+      desc: "We conduct regular quality checks and formal care plan reviews to adjust service hours or techniques as your medical or physical needs evolve.",
+    },
+  ],
+},
   {
     id: 1,
     slug: "companion-care",
@@ -80,7 +170,7 @@ export const services = [
     tagline: "Connection that transforms quality of life.",
     description: "Loneliness is a silent health crisis. Our companion care service pairs clients with warm, thoughtful caregivers who provide genuine conversation, activity participation, and emotional presence — reducing isolation while supporting mental wellness.",
     icon: Users,
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1200&q=80",
+  image: "/images/services/0.png",
     accent: "#0d9488",
     accentLight: "#f0fdfb",
     category: "Wellness",
@@ -90,9 +180,10 @@ export const services = [
     categorizedFeatures: [
       { title: "Companionship & Emotional Support", icon: MessageCircle, items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"] },
       { title: "Recreational & Leisure Activities", icon: Gamepad2, items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"] },
+            { title: "Emotional Wellness & Mental Health Support", icon: HeartHandshake, items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"] },
+
       { title: "Cognitive Engagement", icon: Lightbulb, items: ["Memory stimulation activities", "Orientation reminders", "Brain fitness exercises", "Structured daily routines"] },
       { title: "Community & Social Participation", icon: MapPin, items: ["Accompaniment on walks", "Religious services attendance", "Family gatherings", "Community events and activities"] },
-      { title: "Emotional Wellness & Mental Health Support", icon: HeartHandshake, items: ["Reducing loneliness and isolation", "Encouraging social connections", "Promoting emotional well-being", "Providing supportive companionship during life transitions"] },
     ],
     whoFor: ["Seniors living alone who feel isolated or are at risk of depression", "Individuals whose families live out of town or have busy work schedules", "Those with early-stage memory concerns who benefit from mental stimulation", "Active seniors looking for an outgoing peer to share in hobbies and outings", "Anyone who would benefit from a consistent, joyful, and encouraging presence"],
     howItWorks: [

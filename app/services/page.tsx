@@ -5,17 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Heart, Sparkles, Shield, Award, CheckCircle, Star, MapPin, ArrowRight,
-  User, UserCheck, Activity, Search, Plus, Minus
+  Heart, Sparkles, Shield, ShieldCheck, Award, CheckCircle, Star, MapPin, ArrowRight,
+  User, UserCheck, BadgeCheck, Activity, Search, Plus, Minus, Calendar, Phone,  HeartHandshake,
 } from "lucide-react";
 import { services, type PatientGroup } from "./data";
+import CareManagerCTA from "../home/components/CareManagerCTA";
 
-const TRUST_BADGES = [
-  { icon: Shield, text: "Licensed & Insured" },
-  { icon: Award, text: "Medicare Certified" },
-  { icon: CheckCircle, text: "Background-Checked Caregivers" },
-  { icon: Star, text: "4.9★ Average Rating" },
-];
 
 const FILTER_OPTIONS: {
   id: PatientGroup | "all";
@@ -46,7 +41,6 @@ export default function ServicesPage() {
     gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // ── filter by patientGroups array + search query ──
   const filteredServices = services.filter((service) => {
     const matchesGroup =
       activeFilter === "all" ||
@@ -62,58 +56,101 @@ export default function ServicesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="min-h-screen bg-white font-display">
+      
+<section className="relative bg-white overflow-hidden font-display lg:h-[420px] xl:h-[520px]">
+  {/* Image Area - Positioned to the right with a rounded cutout effect */}
+  <div className="relative lg:absolute lg:inset-y-0 lg:right-0 w-full lg:w-[100%] h-[260px] sm:h-[320px] lg:h-full">
+    <div className="relative w-full h-full overflow-hidden rounded-xl-[100px]">
+      <Image
+        src="/images/Services/0.png"
+        alt="Caregiver supporting senior at home"
+        fill
+        priority
+        className="object-cover object-[center_20%]"
+      />
+      {/* Gradient overlay to blend image into background */}
+{/* Gradient overlay to blend image into background */}
+{/* Desktop */}
+<div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
 
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[#112240] via-[#1a365d] to-[#0f172a] overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold uppercase tracking-wider mb-6">
-              <Sparkles className="w-3 h-3" /> Comprehensive Home Care
-            </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.08] tracking-tight mb-6">
-              Compassionate Care<br />
-              <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-white bg-clip-text text-transparent">Tailored to You</span>
-            </h1>
-            <p className="text-gray-300 text-lg md:text-xl leading-relaxed max-w-2xl mb-10">
-              Every service we offer is built around dignity, independence, and genuine human connection. Explore our full range of care and find exactly what your family needs.
-            </p>
-          </motion.div>
-        </div>
+{/* Mobile */}
+<div className="absolute inset-0 lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
+      {/* Bottom right floating icon */}
+ 
+    </div>
+  </div>
+ {/* Content Container */}
+  <div className="relative z-10 w-full max-w-7xl px-6 lg:px-20 py-10 lg:py-14 lg:h-full flex items-center">
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      className="max-w-[500px] text-left"
+    >
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0C447C]/10 border border-[#0C447C]/20 text-[#0C447C] text-xs font-semibold uppercase tracking-widest mb-3 font-display">
+        <ShieldCheck className="w-3 h-3 text-[#5FC9CE]" />
+        Comprehensive Home Care
       </div>
+  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0B2D5B] leading-tight mb-3 font-display">
+        Care That Fits Your Life.<br />
+        <span className="text-[#0C447C]">Support That Feels Like Family.</span>
+      </h1>
+    <p className="text-sm sm:text-base text-slate-600 leading-7 mb-5 max-w-md font-display">
+        Personalized care services designed to support your loved one's
+        health, independence, and comfort—at home. Our compassionate
+        caregivers are here, every step of the way.
+      </p>
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0C447C] hover:bg-[#259ea3] text-white font-bold rounded-xl transition-all shadow-lg text-sm font-display">
+          <Calendar className="w-3 h-3" />
+          Request a Free Consultation
+        </button>
+<button className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-[#0C447C] hover:bg-[#0A3968] text-[#0C447C] font-bold rounded-xl transition-all text-sm font-display">
+  <Phone className="w-3 h-3" />
+  Call (443) 985-9368
+</button>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-5 border-t border-slate-200">
+        {[
+          { icon: Heart, label: "Compassionate\nCaregivers" },
+          { icon: ShieldCheck, label: "Licensed &\nInsured" },
+          { icon: ShieldCheck, label: "Medicaid\nCertified" },
+          { icon: UserCheck, label: "Background Checked\n& Trusted" },
+        ].map((item, idx) => (
+          <div key={idx} className="flex items-center gap-2">
+            <div className="text-[#0C447C]">
+              <item.icon className="w-10 h-10" />
+            </div>
+            <span className="text-slate-700 text-[11px] font-medium leading-tight whitespace-pre-line font-display">
+              {item.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  </div>
+</section>
 
-      {/* Trust bar */}
-      <div className="bg-[#1a365d] border-y border-blue-900/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-center md:justify-between gap-4">
-          {TRUST_BADGES.map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-2 text-blue-200 text-sm font-medium">
-              <Icon className="w-4 h-4 text-blue-400" />
-              {text}
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Services Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a365d] tracking-tight mb-4">Our Care Services</h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">Ten specialized service areas — each designed to address a specific dimension of home health.</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 font-display">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#1a365d] tracking-tight mb-4 font-display">Our Care Services</h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto font-display">Ten specialized service areas — each designed to address a specific dimension of home health.</p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-12">
+<div className="flex flex-col md:flex-row gap-4">
 
           {/* Sidebar Accordion */}
-          <aside className="w-full md:w-80 flex-shrink-0">
-            <h3 className="font-bold text-black mb-6 text-xl">Filter Categories</h3>
+    <aside className="w-full md:w-72 flex-shrink-0">
+            <h3 className="font-bold text-black mb-6 text-xl font-display">Filter Categories</h3>
             <div className="flex flex-col">
               {FILTER_OPTIONS.map((option) => {
                 const Icon = option.icon;
                 const isActive = activeFilter === option.id;
                 const isAll = option.id === "all";
 
-                // services listed inside the accordion dropdown
                 const groupServices = isAll
                   ? services
                   : services.filter((s) =>
@@ -130,12 +167,12 @@ export default function ServicesPage() {
                         <Icon className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"
                           }`} />
                         <div>
-                          <div className={`font-semibold text-[20px] transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
+                          <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
                             }`}>
                             {option.title}
                           </div>
                           {option.subtitle && (
-                            <div className="text-[14px] text-gray-500 mt-0.5">{option.subtitle}</div>
+                            <div className="text-[14px] text-gray-500 mt-0.5 font-display">{option.subtitle}</div>
                           )}
                         </div>
                       </div>
@@ -158,7 +195,7 @@ export default function ServicesPage() {
                             <Link
                               key={service.id}
                               href={`/services/${service.id}`}
-                              className="block text-[15px] text-gray-600 hover:text-[#005B8E] hover:underline transition-all"
+                              className="block text-[15px] text-gray-600 hover:text-[#005B8E] hover:underline transition-all font-display"
                             >
                               • {service.title}
                             </Link>
@@ -174,18 +211,18 @@ export default function ServicesPage() {
 
           {/* Main Grid */}
           <div className="flex-1" ref={gridRef}>
-            <div className="relative mb-8 max-w-lg">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <div className="relative mb-8">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search services..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 pl-10 pr-4 text-sm text-black bg-gray-50 border border-gray-200 rounded-lg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 transition"
+                className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 focus:border-[#1a365d]/30 transition font-display"
               />
             </div>
 
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               <AnimatePresence mode="popLayout">
                 {filteredServices.map((service) => {
                   const Icon = service.icon;
@@ -199,65 +236,47 @@ export default function ServicesPage() {
                     >
                       <Link
                         href={`/services/${service.id}`}
-                        className="group block h-full bg-slate-50 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer"
+                        className="group block h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer font-display"
                       >
-                        <div>
-                          <div className="relative w-full h-40 bg-slate-200 overflow-hidden">
+                        {/* Image + overlapping icon badge */}
+                        <div className="relative">
+                          <div className="relative w-full h-35 bg-slate-200 overflow-hidden rounded-t-2xl">
                             <Image
                               src={service.image || "/images/placeholder-care.jpg"}
                               alt={service.title}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-500"
-                              sizes="(max-width: 1280px) 33vw, 100vw"
+                              sizes="(max-width: 1280px) 25vw, 100vw"
                             />
                             <div
-                              className="absolute top-3 right-3 z-10 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-white/90 shadow-sm"
+                              className="absolute top-2 right-2 z-10 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/95 shadow-sm font-display"
                               style={{ color: service.accent }}
                             >
                               {service.category}
                             </div>
                           </div>
 
-                          <div className="p-6">
-                            <div
-                              className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 shadow-sm"
-                              style={{ backgroundColor: service.accentLight, color: service.accent }}
-                            >
-                              <Icon className="w-5 h-5" />
-                            </div>
-                            <h3 className="text-lg font-bold text-[#1a365d] mb-2">{service.title}</h3>
-                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{service.description}</p>
+                          {/* Icon badge overlapping bottom-left of image */}
+                          <div
+                            className="absolute -bottom-4 left-3 z-20 w-9 h-9 rounded-xl flex items-center justify-center shadow-md border-2 border-white"
+                            style={{ backgroundColor: service.accentLight, color: service.accent }}
+                          >
+                            <Icon className="w-4 h-4" />
                           </div>
                         </div>
 
-                        {/* card footer */}
-                        <div className="px-6 pb-6 pt-2 flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
-                            <MapPin className="w-3.5 h-3.5" /> {service.coverage}
-                          </div>
-                          {/* right side: age badges + Learn link */}
-                          <div className="flex items-center gap-2">
-                            <div className="flex gap-1">
-                              {service.patientGroups.map((g) => (
-                                <span
-                                  key={g}
-                                  className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
-                                  style={{
-                                    color: service.accent,
-                                    borderColor: service.accent + "55",
-                                    backgroundColor: service.accentLight,
-                                  }}
-                                >
-                                  {GROUP_LABELS[g]}
-                                </span>
-                              ))}
-                            </div>
-                            <div
-                              className="flex items-center gap-1 text-sm font-bold"
-                              style={{ color: service.accent }}
-                            >
-                              Learn <ArrowRight className="w-4 h-4" />
-                            </div>
+                        <div className="pt-7 px-3 pb-3">
+                          <h3 className="text-sm font-bold text-[#1a365d] mb-1 leading-snug font-display">
+                            {service.title}
+                          </h3>
+                          <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-2 font-display">
+                            {service.description}
+                          </p>
+                          <div
+                            className="flex items-center gap-1 text-xs font-bold font-display"
+                            style={{ color: service.accent }}
+                          >
+                            Learn <ArrowRight className="w-3.5 h-3.5" />
                           </div>
                         </div>
                       </Link>
@@ -268,7 +287,7 @@ export default function ServicesPage() {
             </motion.div>
 
             {filteredServices.length === 0 && (
-              <div className="text-center py-24 text-slate-400">
+              <div className="text-center py-24 text-slate-400 font-display">
                 <p className="text-lg font-medium">No services match your search.</p>
                 <button
                   onClick={() => { setActiveFilter("all"); setSearchQuery(""); }}
@@ -281,6 +300,7 @@ export default function ServicesPage() {
           </div>
         </div>
       </div>
+   <CareManagerCTA/>
     </div>
   );
 }

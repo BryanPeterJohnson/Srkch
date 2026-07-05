@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ArrowRight } from "lucide-react";
+import { Heart, ArrowRight, HeartHandshake, Phone } from "lucide-react";
 import { ReactNode } from "react";
 
 // ─── Pill Label ──────────────────────────────────────────────────────────────
@@ -232,38 +232,32 @@ export function ServiceCard({
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 export function CTABanner() {
   return (
-    <section
-      className="py-20 px-6 text-center"
-      style={{
-        background: "#003A5C",
-        backgroundImage:
-          "radial-gradient(ellipse at 70% 50%, rgba(0,166,147,0.15) 0%, transparent 60%)",
-      }}
-    >
-      <div className="max-w-[700px] mx-auto">
-        <h2
-          className="text-white mb-4"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(28px, 3vw, 40px)",
-            fontWeight: 700,
-          }}
-        >
-          Ready to Get the Care You Deserve?
-        </h2>
-
-        <p
-          className="text-white/70 mb-8 text-lg leading-relaxed"
-          style={{ fontFamily: "'Source Sans 3', sans-serif" }}
-        >
-          Our care coordinators are available to create your personalized plan.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <PrimaryButton href="tel:+18005752273">Call Us Today</PrimaryButton>
-          <SecondaryButton to="/contact" white>
-            Request a Consultation
-          </SecondaryButton>
+    <section className="bg-[#0B2D5B] pt-6 pb-6 lg:pt-8 lg:pb-8 text-white font-display">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-center sm:px-6 lg:flex-row lg:px-8 lg:text-left">
+        <div className="flex items-center gap-5">
+          <HeartHandshake className="hidden h-14 w-14 text-white/80 sm:block" />
+          <div>
+            <h2 className="font-display font-black text-2xl">
+              Ready to Improve Your Loved One's Quality of Life?
+            </h2>
+            <p className="mt-2 text-blue-100">
+              Our compassionate team is here to help — call or schedule your free consultation today.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <a
+            href="tel:+14439859368"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap"
+          >
+            <Phone className="h-4 w-4" /> Call (443) 985-9368
+          </a>
+          <a
+            href="/contact"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap"
+          >
+            Request a Free Consultation <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </section>
@@ -308,40 +302,7 @@ export function StatsBar() {
 }
 
 
-export function PaymentBanner() {
-  return (
-    <section className="py-16 px-6 text-center bg-[#00A693]">
-      <p
-        className="text-white mb-6"
-        style={{
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "clamp(20px, 2.5vw, 28px)",
-          fontWeight: 600,
-        }}
-      >
-        We Accept Medicare, Medicaid Long-Term Care & Private Pay
-      </p>
 
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Link
-          href="/about"
-          className="px-7 py-3 rounded-md font-bold text-white border-2 border-white hover:bg-white hover:text-[#00A693] transition-all"
-          style={{ fontFamily: "'Source Sans 3', sans-serif" }}
-        >
-          Learn More
-        </Link>
-
-        <Link
-          href="/contact"
-          className="px-7 py-3 rounded-md font-bold transition-all hover:-translate-y-0.5 bg-white text-[#00A693]"
-          style={{ fontFamily: "'Source Sans 3', sans-serif" }}
-        >
-          Contact Us
-        </Link>
-      </div>
-    </section>
-  );
-}
 
 // ─── Breadcrumb ───────────────────────────────────────────────────────────────
 export function Breadcrumb({

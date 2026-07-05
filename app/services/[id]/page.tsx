@@ -1,20 +1,27 @@
 "use client";
 
-import { use, useEffect, useRef } from "react";
+import { use } from "react";
 import { notFound } from "next/navigation";
-import { motion } from "framer-motion";
 import {
-  Clock,
-  MapPin,
-  ShieldCheck,
-  Clock4,
-  FileCheck,
-  Star,
   ArrowRight,
-  Users2,
+  Brain,
+  CalendarCheck,
+  ChevronDown,
+  ChevronRight,
   ClipboardList,
-  Heart,
-  RefreshCw,
+  Clock,
+  FileCheck,
+  Gamepad2,
+  HeartHandshake,
+  Home,
+  MapPin,
+  Menu,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Users2,
+  ChevronLeft
 } from "lucide-react";
 import { services } from "../data";
 
@@ -28,338 +35,402 @@ interface CategorizedFeature {
   items: string[];
 }
 
-// ── Sticky CTA Card ──
-function CTACard({ leftColRef }: { leftColRef: React.RefObject<HTMLElement | null> }) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const initialTopRef = useRef<number | null>(null);
-  const stopScrollYRef = useRef<number | null>(null);
-  const stateRef = useRef<"relative" | "fixed" | "docked">("relative");
-  const FIXED_TOP = 80;
+const defaultServiceIcons = [HeartHandshake, Gamepad2, Brain, MapPin, Users2, Sparkles];
 
-  useEffect(() => {
-    function captureInitial() {
-      if (!wrapperRef.current || !cardRef.current || !leftColRef.current) return;
-      if (initialTopRef.current !== null) return;
+const fallbackHowItWorks = [
+  { step: 1, title: "Contact Us", desc: "Call or fill out the form to speak with our care coordinator." },
+  { step: 2, title: "Free Assessment", desc: "We learn about your loved one's needs and create a personalized care plan." },
+  { step: 3, title: "Match & Schedule", desc: "We match you with the perfect caregiver and schedule care." },
+  { step: 4, title: "Care Begins", desc: "Care starts with ongoing support and regular check-ins." },
+];
 
-      const wrapperTop =
-        wrapperRef.current.getBoundingClientRect().top + window.scrollY;
-      const cardHeight = cardRef.current.offsetHeight;
-      const leftColBottomAbs =
-        leftColRef.current.getBoundingClientRect().bottom + window.scrollY;
+const stepIcons = [Phone, ClipboardList, Users2, CalendarCheck];
 
-      initialTopRef.current = wrapperTop;
-      stopScrollYRef.current = leftColBottomAbs - cardHeight - FIXED_TOP;
-    }
-
-    function setTransition(enable: boolean) {
-      if (!cardRef.current) return;
-      cardRef.current.style.transition = enable
-        ? "top 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
-        : "none";
-    }
-
-    function updatePosition() {
-      if (!wrapperRef.current || !cardRef.current || !leftColRef.current) return;
-      captureInitial();
-      if (initialTopRef.current === null || stopScrollYRef.current === null) return;
-
-      const scrollY = window.scrollY;
-      const wrapperWidth = wrapperRef.current.getBoundingClientRect().width;
-      const wrapperLeft = wrapperRef.current.getBoundingClientRect().left;
-      const stopScrollY = stopScrollYRef.current;
-
-      if (scrollY + FIXED_TOP < initialTopRef.current) {
-        if (stateRef.current !== "relative") {
-          setTransition(false);
-          cardRef.current.style.position = "relative";
-          cardRef.current.style.top = "0";
-          cardRef.current.style.left = "0";
-          cardRef.current.style.width = "100%";
-          cardRef.current.style.bottom = "auto";
-          stateRef.current = "relative";
-        }
-      } else if (scrollY >= stopScrollY) {
-        if (stateRef.current !== "docked") {
-          setTransition(stateRef.current === "fixed");
-          const dockedTop = stopScrollY - initialTopRef.current + FIXED_TOP;
-          cardRef.current.style.position = "absolute";
-          cardRef.current.style.top = `${dockedTop}px`;
-          cardRef.current.style.bottom = "auto";
-          cardRef.current.style.left = "0";
-          cardRef.current.style.width = "100%";
-          stateRef.current = "docked";
-        }
-      } else {
-        if (stateRef.current !== "fixed") {
-          setTransition(false);
-          cardRef.current.style.position = "fixed";
-          cardRef.current.style.bottom = "auto";
-          cardRef.current.style.top = `${FIXED_TOP}px`;
-          stateRef.current = "fixed";
-        }
-        cardRef.current.style.width = `${wrapperWidth}px`;
-        cardRef.current.style.left = `${wrapperLeft}px`;
-      }
-    }
-
-    const timer = setTimeout(() => {
-      captureInitial();
-      updatePosition();
-    }, 100);
-
-    const handleResize = () => {
-      initialTopRef.current = null;
-      stopScrollYRef.current = null;
-      stateRef.current = "relative";
-      captureInitial();
-      updatePosition();
-    };
-
-    window.addEventListener("scroll", updatePosition, { passive: true });
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", updatePosition);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [leftColRef]);
-
-  const promiseItems = [
+/* ─────────────────────── PROMISE SIDEBAR ─────────────────────── */
+function PromiseCard() {
+  const items = [
     {
       icon: ShieldCheck,
       title: "100% Satisfaction Guarantee",
-      desc: "If you're not satisfied, we make it right — no questions asked.",
+      desc: (
+        <>
+          If you're not satisfied, we make <br />
+          it right — no questions asked.
+        </>
+      ),
     },
     {
-      icon: Clock4,
+      icon: Clock,
       title: "Available Around the Clock 24/7",
-      desc: "Care when you need it, day or night, weekends and holidays.",
+      desc: (
+        <>
+          Care when you need it, day or night, <br />
+          weekends and holidays.
+        </>
+      ),
     },
     {
       icon: FileCheck,
       title: "No Long-Term Contracts",
-      desc: "Flexible care arrangements with no binding commitments required.",
+      desc: (
+        <>
+          Flexible care arrangements with no <br />
+          binding commitments required.
+        </>
+      ),
     },
   ];
 
   return (
-    <div ref={wrapperRef} className="relative w-full min-h-[200px]">
-      <div
-        ref={cardRef}
-        className="z-40 w-full max-w-[360px] rounded-[16px] bg-[#FAFAF9] border border-[#EBEBE9] p-5 shadow-sm"
-        style={{ willChange: "top" }}
-      >
-        <h3 className="text-[#2C2C2A] text-base font-bold mb-4">Our Promise</h3>
+    <div className="mx-auto flex w-full max-w-xs flex-1 flex-col rounded-2xl border border-[#D8F0EE] bg-[#EEF9F7] px-5 py-5 shadow-sm">
+      <h3 className="font-display font-black mb-4 text-base text-[#0B2D5B]">
+        Our Promise
+      </h3>
 
-        <div className="space-y-5 mb-2">
-          {promiseItems.map(({ icon: Icon, title, desc }, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center flex-shrink-0 border border-[#EBEBE9]">
-                <Icon className="w-[18px] h-[18px] text-[#5F5E5A]" strokeWidth={2.2} />
-              </div>
-              <div>
-                <p className="text-[#2C2C2A] text-[13px] font-bold leading-[18px]">
-                  {title}
-                </p>
-                <p className="text-[#5F5E5A] text-[12px] leading-[17px] mt-0.5">
-                  {desc}
-                </p>
-              </div>
+      <div className="flex-1 space-y-4">
+        {items.map(({ icon: Icon, title, desc }) => (
+          <div key={title} className="flex gap-3">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#0C447C] text-[#0C447C]">
+              <Icon className="h-3.5 w-3.5" />
             </div>
-          ))}
-        </div>
-
-        <div className="mt-5 bg-white rounded-xl p-4 border border-[#EBEBE9]">
-          <div className="flex items-center gap-2 mb-2">
-            <Star className="w-[18px] h-[18px] text-[#2C2C2A] fill-[#2C2C2A]" strokeWidth={1.5} />
-            <p className="text-[#2C2C2A] text-[14px] font-bold">High Caliber Caregivers</p>
+            <div>
+              <p className="text-xs font-black text-[#102A43]">{title}</p>
+              <p className="mt-0.5 text-xs leading-5 text-slate-600">{desc}</p>
+            </div>
           </div>
-          <p className="text-[#5F5E5A] text-[13px] leading-[19px] mb-4">
-            Every caregiver is background-checked, insured, and rigorously
-            trained before entering a client&apos;s home.
-          </p>
-          <button className="w-full h-[44px] rounded-[12px] bg-[#0C447C] hover:bg-[#042C53] transition-colors flex items-center justify-center gap-2 font-bold text-white text-[14px]">
-            Request a Free Consultation
-            <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.2} />
-          </button>
+        ))}
+      </div>
+
+      <div className="mt-5 rounded-2xl bg-white px-4 py-4 shadow-sm">
+        <div className="mb-2 flex items-center gap-2">
+          <Star className="h-3.5 w-3.5 fill-[#0C447C] text-[#0C447C]" />
+          <p className="text-xs font-black text-[#102A43]">High Caliber Caregivers</p>
         </div>
+        <p className="mb-4 text-[11px] leading-5 text-slate-600">
+          Every caregiver is background-checked, insured, and rigorously trained before entering a client's home.
+        </p>
+        <a href="/contact" className="flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-4 text-[11px] font-black text-white transition hover:bg-[#08345F]">
+          Request a Free Consultation <ArrowRight className="h-3 w-3 shrink-0" />
+        </a>
+        <a href="tel:+14439859368" className="mt-2 flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white px-4 text-[11px] font-black text-[#0C447C] transition hover:bg-[#F3F8FC]">
+          <Phone className="h-3 w-3" /> Call (443) 985-9368
+        </a>
       </div>
     </div>
   );
 }
+/* ─────────────────────── SECTION DIVIDER ─────────────────────── */
+function HeartDivider() {
+  return (
+    <div className="mx-auto mt-4 flex items-center justify-center gap-2 text-[#159BA1]">
+      <span className="h-px w-10 bg-[#159BA1]" />
+      <HeartHandshake className="h-5 w-5 fill-[#159BA1]" />
+      <span className="h-px w-10 bg-[#159BA1]" />
+    </div>
+  );
+}
 
-// ── Main Page ──
+/* ─────────────────────── PAGE ─────────────────────── */
 export default function ServiceDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const serviceId = parseInt(resolvedParams.id, 10);
-  const service = services.find((s) => s.id === serviceId);
-
-  const leftColRef = useRef<HTMLElement>(null);
+  const service   = services.find((s) => s.id === serviceId);
 
   if (!service) notFound();
 
-  // Resolve categorized features — supports both shapes
   const categories: CategorizedFeature[] =
     "categorizedFeatures" in service && Array.isArray(service.categorizedFeatures)
       ? (service.categorizedFeatures as CategorizedFeature[])
       : "features" in service && Array.isArray((service as any).features)
-        ? [{ title: "What's Included", items: (service as any).features as string[] }]
+        ? [{ title: "Personalized Companionship You Can Trust", items: (service as any).features as string[] }]
         : [];
 
+  const howItWorks =
+    "howItWorks" in service && Array.isArray((service as any).howItWorks)
+      ? (service as any).howItWorks
+      : fallbackHowItWorks;
+
+  /* Related services — services that share at least one patientGroup
+     (seniors / adults / children) with the current service, current one excluded.
+     Falls back to any other services if there aren't enough matches. */
+  const currentGroups: string[] = (service as any).patientGroups || [];
+  const relatedByGroup = services.filter(
+    (s) =>
+      s.id !== service.id &&
+      (s as any).patientGroups?.some((g: string) => currentGroups.includes(g))
+  );
+  const related =
+    relatedByGroup.length >= 3
+      ? relatedByGroup.slice(0, 5)
+      : services.filter((s) => s.id !== service.id).slice(0, 5);
+
   return (
-    <div className="min-h-screen bg-[#f8fafc]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <main className="min-h-screen bg-white font-sans text-[#102A43]">
 
-      {/* HERO */}
-      <div className="relative overflow-hidden min-h-[480px] md:min-h-[560px] flex items-end">
-        <img
-          src={service.image}
-          alt={service.title}
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#112240] via-[#112240cc] to-[#112240]/40" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:32px_32px]" />
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span
-              className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4"
-              style={{ backgroundColor: service.accentLight, color: service.accent }}
-            >
-              {service.category}
-            </span>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 max-w-3xl leading-tight">
-              {service.title}
+      {/* ═══════════════════════════════════════════
+          HERO
+      ═══════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-white min-h-[480px]">
+        <div className="absolute inset-0">
+          <img
+            src={(service as any).image}
+            alt={service.title}
+            className="h-full w-full object-cover object-[right_20%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[50%] to-white" />
+        </div>
+
+<div className="relative ml-0 max-w-7xl pl-14 pr-4 py-14 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-20">
+
+
+          <div className="max-w-[540px] text-left">
+
+            <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[#159BA1]">
+              {(service as any).category || "Companion Care Services"}
+            </p>
+
+<h1 className="font-display font-black text-4xl leading-tight text-[#143e75] sm:text-5xl">
+                {service.title}
             </h1>
-            <p className="text-blue-100 text-lg md:text-xl font-medium mb-8 max-w-2xl leading-relaxed">
-              {service.tagline}
-            </p>
-            <div className="flex flex-wrap gap-6 text-sm text-gray-300 pt-5 border-t border-white/10">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <span>Availability: <strong className="text-white font-semibold">{service.duration}</strong></span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span>Coverage: <strong className="text-white font-semibold">{service.coverage}</strong></span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
 
-      {/* MAIN LAYOUT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
-
-        {/* LEFT COLUMN */}
-        <div className="lg:col-span-2 space-y-12">
-
-          {/* Overview */}
-          <section ref={leftColRef} className="py-2">
-            <h2 className="text-xl font-bold text-[#1a365d] mb-4">
-              {service.title}
-            </h2>
-            <p className="text-slate-600 leading-relaxed text-base mb-1">
-              {service.description}
-            </p>
-            <p className="text-slate-600 leading-relaxed text-base mb-6 font-medium">
-              Our services include around-the-clock care including:
+            <p className="mt-5 text-base leading-7 text-slate-600">
+              {(service as any).tagline || service.description}
             </p>
 
-            {/* TIMELINE LIST */}
-            <div className="flex flex-col">
-              {categories.map((cat, idx) => {
-                const Icon = cat.icon;
-                return (
-                  <div key={idx} className="flex items-start gap-4">
-                    {/* icon + connector line */}
-                    <div className="flex flex-col items-center flex-shrink-0 self-stretch">
-                      <div
-                        className="w-10 h-10 rounded-xl bg-[#005B8E] flex items-center justify-center flex-shrink-0"
-                        style={{ marginTop: "2px" }}
-                      >
-                        {Icon ? (
-                          <Icon className="w-5 h-5 text-white" strokeWidth={2.2} />
-                        ) : (
-                          <div className="w-2 h-2 rounded-full bg-white/60" />
-                        )}
-                      </div>
-                      {idx !== categories.length - 1 && (
-                        <div className="w-[2px] bg-slate-200 flex-1 mt-1" />
-                      )}
-                    </div>
-                    {/* text */}
-                    <div className="pb-7">
-                      <h3 className="text-[17px] font-bold text-[#112240] leading-8">
-                        {cat.title}
-                      </h3>
-                      <p className="text-sm text-slate-500 mt-[3px] leading-relaxed">
-                        {cat.items.join(", ")}
-                      </p>
-                    </div>
+            <div className="mt-7 flex flex-wrap items-center gap-6">
+              {([
+                [Users2,      "Compassionate", "Caregivers"],
+                [ShieldCheck, "Background",    "Checked"],
+                [Clock,       "Available",     "24/7"],
+              ] as [React.ElementType, string, string][]).map(([Icon, line1, line2]) => (
+                <div key={line1} className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0C447C] shadow-sm">
+                    <Icon className="h-5 w-5" />
                   </div>
-                );
-              })}
-            </div>
-          </section>
-
-        </div>
-
-        {/* SIDEBAR */}
-        <aside className="hidden lg:block">
-          <CTACard leftColRef={leftColRef} />
-        </aside>
-
-      </div>
-
-      {/* How It Works — full width white section */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#0C447C]">
-              The Process
-            </span>
-            <h2 className="text-2xl font-bold text-[#112240] mt-2 mb-3">
-              How It Works
-            </h2>
-            <div className="w-10 h-[3px] bg-[#0C447C] mx-auto" />
-          </div>
-
-          <div className="relative">
-            <div className="hidden md:block absolute top-[27px] left-0 right-0 px-[12.5%]">
-              <div className="h-[2px] w-full bg-slate-200" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-stretch relative">
-              {service.howItWorks.map((step, idx) => {
-                const stepIcons = [Users2, ClipboardList, Heart, RefreshCw];
-                const Icon = stepIcons[idx % stepIcons.length];
-                return (
-                  <div
-                    key={step.step}
-                    className="relative h-full flex flex-col text-left p-5 rounded-xl border bg-slate-50 border-slate-100"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#112240]">
-                        <Icon className="w-[18px] h-[18px] text-white" strokeWidth={2} />
-                      </div>
-                      <span className="text-xs font-medium tracking-wider text-slate-400">
-                        Step {String(step.step).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <span className="block font-bold text-[15px] text-[#112240] leading-tight mb-2">
-                      {step.title}
-                    </span>
-                    <p className="text-[13px] leading-relaxed text-slate-500">
-                      {step.desc}
-                    </p>
+                  <div className="text-sm font-bold leading-[1.35] text-[#102A43]">
+                    <p>{line1}</p>
+                    <p>{line2}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex gap-4">
+              <a href="/contact" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
+                Request a Free Consultation <ArrowRight className="h-4 w-4" />
+              </a>
+              <a href="tel:+14439859368" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
+                <Phone className="h-4 w-4" /> Call (443) 985-9368
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          SERVICES + STATS + HOW IT WORKS (left) | PROMISE + TESTIMONIALS (right sticky)
+      ═══════════════════════════════════════════ */}
+      <section className="bg-white pt-6 pb-6 lg:pt-8 lg:pb-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_380px] lg:items-start lg:px-8">
+
+          {/* ── LEFT COLUMN ── */}
+       <div className="flex flex-col">
+
+            {/* Services grid */}
+            <div>
+ <div className="mb-4 text-center">
+  <h2 className="font-display font-black text-3xl text-[#0B2D5B]">Our Companion Care Services</h2>
+    <p className="mt-5 text-sm leading-7 text-slate-600 max-w-2xl mx-auto">
+    Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.
+  </p>
+  <p className="mt-3 text-sm font-bold text-[#0B2D5B]">Our services include around-the-clock care including</p>
+  <HeartDivider />
+
+</div>
+<div className="grid grid-cols-1 gap-x-3 gap-y-5 md:grid-cols-2 xl:grid-cols-3">
+                {categories.map((cat, idx) => {
+                  const Icon = cat.icon || defaultServiceIcons[idx % defaultServiceIcons.length];
+                  return (
+                    <article
+                      key={cat.title}
+                      className="group flex flex-col rounded-2xl border border-slate-100 bg-white px-8 pb-4 pt-1 text-center shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+                    >
+                      <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#159BA1] text-white shadow-md group-hover:bg-[#0C447C]">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="mb-1 text-base font-black text-sm leading-6 text-[#0B2D5B]">{cat.title}</h3>
+                      <p className="text-xs leading-5 text-slate-600 hyphens-auto">{cat.items.join(", ")}</p>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Stats row */}
+<div className="mt-6 lg:mt-8 grid grid-cols-2 rounded-2xl border border-slate-100 bg-[#F5F9FC] sm:grid-cols-4">
+  {([
+    [Users2,      "500+",      "Families Served"],
+    [Clock,       "24/7",      "Care Available"],
+    [Star,        "98%",       "Client Satisfaction"],
+    [ShieldCheck, "Certified", "& Insured Caregivers"],
+  ] as [React.ElementType, string, string][]).map(([Icon, value, label]) => (
+    <div key={value} className="flex items-center gap-3 p-5">
+      <Icon className="h-8 w-8 shrink-0 text-[#0C447C]" />
+      <div>
+        <p className="text-xl font-black text-[#0B2D5B]">{value}</p>
+        <p className="text-xs text-slate-600">{label}</p>
+      </div>
     </div>
+  ))}
+</div>
+
+            {/* How It Works */}
+            <div className="mt-6 lg:mt-8">
+      <div className="mb-4 text-center">
+  <h2 className="font-display font-black text-3xl text-[#0B2D5B]">How It Works</h2>
+  <HeartDivider />
+</div>
+              <div className="flex items-start justify-center">
+                {howItWorks.map((step: any, idx: number) => {
+                  const Icon = stepIcons[idx % stepIcons.length];
+                  const isLast = idx === howItWorks.length - 1;
+                  return (
+                    <div key={step.step ?? idx} className="flex items-start">
+                      <div className="flex w-36 flex-col items-center text-center sm:w-44">
+                        <div className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#0C447C] text-white shadow-md">
+                          <Icon className="h-7 w-7" />
+                        </div>
+                        <p className="mb-1.5 text-sm font-black text-[#0B2D5B]">{idx + 1}. {step.title}</p>
+                        <p className="text-xs leading-5 text-slate-600">{step.desc}</p>
+                      </div>
+                      {!isLast && (
+                        <ArrowRight className="mt-7 h-5 w-5 shrink-0 text-[#0C447C]/50 hidden sm:block" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* ── RIGHT COLUMN — sticky ── */}
+          <div className="flex flex-col gap-5 lg:sticky lg:top-28">
+
+            {/* Promise card */}
+            <PromiseCard />
+
+            {/* Testimonials card */}
+            <div className="mx-auto w-full max-w-xs rounded-2xl border border-slate-100 bg-[#FAFCFE] p-5 shadow-sm">
+              <h2 className="font-display font-black mb-4 text-base text-[#0B2D5B]">What Families Are Saying</h2>
+              {[
+                ["Our caregiver has become part of the family. The companionship and care my mother receives has truly improved her quality of life.", "Sarah M., Columbia, MD"],
+                ["Excellent companion care for my father. The caregiver is compassionate, reliable and engaging. Highly recommend!", "James R., Ellicott City, MD"],
+                ["The team truly listens and adapts the care plan as needs change. It's given our whole family peace of mind.", "Linda K., Baltimore, MD"],
+              ].map(([quote, name]) => (
+                <div key={name as string} className="mb-3 rounded-xl bg-white  p-4">
+                  <div className="mb-2 flex text-[#FFC107]">
+                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-current" />)}
+                  </div>
+                  <p className="text-xs leading-6 text-slate-600">{quote}</p>
+                  <p className="mt-2 text-xs font-bold text-[#0B2D5B]">— {name}</p>
+                </div>
+              ))}
+              <a href="/reviews" className="mt-1 flex items-center gap-1 text-xs font-black text-[#0C447C] hover:underline">
+                View More Reviews <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          FAQ (left) + RELATED SERVICES (right)
+      ═══════════════════════════════════════════ */}
+<section className="bg-[#FAFCFE] pt-3 pb-3 lg:pt-2 lg:pb-3"> 
+<div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_2fr] lg:px-8">
+  <div>
+    <h2 className="font-display font-black mb-0 text-2xl text-[#0B2D5B]">Frequently Asked Questions</h2>
+    {[
+      "How often can a caregiver visit?",
+      "Do you provide transportation for outings?",
+      "Is companion care covered by insurance?",
+      "Can care start immediately?",
+      "Can I change my caregiver if needed?",
+    ].map((question) => (
+      <details key={question} className="mb-3 mt-4 rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-sm">
+        <summary className="flex cursor-pointer items-center justify-between text-xs font-black text-[#102A43]">
+          {question}
+          <span className="ml-3 shrink-0 text-slate-400">+</span>
+        </summary>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          Please contact our care coordinator for details based on your family's needs and schedule.
+        </p>
+      </details>
+    ))}
+  </div>
+
+        
+<div>
+  <h2 className="font-display font-black text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
+  <div className="grid grid-cols-2 mt-4 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+    {related.map((item) => (
+      <a
+        key={item.id}
+        href={`/services/${item.id}`}
+        className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+      >
+        <div className="h-28 overflow-hidden">
+          <img
+            src={(item as any).image}
+            alt={item.title}
+            className="h-full w-full object-cover transition group-hover:scale-105"
+          />
+        </div>
+        <div className="flex flex-1 items-center justify-between gap-2 p-3">
+          <span className="text-xs font-black leading-snug text-[#0B2D5B] line-clamp-2">
+            {item.title}
+          </span>
+          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div className="mt-6 flex items-center justify-center gap-4">
+    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-300">
+      <ChevronLeft className="h-4 w-4" />
+    </button>
+    <span className="text-sm font-medium text-slate-500">1 of 5 Services</span>
+    <button className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B2D5B] text-white">
+      <ChevronRight className="h-4 w-4" />
+    </button>
+  </div>
+</div>
+    </div>
+      </section>
+      {/* ═══════════════════════════════════════════
+          BOTTOM CTA BANNER
+      ═══════════════════════════════════════════ */}
+      <section className="bg-[#0B2D5B] pt-6 pb-6 lg:pt-8 lg:pb-8 text-white">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-center sm:px-6 lg:flex-row lg:px-8 lg:text-left">
+          <div className="flex items-center gap-5">
+            <HeartHandshake className="hidden h-14 w-14 text-white/80 sm:block" />
+            <div>
+              <h2 className="font-display font-black text-2xl">Ready to Improve Your Loved One's Quality of Life?</h2>
+              <p className="mt-2 text-blue-100">Our compassionate team is here to help — call or schedule your free consultation today.</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+<a href="tel:+14439859368" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
+              <Phone className="h-4 w-4" /> Call (443) 985-9368
+            </a>
+<a href="/contact" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap">            
+   Request a Free Consultation <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
