@@ -39,10 +39,11 @@ export function NewsSection() {
                                 duration: 0.5,
                                 delay: i * 0.12,
                             }}
+                            className="h-full"
                         >
-                            <Card className="hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
+                            <Card className="h-full hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
                                 {/* Image */}
-                                <div className="h-[140px] sm:h-[150px] relative overflow-hidden">
+                                <div className="h-[140px] sm:h-[150px] relative overflow-hidden flex-shrink-0">
                                     <Image
                                         src={item.image}
                                         alt={item.title}

@@ -46,11 +46,8 @@ export default function ServicesPage() {
       activeFilter === "all" ||
       service.patientGroups.includes(activeFilter as PatientGroup);
 
-    const q = searchQuery.toLowerCase();
-    const matchesSearch =
-      !q ||
-      service.title.toLowerCase().includes(q) ||
-      service.description.toLowerCase().includes(q);
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch = !q || service.title.toLowerCase().includes(q);
 
     return matchesGroup && matchesSearch;
   });
@@ -88,10 +85,7 @@ export default function ServicesPage() {
       transition={{ duration: 0.6 }}
       className="max-w-[500px] text-left"
     >
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0C447C]/10 border border-[#0C447C]/20 text-[#0C447C] text-xs font-semibold uppercase tracking-widest mb-3 font-display">
-        <ShieldCheck className="w-3 h-3 text-[#5FC9CE]" />
-        Comprehensive Home Care
-      </div>
+ 
   <h1 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-[#0B2D5B] leading-tight mb-3 font-display">
         Care That Fits Your Life.<br />
         Support That <span className="text-[#046e4c]">Feels</span> Like <span className="text-[#E57531]">Family</span>.
@@ -215,7 +209,7 @@ export default function ServicesPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search services..."
+                placeholder="Search services by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 focus:border-[#1a365d]/30 transition font-display"

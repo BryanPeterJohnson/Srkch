@@ -1,81 +1,89 @@
+"use client";
+
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
+import { ALL_JOBS } from '@/app/data/jobs';
 
 export default function ApplicationForm() {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+  const job = ALL_JOBS.find((j) => j.id.toString() === jobId);
+
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
       <div className="max-w-3xl mx-auto space-y-6">
-        
+
         {/* Header Section */}
         <header className="text-center bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center">
             {/* Replace with your actual logo asset */}
-            <div className="flex items-center space-x-1 text-red-600 font-bold tracking-wider text-sm">
-              <span>BAYADA</span>
-              <span className="text-xs font-normal text-gray-500">| 50 Years</span>
+            <div className="flex items-center space-x-1 text-[#0C447C] font-bold tracking-wider text-base font-display">
+              <span>SRK Care at Home</span>
             </div>
           </div>
-          <h1 className="text-xl font-bold text-gray-900">You are applying for:</h1>
-          <p className="text-lg font-semibold text-blue-900 mt-1">Physical Therapist, PT Home Visits - Weekend</p>
-          <p className="text-sm text-gray-600 mt-1">
-            <span className="font-medium">Location:</span> Loveland, CO 80538 <span className="mx-2">|</span> <span className="font-medium">Reference:</span> 2034420002 1570841
+          <h1 className="text-xl font-bold text-[#0E162B] font-display">You are applying for:</h1>
+          <p className="text-lg font-semibold text-[#0D2D52] mt-1 font-display">
+            {job ? job.title : "General Application"}
+          </p>
+          <p className="text-sm text-gray-600 mt-1 font-display">
+            {job ? (
+              <>
+                <span className="font-medium">Location:</span> {job.location}
+                <span className="mx-2">|</span>
+                <span className="font-medium">Reference:</span> #{job.id}
+              </>
+            ) : (
+              <span>Submit your details and we'll match you with open roles.</span>
+            )}
           </p>
         </header>
 
         <form className="space-y-6">
-          
+
           {/* Section 1: Your Information & Location */}
-          <div className="bg-[#E3F2FD] p-6 rounded-lg shadow-sm border border-blue-200 space-y-4">
-            <h2 className="text-lg font-bold text-gray-800 border-b border-blue-300 pb-2">Your Information</h2>
-            
+          <div className="bg-[#159BA1]/5 p-6 rounded-lg shadow-sm border border-[#159BA1]/30 space-y-4">
+            <h2 className="text-lg font-bold text-[#0E162B] border-b border-[#159BA1]/40 pb-2 font-display">Your Information</h2>
+
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700">First Name <span className="text-red-500">*</span></label>
-                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                <label className="block text-sm font-semibold text-gray-700 font-display">First Name <span className="text-[#E57531]">*</span></label>
+                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700">Last Name <span className="text-red-500">*</span></label>
-                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                <label className="block text-sm font-semibold text-gray-700 font-display">Last Name <span className="text-[#E57531]">*</span></label>
+                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700">Email <span className="text-red-500">*</span></label>
-                <input type="email" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                <label className="block text-sm font-semibold text-gray-700 font-display">Email <span className="text-[#E57531]">*</span></label>
+                <input type="email" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700">Phone <span className="text-red-500">*</span></label>
-                <input type="tel" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                <label className="block text-sm font-semibold text-gray-700 font-display">Phone <span className="text-[#E57531]">*</span></label>
+                <input type="tel" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700">Resume/CV <span className="text-red-500">*</span></label>
-                <input type="file" required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 bg-white border border-gray-300 rounded p-1" />
-                <p className="text-xs text-gray-500 mt-1">We accept doc, docx, pdf, txt, and rtf files.</p>
+                <label className="block text-sm font-semibold text-gray-700 font-display">Resume/CV <span className="text-[#E57531]">*</span></label>
+                <input type="file" required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#0D2D52] file:text-white hover:file:bg-[#005B8E] bg-white border border-gray-300 rounded p-1 font-display" />
+                <p className="text-xs text-gray-500 mt-1 font-display">We accept doc, docx, pdf, txt, and rtf files.</p>
               </div>
 
-             
+
             </div>
 
-            <h2 className="text-lg font-bold text-gray-800 border-b border-blue-300 pb-2 pt-4">Your Location</h2>
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">Location <span className="text-red-500">*</span></label>
-                <input type="text" required placeholder="Enter a location" className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500" />
-              </div>
-              <button type="button" className="bg-[#D32F2F] hover:bg-red-800 text-white font-semibold text-xs py-2 px-4 rounded shadow-sm transition">
-                Locate Me
-              </button>
-            </div>
+          
           </div>
 
           {/* Section 2: Voluntary Self-Identification Forms */}
-          <div className="bg-[#E3F2FD] p-6 rounded-lg shadow-sm border border-blue-200 space-y-6 text-xs text-gray-700 leading-relaxed">
-            
+          <div className="bg-[#159BA1]/5 p-6 rounded-lg shadow-sm border border-[#159BA1]/30 space-y-6 text-xs text-gray-700 leading-relaxed font-display">
+
             {/* Disability Self-ID */}
             <section className="space-y-3">
-              <div className="border-b border-blue-300 pb-2">
-                <h2 className="text-lg font-bold text-gray-900">Voluntary Self-Identification of Disability</h2>
+              <div className="border-b border-[#159BA1]/40 pb-2">
+                <h2 className="text-lg font-bold text-[#0E162B] font-display">Voluntary Self-Identification of Disability</h2>
                 <div className="flex justify-between text-[10px] text-gray-500 mt-1">
                   <span>Form CC-305</span>
                   <span>OMB Control Number 1250-0005</span>
@@ -88,7 +96,7 @@ export default function ApplicationForm() {
                 We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must ask you to update our records towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
               </p>
               <p>
-                Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. For more information about the law or this form, visit the U.S. Department of Labor's Office of Federal Contract Compliance Programs (OFCCP) website at <a href="https://www.dol.gov/ofccp" target="_blank" rel="noreferrer" className="text-blue-600 underline">www.dol.gov/ofccp</a>.
+                Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. For more information about the law or this form, visit the U.S. Department of Labor's Office of Federal Contract Compliance Programs (OFCCP) website at <a href="https://www.dol.gov/ofccp" target="_blank" rel="noreferrer" className="text-[#005B8E] underline">www.dol.gov/ofccp</a>.
               </p>
 
               <p className="font-semibold">How do you know if you have a disability?</p>
@@ -122,8 +130,8 @@ export default function ApplicationForm() {
               </ul>
 
               <div className="pt-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Disability Status</label>
-                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Disability Status</label>
+                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="yes">Yes, I Have A Disability, Or Have A History/Record Of Having A Disability</option>
                   <option value="no">No, I Don't Have A Disability, Or A History/Record Of Having A Disability</option>
@@ -133,7 +141,7 @@ export default function ApplicationForm() {
             </section>
 
             {/* Veteran Status Section */}
-            <section className="space-y-3 pt-4 border-t border-blue-300">
+            <section className="space-y-3 pt-4 border-t border-[#159BA1]/40">
               <p>
                 If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans' Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of our outreach and positive recruitment efforts we undertake pursuant to VEVRAA.
               </p>
@@ -151,8 +159,8 @@ export default function ApplicationForm() {
               </p>
 
               <div className="pt-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Veteran Status</label>
-                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Veteran Status</label>
+                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="protected">I identify as one or more of the classifications of protected veteran</option>
                   <option value="not_veteran">I am not a protected veteran</option>
@@ -162,19 +170,19 @@ export default function ApplicationForm() {
             </section>
 
             {/* General Demographic Self-Identification */}
-            <section className="space-y-4 pt-4 border-t border-blue-300">
-              <h2 className="text-lg font-bold text-gray-900">Voluntary Self-Identification</h2>
+            <section className="space-y-4 pt-4 border-t border-[#159BA1]/40">
+              <h2 className="text-lg font-bold text-[#0E162B] font-display">Voluntary Self-Identification</h2>
               <p>
                 For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you provide will be recorded and maintained in a confidential file.
               </p>
               <p>
-                As set forth in BAYADA Home Health Care's Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+                As set forth in SRK Care at Home's Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
               </p>
 
               <div className="grid grid-cols-1 gap-4 pt-2">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Race</label>
-                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Race</label>
+                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="white">White (Not Hispanic or Latino)</option>
                     <option value="black">Black or African American (Not Hispanic or Latino)</option>
@@ -188,8 +196,8 @@ export default function ApplicationForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Gender</label>
-                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Gender</label>
+                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -203,7 +211,7 @@ export default function ApplicationForm() {
 
           {/* Action Button */}
           <div className="pt-2">
-            <button type="submit" className="bg-[#D32F2F] hover:bg-red-800 text-white font-bold text-sm py-3 px-6 rounded shadow transition w-full sm:w-auto">
+            <button type="submit" className="bg-[#E57531] hover:bg-[#0C447C] text-white font-bold text-sm py-3 px-6 rounded shadow transition w-full sm:w-auto font-display">
               Submit Application
             </button>
           </div>
@@ -211,14 +219,14 @@ export default function ApplicationForm() {
       </div>
 
       {/* Footer Section */}
-      <footer className="max-w-3xl mx-auto mt-12 pt-6 border-t border-gray-300 text-center text-[11px] text-gray-500 space-x-2">
+      <footer className="max-w-3xl mx-auto mt-12 pt-6 border-t border-gray-300 text-center text-[11px] text-gray-500 space-x-2 font-display">
         <a href="#" className="hover:underline">Site Search</a> <span>•</span>
         <a href="#" className="hover:underline">Sitemap</a> <span>•</span>
         <a href="#" className="hover:underline">Cookies</a> <span>•</span>
         <a href="#" className="hover:underline">Corporate Site</a> <span>•</span>
         <a href="#" className="hover:underline">Terms and Conditions</a> <span>•</span>
         <a href="#" className="hover:underline">Privacy Policy</a>
-        <p className="mt-2">© BAYADA, All rights reserved.</p>
+        <p className="mt-2">© SRK Care at Home, All rights reserved.</p>
       </footer>
     </div>
   );

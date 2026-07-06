@@ -295,12 +295,12 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
             </div>
 
             {/* Pushed slightly down with mt-6 */}
-            <button
-              onClick={() => router.push("/apply-job")}
-              className="mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap"
-            >
-              Apply Now
-            </button>
+        <button
+  onClick={() => router.push(`/apply-job?jobId=${job.id}`)}
+  className="mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap cursor-pointer"
+>
+  Apply Now
+</button>
           </div>
         </div>
       </div>

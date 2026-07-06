@@ -549,9 +549,9 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
       "Genuine empathy and emotional stability traits",
     ],
     benefits: [
-      { icon: "💰", "title": "Weekend Premium", desc: "Boosted base pay metrics" },
-      { icon: "📍", "title": "Ultra-Local", desc: "Assignments centered by your zip code" },
-      { icon: "🤝", "title": "Paid Onboarding", desc: "Earn while learning company dynamics" },
+      { icon: "💰", title: "Weekend Premium", desc: "Boosted base pay metrics" },
+      { icon: "📍", title: "Ultra-Local", desc: "Assignments centered by your zip code" },
+      { icon: "🤝", title: "Paid Onboarding", desc: "Earn while learning company dynamics" },
     ],
     stats: [
       { value: "15+", label: "Years in Business" },
@@ -566,23 +566,9 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
   },
 ];
 
-// Helper code block to produce an array of all possible 5-digit values (10000 - 99999), 
-// randomizing and choosing only what's needed for RAW_JOBS length to stay fully unique.
-const generateUniqueRandomIds = (count: number): number[] => {
-  const ids = Array.from({ length: 90000 }, (_, i) => i + 10000);
-  
-  // Durstenfeld shuffle algorithm
-  for (let i = ids.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [ids[i], ids[j]] = [ids[j], ids[i]];
-  }
-  
-  return ids.slice(0, count);
-};
-
-const RANDOM_ID_POOL = generateUniqueRandomIds(RAW_JOBS.length);
-
+// Stable, deterministic IDs — identical on server and client, and across
+// refreshes, so links like /apply-job?jobId=10003 always resolve correctly.
 export const ALL_JOBS: Job[] = RAW_JOBS.map((job, index) => ({
-  id: RANDOM_ID_POOL[index],
+  id: 10001 + index,
   ...job,
 }));
