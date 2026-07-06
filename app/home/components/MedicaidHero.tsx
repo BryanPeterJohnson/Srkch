@@ -22,7 +22,7 @@ const programs = [
   {
     id: "cfc",
     emoji: "🗂️",
-    iconBg: "bg-[#EEF9F7]",
+    iconBg: "bg-[#E57531]",
     borderGradient: "from-[#159BA1] to-[#2BB6BC]",
     checkColor: "text-[#159BA1]",
     buttonBg: "bg-[#0D2D52]",
@@ -41,7 +41,7 @@ const programs = [
   {
     id: "waiver",
     emoji: "⭐",
-    iconBg: "bg-[#DCE7F0]",
+    iconBg: "bg-[#0C447C]",
     borderGradient: "from-[#0D2D52] to-[#3D6690]",
     checkColor: "text-[#0D2D52]",
     buttonBg: "bg-[#0D2D52]",
@@ -61,7 +61,7 @@ const programs = [
   {
     id: "private-pay",
     emoji: "💼",
-    iconBg: "bg-[#CFEFE7]",
+    iconBg: "bg-[#046e4c]",
     borderGradient: "from-[#2BB6BC] to-[#159BA1]",
     checkColor: "text-[#159BA1]",
     buttonBg: "bg-[#0D2D52]",
@@ -82,15 +82,15 @@ const programs = [
 
 export default function MedicaidHero() {
   return (
-    <section className="font-display bg-[#FFFDF7] py-16 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col lg:flex-row lg:justify-between gap-10 lg:gap-16 items-start">
+    <section className="font-display bg-white py-20 px-4 sm:px-6 lg:px-8 2xl:px-12">
+      <div className="mx-auto max-w-7xl 2xl:max-w-[1440px]">
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-10 lg:gap-16 2xl:gap-20 items-start">
 
           {/* LEFT: Eyebrow + Headline + Subcopy */}
           <div className="w-full lg:w-[380px] shrink-0 lg:sticky lg:top-24 overflow-hidden">
             {/* Eyebrow badge */}
             <div
-              className="mb-8 inline-flex items-center gap-2 rounded-r-full rounded-l-md bg-[#0D2D52] px-5 py-3 pl-2 max-w-full"
+              className="mb-8 inline-flex items-center gap-2 rounded-r-full rounded-l-md bg-[#E57531] px-5 py-3 pl-2 max-w-full"
               style={{ clipPath: "polygon(0 0, 96% 0, 100% 50%, 96% 100%, 0 100%)" }}
             >
               <span className="font-display font-black text-[9.5px] sm:text-[10.5px] tracking-[1px] text-white uppercase whitespace-nowrap">
@@ -104,7 +104,7 @@ export default function MedicaidHero() {
               style={{ fontSize: "clamp(19px, 2.4vw, 29px)" }}
             >
               Bringing care home with{" "}
-              <span className="text-[#159BA1]">Maryland Medicaid</span>
+              <span className="text-[#046e4c]">Maryland Medicaid</span>
             </h1>
 
             {/* Subcopy */}
@@ -119,11 +119,11 @@ export default function MedicaidHero() {
           </div>
 
           {/* RIGHT: 3 program cards in a row */}
-          <div className="w-full lg:w-auto lg:flex-1 grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="w-full lg:w-auto lg:flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 2xl:gap-6">
             {programs.map((program) => (
               <div
                 key={program.id}
-                className="relative flex flex-col rounded-xl bg-white shadow-[0_1px_3px_rgba(14,22,43,0.06)] overflow-hidden"
+                className="relative flex flex-col rounded-xl bg-white shadow-[0_8px_24px_rgba(14,22,43,0.12)] overflow-hidden"
               >
                 <div className="flex flex-col flex-1 px-4 pb-4 pt-4">
                   {/* Icon */}

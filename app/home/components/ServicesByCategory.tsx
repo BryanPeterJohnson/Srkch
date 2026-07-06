@@ -43,27 +43,35 @@ export function ServicesByCategory() {
     const viewportWidth = CARDS_VISIBLE * CARD_W + (CARDS_VISIBLE - 1) * CARD_GAP;
 
     return (
-        <section className="pt-6 pb-16 sm:pt-8 sm:pb-20 px-4 sm:px-6 lg:px-8 bg-white font-display" id="services">
-            <div className="max-w-7xl mx-auto">
+        <section className="pt-6 pb-16 sm:pt-8 sm:pb-20 px-4 sm:px-6 lg:px-8 2xl:px-12 bg-white font-display" id="services">
+            <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto">
 
                 {/* Header */}
                 <div className="text-center mb-12 sm:mb-14">
                     <motion.div
-                        className="font-display"
-                        initial={{ opacity: 0, y: 12 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ duration: 0.5 }}
-                        style={{
-                            fontSize: 18,
-                            fontWeight: 700,
-                            letterSpacing: "1.5px",
-                            color: "#0C447C",
-                            marginBottom: "0.6rem",
-                        }}
-                    >
-                        OUR SERVICES
-                    </motion.div>
+    className="font-display flex items-center justify-center gap-3"
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.5 }}
+    style={{
+        fontSize: 18,
+        fontWeight: 700,
+        letterSpacing: "1.5px",
+        color: "#0C447C",
+        marginBottom: "0.6rem",
+    }}
+>
+    <span
+        className="h-[2px] w-[60px] sm:w-16"
+        style={{ backgroundColor: "#E57531" }}
+    />
+    OUR SERVICES
+    <span
+        className="h-[2px] w-[60px] sm:w-16"
+        style={{ backgroundColor: "#E57531" }}
+    />
+</motion.div>
 
                     <motion.h2
                         className="font-display"
@@ -104,7 +112,7 @@ export function ServicesByCategory() {
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
                     {/* LEFT: Category Cards */}
-                    <div className="w-full lg:w-[250px] shrink-0 space-y-3.5 lg:ml-6">
+                    <div className="w-full lg:w-[350px] shrink-0 space-y-3.5 lg:ml-6">
                         {categoryData.map((cat, i) => {
                             const isOpen = openCat === i;
                             const CatIcon = cat.Icon;
@@ -128,18 +136,18 @@ export function ServicesByCategory() {
                                                     : "bg-[#F5F7FA] text-gray-400"
                                             }`}
                                         >
-                                            <CatIcon size={18} strokeWidth={2} />
+                                            <CatIcon size={25} strokeWidth={2} />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <h3
-                                                className={`font-display font-bold text-[14.5px] leading-tight truncate ${
+                                                className={`font-display font-bold text-[20px] leading-tight truncate ${
                                                     isOpen ? "text-white" : "text-[#0D2D52]"
                                                 }`}
                                             >
                                                 {cat.title}
                                             </h3>
                                             <p
-                                                className={`mt-0.5 text-[12px] leading-tight ${
+                                                className={`font-display mt-0.5 text-[12px] leading-tight ${
                                                     isOpen ? "text-white/80" : "text-gray-500"
                                                 }`}
                                             >
@@ -233,7 +241,7 @@ export function ServicesByCategory() {
                                             </p>
                                             <span
                                                 className="inline-flex items-center gap-1 text-[13px] font-bold font-display"
-                                                style={{ color: "#0C447C" }}
+                                                style={{ color: "#E57531" }}
                                             >
                                                 Learn More <ArrowRight size={14} />
                                             </span>
@@ -244,7 +252,7 @@ export function ServicesByCategory() {
                         </div>
 
                         {/* Navigation */}
-                        <div className="w-full flex justify-center mt-6 mr-80">
+                        <div className="w-full flex justify-center mt-6">
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => canPrev && setSlideIndex(slideIndex - 1)}

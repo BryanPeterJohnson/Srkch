@@ -16,7 +16,7 @@ import { TrustBadgesMarquee } from "./TrustBadgesMarquee";
 export function NewsSection() {
     return (
         <section className="-mt-4 sm:-mt-5 pt-0 pb-8 sm:pb-10 bg-white font-display">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12">
 
                 <motion.h2
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -42,7 +42,7 @@ export function NewsSection() {
                         >
                             <Card className="hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
                                 {/* Image */}
-                                <div className="h-35 relative overflow-hidden">
+                                <div className="h-[140px] sm:h-[150px] relative overflow-hidden">
                                     <Image
                                         src={item.image}
                                         alt={item.title}

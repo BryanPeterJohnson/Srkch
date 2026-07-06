@@ -10,7 +10,7 @@ export function HowItWorks() {
             className="-mt-0 sm:-mt-5 pt-0 pb-16 sm:pb-20 lg:pb-24 px-4 sm:px-6 lg:px-8 font-display"
             style={{ background: "#F9F9F7" }}
         >
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto">
 
                 {/* Header Animation */}
                 <motion.div

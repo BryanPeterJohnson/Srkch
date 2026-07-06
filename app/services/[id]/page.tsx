@@ -240,10 +240,12 @@ export default function ServiceDetailPage({ params }: PageProps) {
             <div>
  <div className="mb-4 text-center">
   <h2 className="font-display font-black text-3xl text-[#0B2D5B]">Our Companion Care Services</h2>
-    <p className="mt-5 text-sm leading-7 text-slate-600 max-w-2xl mx-auto">
-    Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.
+    <p className="mt-5 text-sm leading-7 text-slate-600 max-w-3xl mx-auto text-justify">
+At SRK Care at Home, we provide trusted and compassionate in-home senior care for adults age 65 and older. Our caregivers help seniors stay safe, comfortable, and independent at home with personalized support tailored to their daily needs.
+We support eligible seniors through Medicaid, LTSS, In-Home Aides Services, Home and Community-Based Services, and long-term caregiving programs, helping families access reliable care so their loved ones can age safely at home.
+Our services include
   </p>
-  <p className="mt-3 text-sm font-bold text-[#0B2D5B]">Our services include around-the-clock care including</p>
+  <p className="mt-3 text-m font-bold text-[#0B2D5B]">Our services include around-the-clock care including</p>
   <HeartDivider />
 
 </div>

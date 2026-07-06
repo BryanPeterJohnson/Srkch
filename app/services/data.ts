@@ -48,7 +48,7 @@ export const services = [
   shortTitle: "Personal Care",
   tagline: "Dignity and independence, every single day.",
   description:
-    "Our personal care services provide compassionate, respectful support with the activities that make daily life possible. We meet each client where they are — physically, emotionally, and medically — to design an approach that preserves their self-worth while ensuring safety.",
+"At SRK Care at Home, we provide trusted and compassionate in-home senior care for adults age 65 and older. Our caregivers help seniors stay safe, comfortable, and independent at home with personalized support tailored to their daily needs. We support eligible seniors through Medicaid, LTSS, In-Home Aides Services, Home and Community-Based Services, and long-term caregiving programs, helping families access reliable care so their loved ones can age safely at home. Our services include",
   icon: Heart,
 
   // Updated image (professional caregiver assisting an elderly client at home)

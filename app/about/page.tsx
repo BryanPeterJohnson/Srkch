@@ -1,319 +1,782 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Mail,
+  ShieldCheck,
+  BadgeCheck,
+  Phone,
+  Target,
+  Eye,
+  Gem,
+  CheckCircle,
+  Users,
+  UserCheck,
+  Stethoscope,
+  Clock,
+  Award,
+  Star,
+  User,
+  Activity,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Quote,
+  HeartHandshake,
+} from "lucide-react";
 
+/* -------------------------------------------------------------------------- */
+/*  Static content                                                            */
+/* -------------------------------------------------------------------------- */
 
-// ─── TYPES ───────────────────────────────────────────────────────────────────
-interface ServiceItem {
+const HERO_BADGES = [
+  { icon: Mail, label: "Medicaid\nAccepted", color: "#E57531" },
+  { icon: ShieldCheck, label: "RN Care\nAssessments", color: "#0C447C" },
+  { icon: BadgeCheck, label: "Background\nChecked Caregivers", color: "#046e4c" },
+  { icon: Clock, label: "Available\n24/7", color: "#E57531" },
+];
+
+const VALUES = [
+  "Compassion",
+  "Integrity",
+  "Respect",
+  "Excellence",
+  "Accountability",
+];
+
+type MvvTab = {
+  id: "mission" | "vision" | "values";
   label: string;
-}
-
-interface TeamMember {
-  name: string;
-  role: string;
-  bg: string;
-  img: string;
-}
-
-interface NewsItem {
-  tag: string;
-  tagBg: string;
+  icon: React.ElementType;
   title: string;
-  desc: string;
-  img: string;
-}
+  description?: string[];
+  values?: string[];
+  image: string;
+  accent: string;
+};
 
-interface AccordionRowProps {
-  label: string;
-}
-
-interface PillBarProps {
-  pills: string[];
-}
-
-interface ServiceSectionProps {
-  title: string;
-  pills: string[];
-  img: string;
-  imgAlt: string;
-  services: ServiceItem[];
-  ctaLabel: string;
-  reverse?: boolean;
-  bg?: string;
-}
-
-// ─── UNSPLASH IMAGES ─────────────────────────────────────────────────────────
-const HERO_IMG       = "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1440&h=420&fit=crop&auto=format";
-const MISSION_IMG    = "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=520&fit=crop&auto=format";
-const HOMECARE_IMG   = "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=700&h=440&fit=crop&auto=format";
-const PALLIATIVE_IMG = "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=700&h=440&fit=crop&auto=format";
-const HOSPICE_IMG    = "https://images.unsplash.com/photo-1551076805-e1869033e561?w=700&h=440&fit=crop&auto=format";
-const TRANSPORT_IMG  = "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=700&h=440&fit=crop&auto=format";
-const TEAM_IMG       = "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=700&h=460&fit=crop&auto=format";
-
-// ─── DATA ────────────────────────────────────────────────────────────────────
-const homeCareServices: ServiceItem[] = [
-  { label: "Skilled Nursing Care at Home" },
-  { label: "Short-Term Rehab" },
-  { label: "Disease-Specific Expertise" },
-  { label: "Skilled Nursing Care" },
-];
-const palliativeServices: ServiceItem[] = [
-  { label: "Provided Alongside Curative Treatment" },
-  { label: "Symptom Management" },
-  { label: "Care Coordination" },
-];
-const hospiceServices: ServiceItem[] = [
-  { label: "Comfort at the End of Life" },
-  { label: "Customized Plan of Care" },
-  { label: "Bereavement Support" },
-];
-const transportServices: ServiceItem[] = [
-  { label: "Safe, Reliable Transportation" },
-  { label: "Medical Appointment Rides" },
-  { label: "Companion-Assisted Travel" },
+const MVV_TABS: MvvTab[] = [
+  {
+    id: "mission",
+    label: "Mission",
+    icon: Target,
+    title: "Our Mission",
+    description: [
+      "To enhance quality of life by providing personalized, compassionate care that empowers independence and brings peace of mind to families.",
+      "We do this by pairing every client with a caregiver who truly fits their needs, backed by RN-supervised care plans that adapt as those needs change—so families never have to navigate it alone.",
+    ],
+    image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=1000&q=80",
+    accent: "#046e4c",
+  },
+  {
+    id: "vision",
+    label: "Vision",
+    icon: Eye,
+    title: "Our Vision",
+    description: [
+      "To be Maryland's most trusted partner in in-home care—known for our excellence, integrity, and unwavering commitment to our community.",
+      "We envision a future where every family, regardless of income or circumstance, has access to caregivers who treat their loved ones with the same dignity and attentiveness they would want for their own.",
+    ],
+    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1000&q=80",
+    accent: "#0C447C",
+  },
+  {
+    id: "values",
+    label: "Values",
+    icon: Gem,
+    title: "Our Values",
+    values: VALUES,
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80",
+    accent: "#E57531",
+  },
 ];
 
-const pillsHomeCare: string[]   = ["Care at Home", "Short-Term Rehab", "Skilled Nursing", "Palliative Care"];
-const pillsPalliative: string[] = ["Advance Care Planning", "Care Coordination", "Symptom Management"];
-const pillsHospice: string[]    = ["Pain Management", "Bereavement Support", "Customized Plan of Care", "Spiritual Support"];
-const pillsTransport: string[]  = ["Scheduling", "Long-Distance", "Medical Visits", "Same-Day"];
-
-const teamMembers: TeamMember[] = [
-  { name: "Dr. Sarah Kaminski", role: "Medical Director",        bg: "#005B8E", img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&h=200&fit=crop&auto=format" },
-  { name: "Robert Chen",        role: "Director of Care Services", bg: "#00A693", img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&h=200&fit=crop&auto=format" },
-  { name: "Amara Osei",         role: "Lead Care Coordinator",   bg: "#003A5C", img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&auto=format" },
+const WHY_CHOOSE = [
+  {
+    icon: Users,
+    title: "Top-Tier Caregivers",
+    description:
+      "Highly trained professionals who treat your loved one like family.",
+    accent: "#046e4c",
+  },
+  {
+    icon: UserCheck,
+    title: "Personalized Matching",
+    description:
+      "We match each client with a caregiver who aligns with their needs, preferences, and personality.",
+    accent: "#E57531",
+  },
+  {
+    icon: Stethoscope,
+    title: "RN-Supervised Care",
+    description:
+      "Our registered nurses design and monitor care plans tailored to each client's unique needs.",
+    accent: "#0C447C",
+  },
+  {
+    icon: Clock,
+    title: "24/7 Support",
+    description: "We're here whenever you need us—day or night.",
+    accent: "#159BA1",
+  },
 ];
 
-const newsItems: NewsItem[] = [
-  { tag: "SRK IN THE NEWS", tagBg: "#003A5C", title: "SRK Care Launches Inpatient Hospice Care with Community Partners",      desc: "We continue to expand our services to meet the growing needs of families across the region.", img: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&h=240&fit=crop&auto=format" },
-  { tag: "SRK IN THE NEWS", tagBg: "#005B8E", title: "SRK Nursing Center Featured on Local Health Radio Station",             desc: "Our care model and patient outcomes were highlighted as a model for community health.",       img: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&h=240&fit=crop&auto=format" },
-  { tag: "SRK IN THE NEWS", tagBg: "#1A1A2E", title: "Staff Honored by United Hospital Fund for Excellence in Care",          desc: "Two senior nurses recognized for outstanding dedication to client-centered care.",            img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=240&fit=crop&auto=format" },
-  { tag: "AWARD",           tagBg: "#00A693", title: "SRK Care Earns Joint Commission's Prestigious Gold Seal of Approval",   desc: "A testament to our commitment to the highest standards in home care quality.",                img: "https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?w=400&h=240&fit=crop&auto=format" },
+const STATS = [
+  { icon: Users, value: "500+", label: "Families Served" },
+  { icon: Award, value: "Certified", label: "Caregivers" },
+  { icon: ShieldCheck, value: "Medicaid", label: "Accepted" },
+  { icon: Clock, value: "24/7", label: "Support" },
 ];
 
-// ─── SUBCOMPONENTS ───────────────────────────────────────────────────────────
-function AccordionRow({ label }: AccordionRowProps) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div
-      onClick={() => setOpen(!open)}
-      style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 0", borderBottom: "1px solid #E5E7EB", cursor: "pointer" }}
-    >
-      <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, color: "#1A1A2E", fontWeight: 500 }}>
-        {label}
-      </span>
-      <span style={{ color: "#005B8E", flexShrink: 0, marginLeft: 8 }}>
-        {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-      </span>
-    </div>
+const LIFE_STAGES = [
+  {
+    icon: User,
+    title: "Seniors",
+    image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80",
+    description:
+      "Compassionate care that helps older adults maintain safety, active, and independent lives.",
+    accent: "#046e4c",
+  },
+  {
+    icon: UserCheck,
+    title: "Adults",
+    image: "https://images.unsplash.com/photo-1581595219315-a187dd40c322?auto=format&fit=crop&w=800&q=80",
+    description:
+      "Support for adults recovering from illness, managing chronic conditions, or needing extra help.",
+    accent: "#E57531",
+  },
+  {
+    icon: Activity,
+    title: "Children",
+    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0?auto=format&fit=crop&w=800&q=80",
+    description:
+      "Specialized care for children with medical needs, developmental differences, or disabilities.",
+    accent: "#0C447C",
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "SRK Care at Home has been a blessing for our family. Their caregivers treat my mom with such kindness and respect. We finally have peace of mind knowing she's in good hands.",
+    name: "Lisa B.",
+    relation: "Daughter of Client",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+    rating: 5,
+  },
+  {
+    quote:
+      "The care coordinators listened to exactly what our family needed and matched us with a caregiver who fit perfectly. The communication has been outstanding from day one.",
+    name: "Marcus T.",
+    relation: "Son of Client",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    rating: 5,
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Page                                                                      */
+/* -------------------------------------------------------------------------- */
+
+export default function AboutPage() {
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [mvvTab, setMvvTab] = useState<"mission" | "vision" | "values">(
+    "mission"
   );
-}
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    preferredContact: "",
+    helpType: "",
+    message: "",
+  });
 
-function PillBar({ pills }: PillBarProps) {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
-      {pills.map((p: string) => (
-        <span key={p} style={{ background: "#E8F4FD", color: "#005B8E", fontSize: 12, fontWeight: 600, padding: "4px 12px", borderRadius: 20, fontFamily: "'Source Sans 3', sans-serif", letterSpacing: "0.03em" }}>
-          {p}
-        </span>
-      ))}
-    </div>
-  );
-}
+  const nextTestimonial = () =>
+    setTestimonialIndex((i) => (i + 1) % TESTIMONIALS.length);
+  const prevTestimonial = () =>
+    setTestimonialIndex(
+      (i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
+    );
 
-function ServiceSection({ title, pills, img, imgAlt, services, ctaLabel, reverse = false, bg }: ServiceSectionProps) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: wire up to API route / email service
+    console.log(formData);
+  };
+
+  const activeMvv = MVV_TABS.find((tab) => tab.id === mvvTab)!;
+
   return (
-    <section style={{ background: bg ?? "#fff", padding: "64px 0", borderBottom: "1px solid #E5E7EB" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
-        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 11, fontWeight: 700, color: "#00A693", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
-          LEARN MORE ABOUT
-        </p>
-        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 700, color: "#003A5C", marginBottom: 32 }}>
-          {title}
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 40, alignItems: "start" }}>
-          {/* Photo */}
-          <div style={{ order: reverse ? 2 : 1, position: "relative", height: 280, borderRadius: 14, overflow: "hidden", boxShadow: "0 6px 24px rgba(0,58,92,0.12)" }}>
-            <Image src={img} alt={imgAlt} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
+    <div className="min-h-screen bg-white font-display">
+      {/* ---------------------------------------------------------------- */}
+      {/* Hero — same treatment as the home page HeroSlider, single static image */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
+        {/* BACKGROUND IMAGE */}
+        <Image
+          src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
+          alt="Caregiver sharing a warm moment with a senior client"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: "60% 10%" }}
+        />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
+        <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
+
+        {/* Decorative brand-color sweep along the bottom edge */}
+        <div
+          className="absolute bottom-0 right-0 z-[2] w-full h-2.5 sm:h-3 pointer-events-none bg-gradient-to-r from-[#E57531] via-[#159BA1] to-[#046e4c]"
+          style={{ clipPath: "polygon(20% 100%, 100% 0%, 100% 100%)" }}
+        />
+
+        {/* CONTENT */}
+        <div className="absolute inset-0 z-[10]">
+          <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-32">
+            <div className="max-w-[600px] h-full flex flex-col justify-center items-start text-left">
+              <div className="space-y-6">
+                {/* HEADLINE */}
+                <h1
+                  className="font-display font-black text-[#0C447C]"
+                  style={{
+                    fontSize: "clamp(34px, 4.5vw, 46px)",
+                    lineHeight: 1.12,
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  Care That <span className="text-[#046e4c]">Feels</span>
+                  <br />
+                  Like <span className="text-[#E57531]">Family</span>
+                </h1>
+
+                {/* SUBTEXT */}
+                <p
+                  className="font-display text-[#3E4C63]"
+                  style={{
+                    fontSize: "clamp(14px, 1.1vw, 16px)",
+                    lineHeight: 1.6,
+                    maxWidth: 460,
+                  }}
+                >
+                  At SRK Care at Home, we believe everyone deserves to live
+                  safely, comfortably, and independently at home—with a team
+                  that truly cares for seniors, adults, and children across
+                  Maryland.
+                </p>
+
+                {/* ICON BADGE ROW */}
+                <div className="flex flex-wrap items-start gap-x-6 gap-y-4 pt-1">
+                  {HERO_BADGES.map((b, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <b.icon
+                        size={22}
+                        strokeWidth={1.75}
+                        className="flex-shrink-0"
+                        style={{ color: b.color }}
+                      />
+                      <span
+                        className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight"
+                        style={{ fontSize: 12 }}
+                      >
+                        {b.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* BUTTONS */}
+                <div className="flex gap-3 flex-wrap items-center pt-2">
+            <Link
+  href="/get-started"
+  className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+>
+  Request a Free Consultation
+
+</Link>
+                  <Link
+                    href="tel:+14439859368"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm"
+                  >
+                    <Phone size={15} />
+                    Call (443) 985-9368
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-          {/* Accordion card */}
-          <div style={{ order: reverse ? 1 : 2 }}>
-            <PillBar pills={pills} />
-            <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 12, padding: "8px 20px 4px", marginBottom: 24, boxShadow: "0 2px 10px rgba(0,58,92,0.07)" }}>
-              <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 10, fontWeight: 700, color: "#9CA3AF", letterSpacing: "0.12em", textTransform: "uppercase", margin: "14px 0 6px" }}>
-                CARE AT A GLANCE
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Our Story                                                         */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-6 md:pt-10 pb-8 md:pb-10 font-display">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="text-[#046e4c] text-m font-bold uppercase tracking-widest mb-3 font-display">
+              Our Story
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1a365d] leading-tight mb-5 font-display">
+              A Family&apos;s Vision.
+              <br />A Community&apos;s Mission.
+            </h2>
+            <p className="text-slate-600 leading-7 mb-4 font-display">
+              SRK Care at Home was founded by a healthcare professional who
+              experienced firsthand the challenges families face when a loved
+              one needs care.
+            </p>
+            <p className="text-slate-600 leading-7 font-display">
+              We built SRK to be the kind of agency we would trust with our
+              own family—where compassion meets clinical excellence, and
+              every client is treated with dignity, respect, and heart.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-[1.1fr_1fr] gap-4 items-stretch">
+            <div className="relative w-full min-h-[220px] rounded-2xl overflow-hidden shadow-md">
+              <Image
+                src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=900&q=80"
+                alt="Caregiver holding hands with a client"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="relative bg-[#EAF3F8] rounded-2xl p-6 flex flex-col justify-between">
+              <Quote className="w-7 h-7 text-[#0C447C] mb-3" />
+              <p className="text-[#0B2D5B] font-semibold leading-relaxed font-display">
+                We listen, we care, and we show up—every day. Your loved
+                one&apos;s well-being is our highest priority.
               </p>
-              <div style={{ height: 2, background: "#003A5C", marginBottom: 4 }} />
-              {services.map((s: ServiceItem) => (
-                <AccordionRow key={s.label} label={s.label} />
+              <HeartHandshake className="w-8 h-8 text-[#0C447C]/30 self-end mt-4" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Mission, Vision & Values — interactive tabs                      */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="bg-slate-50 pt-5 md:pt-2 pb-8 md:pb-10 font-display bg-[#0C447C]">
+        <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 2xl:gap-20 items-center">
+            {/* Left: tab buttons + active content */}
+            <div>
+              <div className="flex flex-wrap gap-3 mb-8">
+                {MVV_TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setMvvTab(tab.id)}
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all font-display ${
+                      mvvTab === tab.id
+                        ? "bg-[#0C447C] text-white shadow-md"
+                        : "bg-white border border-slate-200 text-slate-600 hover:border-[#0C447C]/40 hover:text-[#0C447C]"
+                    }`}
+                  >
+                    <tab.icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={mvvTab}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                    style={{ backgroundColor: `${activeMvv.accent}1A` }}
+                  >
+                    <activeMvv.icon
+                      className="w-6 h-6"
+                      style={{ color: activeMvv.accent }}
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#1a365d] mb-2 font-display">
+                    {activeMvv.title}
+                  </h3>
+                  <div
+                    className="w-10 h-[3px] rounded-full mb-4"
+                    style={{ backgroundColor: activeMvv.accent }}
+                  />
+
+                  {activeMvv.values ? (
+                    <ul className="space-y-2">
+                      {activeMvv.values.map((value) => (
+                        <li
+                          key={value}
+                          className="flex items-center gap-2 text-slate-600 text-sm font-display"
+                        >
+                          <CheckCircle
+                            className="w-4 h-4 flex-shrink-0"
+                            style={{ color: activeMvv.accent }}
+                          />
+                          {value}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="space-y-4">
+                      {activeMvv.description?.map((paragraph, i) => (
+                        <p
+                          key={i}
+                          className="text-slate-600 leading-relaxed font-display"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Right: single photo, swaps with the active tab */}
+            <div className="relative w-full h-[380px] 2xl:h-[440px] rounded-2xl overflow-hidden shadow-md">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={mvvTab}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={activeMvv.image}
+                    alt={activeMvv.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B2D5B]/85 via-[#0B2D5B]/10 to-transparent" />
+
+           
+
+                 
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Why Families Choose SRK                                           */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-8 md:pt-10 pb-8 md:pb-10 font-display">
+        <div className="text-center text-[#0C447C] text-m font-bold uppercase tracking-widest mb-6 font-display">
+          Why Families Choose SRK
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {WHY_CHOOSE.map((item) => (
+            <div
+              key={item.title}
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6"
+            >
+              <div
+                className="w-11 h-11 rounded-full flex items-center justify-center mb-4"
+                style={{ backgroundColor: `${item.accent}1A` }}
+              >
+                <item.icon className="w-5 h-5" style={{ color: item.accent }} />
+              </div>
+              <h3 className="text-base font-bold text-[#1a365d] mb-2 font-display">
+                {item.title}
+              </h3>
+              <p className="text-slate-500 text-sm leading-relaxed mb-3 font-display">
+                {item.description}
+              </p>
+              <div
+                className="w-8 h-[3px] rounded-full"
+                style={{ backgroundColor: item.accent }}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Stats bar                                                         */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="bg-gradient-to-r from-[#0D2D52] to-[#046e4c] mt-6 md:mt-3 py-8 md:py-10 font-display">
+        <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 flex flex-wrap justify-center sm:justify-between items-center gap-8">
+          {STATS.map((stat) => (
+            <div key={stat.label} className="flex items-center gap-3">
+              <stat.icon className="w-6 h-6 text-white" />
+              <div className="leading-tight">
+                <div className="font-bold text-white text-sm font-display">
+                  {stat.value}
+                </div>
+                <div className="text-white/70 text-xs font-display">
+                  {stat.label}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div className="flex items-center gap-3">
+            <div className="flex">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-4 h-4 text-white fill-white"
+                />
               ))}
             </div>
-            <a href="#" style={{ display: "inline-block", background: "#005B8E", color: "#fff", fontFamily: "'Source Sans 3', sans-serif", fontWeight: 700, fontSize: 12, padding: "12px 22px", borderRadius: 6, textDecoration: "none", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-              {ctaLabel}
+            <div className="leading-tight">
+              <div className="font-bold text-white text-sm font-display">
+                4.9 Customer Rating
+              </div>
+              <div className="text-white/70 text-xs font-display">
+                Based on Google Reviews
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Serving Every Stage of Life                                       */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-8 md:pt-10 pb-8 md:pb-10 font-display">
+        <div className="text-center text-[#0C447C] text-m font-bold uppercase tracking-widest mb-10 font-display">
+          Serving Every Stage of Life
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {LIFE_STAGES.map((stage) => (
+            <div
+              key={stage.title}
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col sm:flex-row md:flex-col"
+            >
+              <div className="relative w-full sm:w-40 md:w-full h-40 flex-shrink-0">
+                <Image
+                  src={stage.image}
+                  alt={stage.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-5">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center mb-3"
+                  style={{ backgroundColor: `${stage.accent}1A` }}
+                >
+                  <stage.icon className="w-4 h-4" style={{ color: stage.accent }} />
+                </div>
+                <h3 className="text-base font-bold text-[#1a365d] mb-2 font-display">
+                  {stage.title}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-3 font-display">
+                  {stage.description}
+                </p>
+                <div
+                  className="inline-flex items-center gap-1 text-sm font-bold font-display"
+                  style={{ color: stage.accent }}
+                >
+                  Learn More <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Testimonial                                                       */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="bg-slate-50 pt-14 md:pt-20 pb-8 md:pb-10 font-display">
+        <div className="max-w-4xl mx-auto px-6 relative">
+          <button
+            onClick={prevTestimonial}
+            aria-label="Previous testimonial"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-[#0C447C] hover:bg-[#0C447C] hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={nextTestimonial}
+            aria-label="Next testimonial"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-[#0C447C] hover:bg-[#0C447C] hover:text-white transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={testimonialIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-center px-10"
+            >
+              <div className="relative w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#0C447C]">
+                <Image
+                  src={TESTIMONIALS[testimonialIndex].avatar}
+                  alt={TESTIMONIALS[testimonialIndex].name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <Quote className="w-6 h-6 text-[#0C447C] mx-auto mb-3" />
+              <p className="text-[#0B2D5B] font-semibold leading-relaxed mb-4 font-display">
+                {TESTIMONIALS[testimonialIndex].quote}
+              </p>
+              <div className="flex justify-center mb-2">
+                {Array.from({ length: TESTIMONIALS[testimonialIndex].rating }).map(
+                  (_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 text-[#046e4c] fill-[#046e4c]"
+                    />
+                  )
+                )}
+              </div>
+              <div className="text-slate-500 text-sm font-display">
+                – {TESTIMONIALS[testimonialIndex].name},{" "}
+                {TESTIMONIALS[testimonialIndex].relation}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="flex justify-center gap-2 mt-6">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setTestimonialIndex(i)}
+                aria-label={`Go to testimonial ${i + 1}`}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === testimonialIndex ? "bg-[#0C447C]" : "bg-slate-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Contact / Get Support                                             */}
+      {/* ---------------------------------------------------------------- */}
+      <section
+        id="contact"
+        className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-14 md:pt-20 pb-16 md:pb-24 font-display"
+      >
+        <div className="grid lg:grid-cols-[0.9fr_1.4fr_0.7fr] gap-8">
+          <div>
+            <div className="text-[#046e4c] text-xs font-bold uppercase tracking-widest mb-3 font-display">
+              Get the Support You Deserve
+            </div>
+            <h2 className="text-3xl font-bold text-[#1a365d] leading-tight mb-4 font-display">
+              Let&apos;s Talk About How We Can{" "}
+              <span className="text-[#E57531]">Help</span>
+            </h2>
+            <p className="text-slate-600 leading-7 font-display">
+              Fill out the form and a care coordinator will reach out to you
+              within one business day.
+            </p>
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 grid sm:grid-cols-2 gap-4"
+          >
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              className="w-full h-12 px-4 text-sm text-black bg-white border border-gray-200 rounded-xl placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+            />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+              className="w-full h-12 px-4 text-sm text-black bg-white border border-gray-200 rounded-xl placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+            />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full h-12 px-4 text-sm text-black bg-white border border-gray-200 rounded-xl placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+            />
+            <select
+              value={formData.preferredContact}
+              onChange={(e) =>
+                setFormData({ ...formData, preferredContact: e.target.value })
+              }
+              className="w-full h-12 px-4 text-sm text-gray-500 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+            >
+              <option value="">Preferred Contact</option>
+              <option value="phone">Phone</option>
+              <option value="email">Email</option>
+              <option value="text">Text</option>
+            </select>
+            <select
+              value={formData.helpType}
+              onChange={(e) =>
+                setFormData({ ...formData, helpType: e.target.value })
+              }
+              className="w-full h-12 px-4 text-sm text-gray-500 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+            >
+              <option value="">How can we help?</option>
+              <option value="senior-care">Senior Care</option>
+              <option value="adult-care">Adult Care</option>
+              <option value="pediatric-care">Pediatric Care</option>
+              <option value="other">Other</option>
+            </select>
+            <textarea
+              placeholder="Message (optional)"
+              rows={3}
+              value={formData.message}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
+              className="w-full px-4 py-3 text-sm text-black bg-white border border-gray-200 rounded-xl placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display resize-none"
+            />
+            <button
+              type="submit"
+              className="sm:col-span-2 inline-flex items-center justify-center gap-2 h-12 bg-[#0C447C] hover:bg-[#046e4c] text-white font-bold rounded-xl transition-all text-sm font-display"
+            >
+              Submit Request
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          <div className="bg-[#E1F0E6] rounded-2xl p-6 flex flex-col items-start justify-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#046e4c] shadow-sm">
+              <Phone className="w-5 h-5" />
+            </div>
+            <p className="text-[#0B2D5B] text-sm font-semibold font-display">
+              Not sure where to start? Call us anytime.
+            </p>
+            <a
+              href="tel:4439859368"
+              className="text-[#046e4c] font-bold text-sm font-display"
+            >
+              (443) 985-9368
             </a>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function ContactForm() {
-  return (
-    <section style={{ background: "#F9F9F7", padding: "80px 24px" }}>
-      <div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(26px, 3vw, 36px)", fontWeight: 700, color: "#003A5C", textAlign: "center", marginBottom: 40 }}>
-          Contact Us
-        </h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {["Your Name", "Your Telephone Number", "Your Email Address"].map((ph) => (
-            <input key={ph} placeholder={ph} style={{ padding: "13px 16px", border: "1px solid #D1D5DB", borderRadius: 6, fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, color: "#1A1A2E", outline: "none", width: "100%", boxSizing: "border-box" }} />
-          ))}
-          <select style={{ padding: "13px 16px", border: "1px solid #D1D5DB", borderRadius: 6, fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, color: "#6B7280", background: "#fff" }}>
-            <option>What services are you interested in learning about?</option>
-            <option>SRK Home Care</option>
-            <option>SRK Palliative Care</option>
-            <option>SRK Hospice</option>
-            <option>SRK Senior Transportation</option>
-          </select>
-          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: "#6B7280", margin: "4px 0 0" }}>
-            Is this for you or a loved one?
-          </p>
-          <div style={{ display: "flex", gap: 24 }}>
-            {["For me", "For a loved one"].map((opt) => (
-              <label key={opt} style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, color: "#1A1A2E", cursor: "pointer" }}>
-                <input type="radio" name="for" value={opt} style={{ accentColor: "#005B8E", width: 16, height: 16 }} />
-                {opt}
-              </label>
-            ))}
-          </div>
-          <textarea placeholder="Please include any details that may help in assisting you..." rows={5} style={{ padding: "13px 16px", border: "1px solid #D1D5DB", borderRadius: 6, fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, color: "#1A1A2E", resize: "vertical", outline: "none", width: "100%", boxSizing: "border-box" }} />
-          <button style={{ background: "#005B8E", color: "#fff", fontFamily: "'Source Sans 3', sans-serif", fontWeight: 700, fontSize: 13, padding: "14px 32px", borderRadius: 6, border: "none", cursor: "pointer", letterSpacing: "0.07em", textTransform: "uppercase", alignSelf: "flex-start" }}>
-            SEND US A MESSAGE
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── PAGE ────────────────────────────────────────────────────────────────────
-export default function AboutPage() {
-  return (
-    <main style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-
-      {/* HERO */}
-      <section style={{ position: "relative", minHeight: 400, display: "flex", alignItems: "center" }}>
-        <Image src={HERO_IMG} alt="SRK caregiver with happy seniors" fill style={{ objectFit: "cover" }} priority sizes="100vw" />
-        <div style={{ position: "absolute", inset: 0, background: "rgba(0,58,92,0.72)" }} />
-        <div style={{ position: "relative", zIndex: 10, maxWidth: 1200, margin: "0 auto", padding: "64px 24px", width: "100%" }}>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginBottom: 10 }}>Home</p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 700, color: "#fff", maxWidth: 680, lineHeight: 1.15, marginBottom: 16 }}>
-            About SRK Care at Home
-          </h1>
-          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 17, maxWidth: 540, lineHeight: 1.65, marginBottom: 28 }}>
-            A not-for-profit home care agency that has been caring for, supporting, and guiding at-risk families for nearly 20 years.
-          </p>
-          <a href="#contact" style={{ display: "inline-block", background: "#00A693", color: "#fff", fontWeight: 700, fontSize: 13, padding: "13px 28px", borderRadius: 6, textDecoration: "none", letterSpacing: "0.07em", textTransform: "uppercase" }}>
-            CONTACT US
-          </a>
-        </div>
       </section>
-
-      {/* MISSION */}
-      <section style={{ background: "#fff", padding: "80px 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 60, alignItems: "center" }}>
-          <div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(24px, 3vw, 38px)", fontWeight: 700, color: "#003A5C", marginBottom: 20 }}>
-              A Legacy of Compassion, Dignity &amp; Respect
-            </h2>
-            <p style={{ color: "#6B7280", lineHeight: 1.78, fontSize: 16, marginBottom: 14 }}>
-              Founded in 2004, SRK Care at Home is based on the core values of compassion and respect. SRK Health System is a well-respected, mission-driven, not-for-profit provider of health care programs and services across the greater metropolitan area.
-            </p>
-            <p style={{ color: "#6B7280", lineHeight: 1.78, fontSize: 16, marginBottom: 14 }}>
-              SRK believes that staying healthy is not always as easy as visiting the doctor or taking medicines as prescribed. Gaps in access to quality health care based on race, ethnicity, culture, language, and socioeconomic status are well-documented. SRK is leading the way by being committed to health equity, closing these gaps in care.
-            </p>
-            <p style={{ color: "#6B7280", lineHeight: 1.78, fontSize: 16, marginBottom: 20 }}>You can count on SRK for:</p>
-            <ul style={{ paddingLeft: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {["Home Care at Home", "Short-Term Rehabilitation", "Long-Term Care", "Care in our Skilled Nursing Centers", "Hospice and Palliative Care", "Health Plans for Medicare or Dual Medicare and Medicaid Beneficiaries"].map((item) => (
-                <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                  <CheckCircle2 size={18} color="#00A693" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span style={{ color: "#005B8E", fontSize: 15, fontWeight: 500 }}>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div style={{ position: "relative", height: 480, borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,58,92,0.15)" }}>
-            <Image src={MISSION_IMG} alt="SRK nurse caring for elderly patient" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICES */}
-      <ServiceSection title="SRK Home Care"           pills={pillsHomeCare}   img={HOMECARE_IMG}   imgAlt="Caregiver helping senior at home"   services={homeCareServices}   ctaLabel="Learn More About SRK Home Care"        bg="#F2F2F2" />
-      <ServiceSection title="SRK Palliative Care"     pills={pillsPalliative} img={PALLIATIVE_IMG} imgAlt="Compassionate palliative care"       services={palliativeServices} ctaLabel="Learn More About SRK Palliative Care"  bg="#fff"    reverse />
-      <ServiceSection title="SRK Hospice"             pills={pillsHospice}    img={HOSPICE_IMG}    imgAlt="Peaceful hospice care"               services={hospiceServices}    ctaLabel="Learn More About SRK Hospice"          bg="#F2F2F2" />
-      <ServiceSection title="SRK Senior Transportation" pills={pillsTransport} img={TRANSPORT_IMG}  imgAlt="Senior transportation service"       services={transportServices}  ctaLabel="Learn More About SRK Transportation"   bg="#fff"    reverse />
-
-      {/* TEAM */}
-      <section style={{ background: "#F2F2F2", padding: "80px 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 56, alignItems: "center", marginBottom: 64 }}>
-            <div style={{ position: "relative", height: 400, borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,58,92,0.12)" }}>
-              <Image src={TEAM_IMG} alt="SRK healthcare team" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
-            </div>
-            <div>
-              <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 11, fontWeight: 700, color: "#00A693", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>MEET THE TEAM</p>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(24px, 3vw, 38px)", fontWeight: 700, color: "#003A5C", marginBottom: 18 }}>The People Behind the Care</h2>
-              <p style={{ color: "#6B7280", lineHeight: 1.75, fontSize: 16 }}>Our leadership team brings decades of healthcare expertise and a genuine passion for improving lives in every community we serve.</p>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 28 }}>
-            {teamMembers.map((m: TeamMember) => (
-              <div key={m.name} style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "36px 24px", boxShadow: "0 2px 16px rgba(0,58,92,0.09)" }}>
-                <div style={{ position: "relative", width: 88, height: 88, borderRadius: "50%", overflow: "hidden", margin: "0 auto 16px", border: `3px solid ${m.bg}` }}>
-                  <Image src={m.img} alt={m.name} fill style={{ objectFit: "cover" }} sizes="88px" />
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, color: "#1A1A2E", marginBottom: 4 }}>{m.name}</div>
-                <div style={{ fontSize: 13, color: "#6B7280" }}>{m.role}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <div id="contact"><ContactForm /></div>
-
-      {/* NEWS */}
-      <section style={{ background: "#fff", padding: "80px 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: "#003A5C", textAlign: "center", marginBottom: 44 }}>
-            SRK In the News
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
-            {newsItems.map((n: NewsItem, i: number) => (
-              <div key={i} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #E5E7EB", background: "#fff", boxShadow: "0 2px 12px rgba(0,58,92,0.07)" }}>
-                <div style={{ position: "relative", height: 170 }}>
-                  <Image src={n.img} alt={n.title} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 25vw" />
-                  <span style={{ position: "absolute", top: 12, left: 12, background: n.tagBg, color: "#fff", fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 4, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                    {n.tag}
-                  </span>
-                </div>
-                <div style={{ padding: "20px 18px" }}>
-                  <h4 style={{ fontSize: 14, fontWeight: 700, color: "#1A1A2E", marginBottom: 8, lineHeight: 1.45 }}>{n.title}</h4>
-                  <p style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.6, marginBottom: 16 }}>{n.desc}</p>
-                  <a href="#" style={{ color: "#005B8E", fontSize: 13, fontWeight: 700, textDecoration: "none", letterSpacing: "0.04em" }}>LEARN MORE →</a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-    </main>
+    </div>
   );
 }

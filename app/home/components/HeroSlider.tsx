@@ -24,14 +24,14 @@ export function HeroSlider() {
     const activeImage = heroSlides[current].img;
 
     const badges = [
-        { icon: Mail, label: "Medicaid\nAccepted" },
-        { icon: ShieldCheck, label: "RN Care\nAssessments" },
-        { icon: BadgeCheck, label: "Background\nChecked Caregivers" },
-        { icon: Clock, label: "Available\n24/7" },
+        { icon: Mail, label: "Medicaid\nAccepted", color: "#E57531" },
+        { icon: ShieldCheck, label: "RN Care\nAssessments", color: "#0C447C" },
+        { icon: BadgeCheck, label: "Background\nChecked Caregivers", color: "#166534" },
+        { icon: Clock, label: "Available\n24/7", color: "#E57531" },
     ];
 
     return (
-        <section className="relative h-[55vh] min-h-[500px] max-h-[550px] overflow-hidden bg-white font-display">
+        <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
 
             {/* SINGLE BACKGROUND IMAGE (prevents flick) */}
             <Image
@@ -53,7 +53,7 @@ export function HeroSlider() {
 
             {/* STATIC CONTENT (never changes) */}
             <div className="absolute inset-0 z-[10]">
-                <div className="w-full h-full px-6 lg:px-16 xl:px-24">
+                <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-32">
                     <div className="max-w-[600px] h-full flex flex-col justify-center items-start text-left">
                         <div className="space-y-6">
 
@@ -66,8 +66,8 @@ export function HeroSlider() {
                                     letterSpacing: "-0.5px",
                                 }}
                             >
-                                Care That Feels<br />
-                                Like <span className="text-[#0C447C]">Family</span>
+                                Care That <span className="text-[#046e4c]">Feels </span> <br />
+                               Like   <span className="text-[#E57531]">Family</span>
                             </h1>
 
                             {/* SUBTEXT */}
@@ -91,7 +91,8 @@ export function HeroSlider() {
                                         <b.icon
                                             size={22}
                                             strokeWidth={1.75}
-                                            className="text-[#0C447C] flex-shrink-0"
+                                            className="flex-shrink-0"
+                                            style={{ color: b.color }}
                                         />
                                         <span
                                             className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight"
@@ -112,18 +113,18 @@ export function HeroSlider() {
                                             block: "start",
                                         });
                                     }}
-                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] hover:bg-[#0A3968] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0A3968] text-white font-bold rounded-xl transition-all shadow-md text-sm"
                                 >
-                                    Request a Free Consultation
-                                    <ArrowRight size={16} />
+                                    Find a Services
+                                    
                                 </button>
 
                                 <Link
-                                    href="tel:+14439859368"
-                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-[#0C447C] hover:bg-[#0C447C]/5 text-[#0C447C] font-bold rounded-xl transition-all text-sm"
+                                    href="/get-started"
+                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm"
                                 >
                                     <Phone size={15} />
-                                    Call (443) 985-9368
+                                    Request a Free Consultation
                                 </Link>
                             </div>
 
