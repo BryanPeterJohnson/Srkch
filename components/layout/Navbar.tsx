@@ -144,7 +144,7 @@ export default function Header() {
 
       {/* ── Main Desktop Header ── */}
       <header className="w-full bg-white fixed top-0 left-0 right-0 z-[100] shadow-sm border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
+        <div className="max-w-[1400px] 2xl:max-w-[1800px] mx-auto px-8 2xl:px-12 h-[72px] 2xl:h-[84px] flex items-center justify-between">
           <Link href="/" className="flex items-center flex-shrink-0">
             <Image
               src="/images/logo2.png"
@@ -152,18 +152,18 @@ export default function Header() {
               width={220}
               height={170}
               priority
-              className="h-20 w-auto"
+              className="h-20 2xl:h-24 w-auto"
             />
           </Link>
 
-          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8">
+          <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8 2xl:gap-10">
             {NAV_ITEMS.map((item) => (
               <div key={item.label} className="relative group/nav">
                 {"links" in item ? (
                   <div className="flex items-center gap-0.5 py-4">
                     <Link
                       href={item.href || "#"}
-                      className="relative text-[14px] font-semibold text-[#005B8E] transition-colors cursor-pointer focus:outline-none after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
+                      className="relative text-[14px] 2xl:text-[15px] font-semibold text-[#005B8E] transition-colors cursor-pointer focus:outline-none after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                       style={{ color: openDropdown === item.label ? "#005B8E" : "" }}
                     >
                       {item.label}
@@ -197,7 +197,7 @@ export default function Header() {
                 ) : (
                   <Link
                     href={item.href || "#"}
-                    className="relative text-[14px] font-semibold text-[#005B8E] transition-colors block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
+                    className="relative text-[14px] 2xl:text-[15px] font-semibold text-[#005B8E] transition-colors block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                   >
                     {item.label}
                   </Link>
@@ -205,22 +205,20 @@ export default function Header() {
               </div>
             ))}
 
-<Link
-  href="/contact"
-  className="relative text-[14px] font-bold text-[#005B8E] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 hover:after:w-full"
->
-  Contact Us
-</Link>
+            <Link
+              href="/contact"
+              className="relative text-[14px] 2xl:text-[15px] font-bold text-[#005B8E] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Contact Us
+            </Link>
 
             <a
               href="tel:+14439859368"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[14px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               <Phone size={18} />
               <span>+1 (443) 985-9368</span>
             </a>
-
-
           </nav>
 
           <div className="flex items-center gap-2 lg:hidden">
