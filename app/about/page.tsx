@@ -217,16 +217,15 @@ export default function AboutPage() {
       {/* ---------------------------------------------------------------- */}
       <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
         {/* BACKGROUND IMAGE */}
-        <Image
-          src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80"
-          alt="Caregiver sharing a warm moment with a senior client"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: "60% 10%" }}
-        />
-
+    <Image
+  src="/Home/1.png"
+  alt="Caregiver sharing a warm moment with a senior client"
+  fill
+  priority
+  sizes="100vw"
+  className="object-cover"
+  style={{ objectPosition: "60% 10%" }}
+/>
         {/* Gradient overlay */}
         <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
         <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />

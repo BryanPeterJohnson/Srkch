@@ -276,7 +276,7 @@ export default function ServicesPage() {
                             className="flex items-center gap-1 text-xs font-bold font-display"
                             style={{ color: service.accent }}
                           >
-                            Learn <ArrowRight className="w-3.5 h-3.5" />
+                            Learn More<ArrowRight className="w-3.5 h-3.5" />
                           </div>
                         </div>
                       </Link>
