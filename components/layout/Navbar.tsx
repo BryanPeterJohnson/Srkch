@@ -205,12 +205,12 @@ export default function Header() {
               </div>
             ))}
 
-            <Link
-              href="/contact"
-              className="px-5 py-2.5  text-[14px] font-bold text-[#005B8E]  transition-colors"
-            >
-              Contact Us
-            </Link>
+<Link
+  href="/contact"
+  className="relative text-[14px] font-bold text-[#005B8E] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 hover:after:w-full"
+>
+  Contact Us
+</Link>
 
             <a
               href="tel:+14439859368"

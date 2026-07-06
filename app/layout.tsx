@@ -5,7 +5,12 @@ import LenisProvider from "../components/animations/LenisProvider";
 
 export const metadata = {
   title: "SRKCH",
-  description: "Company Website",
+  description: "SRK Care at home",
+  icons: {
+    icon: "/images/logo1.png",
+    shortcut: "/images/logo1.png",
+    apple: "/images/logo.svg",
+  },
 };
 
 export default function RootLayout({
