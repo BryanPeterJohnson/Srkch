@@ -80,6 +80,17 @@ function ApplicationFormContent() {
               </div>
 
               <div>
+                <label className="block text-sm font-semibold text-gray-700 font-display">Location <span className="text-[#E57531]">*</span></label>
+                <input
+                  type="text"
+                  required
+                  placeholder="City, State (e.g. Philadelphia, PA)"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
+                />
+                <p className="text-xs text-gray-500 mt-1 font-display">Enter the city and state where you&apos;re looking for work.</p>
+              </div>
+
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Resume/CV <span className="text-[#E57531]">*</span></label>
                 <input type="file" required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#0D2D52] file:text-white hover:file:bg-[#005B8E] bg-white border border-gray-300 rounded p-1 font-display" />
                 <p className="text-xs text-gray-500 mt-1 font-display">We accept doc, docx, pdf, txt, and rtf files.</p>

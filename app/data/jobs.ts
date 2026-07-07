@@ -10,7 +10,6 @@ export interface Job {
   license: string;           // e.g. "LPN or RN required"
   setting: string;           // e.g. "Private Home / Community"
   datePosted: string;        // e.g. "June 15, 2026"
-  partner: string | null;    // partner company name or null
   badge: string;             // e.g. "Now Hiring"
   category: string;          // breadcrumb category, e.g. "Nursing"
   tagline: string;           // bold intro line in description
@@ -46,7 +45,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "Valid PTA License",
     setting: "Private Home / Community",
     datePosted: "June 10, 2026",
-    partner: null,
     badge: "Now Hiring",
     category: "Therapy",
     tagline: "Make a Difference — One Patient at a Time.",
@@ -108,7 +106,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "PTA Certification",
     setting: "Private Home / Community",
     datePosted: "June 12, 2026",
-    partner: null,
     badge: "Now Hiring",
     category: "Therapy",
     tagline: "Empower Recovery. Restore Independence.",
@@ -165,12 +162,11 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "RN License (PA)",
     setting: "Patient Home / Inpatient Facility",
     datePosted: "June 15, 2026",
-    partner: "Jefferson Health",
     badge: "Now Hiring",
     category: "Nursing",
     tagline: "Compassionate Care. Meaningful Moments.",
     description:
-      "SRK Care at Home, in partnership with Jefferson Health, is seeking a Registered Nurse to provide compassionate hospice nursing care for patients and families in the Abington, PA area.",
+      "SRK Care at Home is seeking a Registered Nurse to provide compassionate hospice nursing care for patients and families in the Abington, PA area.",
     descriptionExtra:
       "In this deeply rewarding role, you will assess, plan, and provide skilled nursing care to terminally ill patients, ensuring their comfort and dignity while supporting their loved ones through one of life's most challenging transitions.",
     whatWeOffer: [
@@ -227,7 +223,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "Active HHA Certification or CNA License (PA)",
     setting: "Private Home / Community",
     datePosted: "June 16, 2026",
-    partner: null,
     badge: "Hot Job",
     category: "Aide Services",
     tagline: "Bring Comfort, Dignity, and Joy to Seniors at Home.",
@@ -284,7 +279,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "LPN License (NH or Compact)",
     setting: "Private Home / Community",
     datePosted: "June 16, 2026",
-    partner: null,
     badge: "Now Hiring",
     category: "Nursing",
     tagline: "Deliver Exceptional Clinical Care on Your Own Schedule.",
@@ -335,7 +329,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "Valid NH Occupational Therapist License",
     setting: "Private Home / Independent Living Facilities",
     datePosted: "June 14, 2026",
-    partner: null,
     badge: "New Listing",
     category: "Therapy",
     tagline: "Help Individuals Reclaim Daily Independence and Confidence.",
@@ -381,7 +374,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "RN License (NH or Compact)",
     setting: "Private Home / Local Area Office",
     datePosted: "June 17, 2026",
-    partner: null,
     badge: "Urgent Need",
     category: "Nursing",
     tagline: "Lead Patient Recovery and Coordinate Strategic Home Care Plans.",
@@ -431,7 +423,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "Active PA CNA Registry Verification",
     setting: "Private Home Setting",
     datePosted: "June 15, 2026",
-    partner: null,
     badge: "Now Hiring",
     category: "Aide Services",
     tagline: "Provide Crucial Support and Safety Protocols Overnight.",
@@ -479,7 +470,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "Valid NH SLP License & ASHA CCCs",
     setting: "Private Home / Rehabilitation Communities",
     datePosted: "June 11, 2026",
-    partner: null,
     badge: "New Listing",
     category: "Therapy",
     tagline: "Restore Communication, Speech clarity, and Safe Swallowing Functions.",
@@ -525,7 +515,6 @@ const RAW_JOBS: Omit<Job, 'id'>[] = [
     license: "No State Nursing License Required",
     setting: "Private Home / Companion Living",
     datePosted: "June 13, 2026",
-    partner: null,
     badge: "Weekend Shift",
     category: "Aide Services",
     tagline: "Support Independence and Enrich the Lives of Local Families.",

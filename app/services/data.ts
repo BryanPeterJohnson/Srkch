@@ -52,7 +52,7 @@ export const services = [
   icon: Heart,
 
   // Updated image (professional caregiver assisting an elderly client at home)
-image: "/images/services/0.png",
+image: "/images/Services/0.png",
 
   accent: "#E57531",
   accentLight: "#fdf0f7",
@@ -170,7 +170,7 @@ image: "/images/services/0.png",
     tagline: "Connection that transforms quality of life.",
     description: "At SRK Care at Home, our companion care services help adults age 65 and older stay socially connected, emotionally supported, and engaged at home. Our compassionate caregivers provide friendly conversation, meal support, light household help, medication reminders, and assistance with daily routines. Companionship can help reduce senior isolation, loneliness, and stress while supporting overall mental well-being and quality of life. We also support eligible seniors through Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services, helping families access reliable care for their loved ones at home.",
     icon: Users,
-  image: "/images/services/0.png",
+  image: "/images/Services/0.png",
     accent: "#E57531",
     accentLight: "#f0fdfb",
     category: "Wellness",

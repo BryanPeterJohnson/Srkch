@@ -210,7 +210,7 @@ export default function JobDetailPage() {
                 
                 <p className="text-base font-semibold text-blue-100 flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-blue-300" />
-                  {job.partner || "SRK Care at Home"}
+                  SRK Care at Home
                 </p>
               </div>
 
@@ -260,9 +260,9 @@ export default function JobDetailPage() {
                 {/* Floating Initial Badge */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md text-[#1a365d] px-3 py-1.5 rounded-xl flex items-center gap-2 font-black text-sm shadow-md border border-white">
                   <span className="w-7 h-7 rounded-lg bg-[#1a365d] text-white flex items-center justify-center text-xs">
-                    {job.partner ? job.partner.substring(0, 2).toUpperCase() : "SR"}
+                    SR
                   </span>
-                  {job.partner || "SRK Care"}
+                  SRK Care
                 </div>
 
                 {/* Inline Action Interventions */}

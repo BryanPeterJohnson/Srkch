@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -77,7 +77,7 @@ const MVV_TABS: MvvTab[] = [
     icon: Eye,
     title: "Our Vision",
     description: [
-      "To be Maryland's most trusted partner in in-home care—known for our excellence, integrity, and unwavering commitment to our community.",
+      "To be Maryland&apos;s most trusted partner in in-home care—known for our excellence, integrity, and unwavering commitment to our community.",
       "We envision a future where every family, regardless of income or circumstance, has access to caregivers who treat their loved ones with the same dignity and attentiveness they would want for their own.",
     ],
     image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1000&q=80",
@@ -195,6 +195,39 @@ export default function AboutPage() {
     message: "",
   });
 
+  /* ------------------------------------------------------------------ */
+  /*  Hash navigation: /about#mission, /about#vision, /about#values,     */
+  /*  /about#our-story — activates the right tab and scrolls to it.      */
+  /*  Works both when arriving from another page (header dropdown) and   */
+  /*  when clicking a hash link while already on /about.                 */
+  /* ------------------------------------------------------------------ */
+  useEffect(() => {
+    const applyHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+
+      if (hash === "mission" || hash === "vision" || hash === "values") {
+        setMvvTab(hash as "mission" | "vision" | "values");
+        // All three tabs live in the same section (id="mission")
+        requestAnimationFrame(() => {
+          document
+            .getElementById("mission")
+            ?.scrollIntoView({ behavior: "smooth" });
+        });
+      } else {
+        requestAnimationFrame(() => {
+          document
+            .getElementById(hash)
+            ?.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    };
+
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
   const nextTestimonial = () =>
     setTestimonialIndex((i) => (i + 1) % TESTIMONIALS.length);
   const prevTestimonial = () =>
@@ -217,15 +250,15 @@ export default function AboutPage() {
       {/* ---------------------------------------------------------------- */}
       <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
         {/* BACKGROUND IMAGE */}
-    <Image
-  src="/Home/1.png"
-  alt="Caregiver sharing a warm moment with a senior client"
-  fill
-  priority
-  sizes="100vw"
-  className="object-cover"
-  style={{ objectPosition: "60% 10%" }}
-/>
+        <Image
+          src="/images/Home/1.png"
+          alt="Caregiver sharing a warm moment with a senior client"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: "60% 10%" }}
+        />
         {/* Gradient overlay */}
         <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
         <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
@@ -292,13 +325,12 @@ export default function AboutPage() {
 
                 {/* BUTTONS */}
                 <div className="flex gap-3 flex-wrap items-center pt-2">
-            <Link
-  href="/get-started"
-  className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm"
->
-  Request a Free Consultation
-
-</Link>
+                  <Link
+                    href="/get-started"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+                  >
+                    Request a Free Consultation
+                  </Link>
                   <Link
                     href="tel:+14439859368"
                     className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm"
@@ -314,9 +346,12 @@ export default function AboutPage() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Our Story                                                         */}
+      {/* Our Story  —  /about#our-story                                    */}
       {/* ---------------------------------------------------------------- */}
-      <section className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-6 md:pt-10 pb-8 md:pb-10 font-display">
+      <section
+        id="our-story"
+        className="scroll-mt-24 2xl:scroll-mt-28 max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-6 md:pt-10 pb-8 md:pb-10 font-display"
+      >
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <div className="text-[#046e4c] text-m font-bold uppercase tracking-widest mb-3 font-display">
@@ -360,9 +395,13 @@ export default function AboutPage() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Mission, Vision & Values — interactive tabs                      */}
+      {/* Mission, Vision & Values — interactive tabs                       */}
+      {/* /about#mission  /about#vision  /about#values all land here        */}
       {/* ---------------------------------------------------------------- */}
-      <section className="bg-slate-50 pt-5 md:pt-2 pb-8 md:pb-10 font-display bg-[#0C447C]">
+      <section
+        id="mission"
+        className="scroll-mt-24 2xl:scroll-mt-28 bg-slate-50 pt-5 md:pt-2 pb-8 md:pb-10 font-display"
+      >
         <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 2xl:gap-20 items-center">
             {/* Left: tab buttons + active content */}
@@ -458,10 +497,6 @@ export default function AboutPage() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B2D5B]/85 via-[#0B2D5B]/10 to-transparent" />
-
-           
-
-                 
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -665,11 +700,11 @@ export default function AboutPage() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Contact / Get Support                                             */}
+      {/* Contact / Get Support  —  /about#contact                          */}
       {/* ---------------------------------------------------------------- */}
       <section
         id="contact"
-        className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-14 md:pt-20 pb-16 md:pb-24 font-display"
+        className="scroll-mt-24 2xl:scroll-mt-28 max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-14 md:pt-20 pb-16 md:pb-24 font-display"
       >
         <div className="grid lg:grid-cols-[0.9fr_1.4fr_0.7fr] gap-8">
           <div>
@@ -688,7 +723,7 @@ export default function AboutPage() {
 
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 grid sm:grid-cols-2 gap-4"
+            className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 grid sm:grid-cols-2 gap-4 font-display"
           >
             <input
               type="text"

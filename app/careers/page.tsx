@@ -229,7 +229,7 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
 
   return (
     <div className="h-full flex flex-col overflow-hidden bg-white">
-      <div className="px-6 pt-6 pb-5 border-b border-gray-100">
+      <div className="px-6 pt-6 pb-5 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <span className="text-xs font-mono text-gray-500 block mb-1">Job ID: #{job.id}</span>
@@ -305,7 +305,8 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+      {/* Description scrolls INSIDE the panel (like the video) — page itself stays put */}
+      <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 space-y-6">
         {job.tagline && (
           <div className="bg-[#f0f6fb] rounded-lg px-4 py-3.5 border border-blue-50">
             <p className="text-[11px] text-[#164e9a] font-bold uppercase tracking-wider mb-0.5">Opportunity</p>
@@ -383,12 +384,12 @@ function BenefitsCard() {
   ];
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden">
       <div className="px-4 py-3.5 border-b border-gray-200 bg-gradient-to-br from-[#1a365d] to-[#2a4a7f]">
         <h2 className="text-sm font-bold text-white mb-0.5">Why Work With Us?</h2>
         <p className="text-white/80 text-[11px]">Discover the unique rewards of our healthcare network</p>
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-3.5 space-y-3 bg-gray-50/50">
+      <div className="px-4 py-3.5 space-y-3 bg-gray-50/50">
         <div className="space-y-2">
           {benefits.map((benefit, index) => (
             <div key={index} className="bg-white border border-gray-200 rounded-lg p-2.5 shadow-sm flex items-start gap-2.5">
@@ -418,6 +419,7 @@ function BenefitsCard() {
 export default function CareersPage() {
   const jobsSectionRef = useRef<HTMLDivElement>(null);
   const detailPanelRef = useRef<HTMLDivElement>(null);
+  const jobsListRef = useRef<HTMLDivElement>(null);
 
   const scrollToJobs = () => {
     const yOffset = -80;
@@ -446,6 +448,13 @@ export default function CareersPage() {
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Scroll the jobs list back to top when the page number changes
+  useEffect(() => {
+    if (jobsListRef.current) {
+      jobsListRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   const handleRemoteTypesChange = (values: string[]) => {
     setRemoteTypes(values);
@@ -607,10 +616,20 @@ export default function CareersPage() {
           <strong className="text-[#1a365d]">{totalJobs.toLocaleString()}</strong> matching jobs
         </p>
 
-        <div ref={jobsSectionRef} className="flex gap-5 items-start w-full">
+        {/*
+          Indeed-style split view:
+          - The whole section is capped at viewport height, so the PAGE stops where the panels end
+          - LEFT: job cards scroll inside their own column (independent scrollbar)
+          - RIGHT: job description scrolls inside the detail panel
+          - Benefits card (no job selected) sizes to its content via h-fit self-start
+        */}
+        <div ref={jobsSectionRef} className="flex gap-5 items-stretch w-full" style={{ height: "calc(100vh - 120px)" }}>
 
-          {/* Left Job Cards Column */}
-          <div className={`min-w-0 transition-all duration-200 ${selectedJob ? "w-[320px] flex-shrink-0" : "flex-1"}`}>
+          {/* Left Job Cards Column — independently scrollable */}
+          <div
+            ref={jobsListRef}
+            className={`min-w-0 h-full overflow-y-auto overscroll-contain pr-1 transition-all duration-200 ${selectedJob ? "w-[320px] flex-shrink-0" : "flex-1"}`}
+          >
             <div className="space-y-3">
               {paginatedJobs.map((job) => {
                 const isSelected = selectedJob?.id === job.id;
@@ -689,7 +708,7 @@ export default function CareersPage() {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-6 pb-2">
                 <div className="flex items-center gap-1.5">
                   {pageNumbers.map((page) => (
                     <button
@@ -706,12 +725,15 @@ export default function CareersPage() {
             )}
           </div>
 
-          {/* Right Column: Benefits / Detailed View Component */}
+          {/* Right Column: Benefits / Detailed View Component
+              — Detail view: full height, content scrolls inside
+              — Benefits card: hugs its content (h-fit self-start), no empty space below */}
           <div
             ref={detailPanelRef}
-            className={`sticky top-[80px] border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${selectedJob ? "flex-1 min-w-0" : "w-[360px] flex-shrink-0"
+            className={`border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${selectedJob
+                ? "h-full flex-1 min-w-0"
+                : "h-fit self-start w-[360px] flex-shrink-0"
               }`}
-            style={{ maxHeight: "calc(100vh - 120px)" }}
           >
             {selectedJob ? (
               <JobDetail job={selectedJob} onClose={() => setSelectedJob(null)} />

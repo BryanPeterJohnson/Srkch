@@ -27,7 +27,7 @@ const NAV_ITEMS = [
     href: "/about",
     links: [
       { id: "history", label: "History", slug: "/about/history" },
-      { id: "mission", label: "Mission", slug: "/about/mission" },
+      { id: "mission", label: "Mission", slug: "/about#mission" },
       { id: "diversity", label: "Diversity", slug: "/about/diversity" },
     ]
   },
