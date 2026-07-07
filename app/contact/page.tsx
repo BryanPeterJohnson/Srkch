@@ -31,8 +31,8 @@ const faqs = [
     a: "Simply call us or fill out our contact form. A care coordinator will reach out within 24 hours to schedule a free in-home assessment and build your personalized care plan.",
   },
   {
-    q: "Does SRK accept Medicare and Medicaid?",
-    a: "Yes! We are fully certified to accept Medicare, Medicaid Long-Term Care, and private pay. Our team can help you understand your coverage and what services are eligible.",
+    q: "Does SRK accept Medicaid?",
+    a: "Yes! We are fully certified to accept Medicaid Long-Term Care, and private pay. Our team can help you understand your coverage and what services are eligible.",
   },
   {
     q: "What areas does SRK Care at Home serve?",
