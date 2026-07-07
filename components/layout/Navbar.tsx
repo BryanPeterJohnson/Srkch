@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
@@ -57,7 +56,6 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Scroll to top on page refresh
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
@@ -67,15 +65,14 @@ export default function Header() {
 
   return (
     <>
-      {/* ── Mobile menu overlay ── */}
       <div
         className={`fixed inset-0 z-[150] bg-white overflow-y-auto transition-transform duration-300 lg:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
         <div className="flex items-center justify-between px-6 h-[72px] border-b border-gray-100">
-          <Link href="/" onClick={() => setMobileOpen(false)}>
+          <a href="/" onClick={() => setMobileOpen(false)}>
             <Image src="/images/logo2.png" alt="SRK Care At Home" width={160} height={46} priority className="w-auto h-11" />
-          </Link>
+          </a>
           <button onClick={() => setMobileOpen(false)} className="p-1 cursor-pointer">
             <X size={26} className="text-[#005B8E]" />
           </button>
@@ -91,13 +88,13 @@ export default function Header() {
               {"links" in item ? (
                 <>
                   <div className="w-full flex items-center justify-between py-1">
-                    <Link
+                    <a
                       href={item.href || "#"}
                       className="text-[15px] font-semibold text-[#005B8E] hover:text-[#005B8E] py-2 flex-1"
                       onClick={() => setMobileOpen(false)}
                     >
                       {item.label}
-                    </Link>
+                    </a>
                     <button
                       className="p-2 text-[#005B8E] focus:outline-none cursor-pointer"
                       onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
@@ -114,46 +111,45 @@ export default function Header() {
                     <ul className="pb-3 pl-3 mt-1 space-y-1">
                       {item.links?.map((link) => (
                         <li key={link.label} className="border-l-2 border-slate-100 pl-3">
-                          <Link
+                          <a
                             href={link.slug}
                             className="block py-2 text-[14px] font-medium text-slate-600 hover:text-[#005B8E] transition-colors"
                             onClick={() => setMobileOpen(false)}
                           >
                             {link.label}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
                   )}
                 </>
               ) : (
-                <Link
+                <a
                   href={item.href || "#"}
                   className="block py-3 text-[15px] font-semibold text-[#005B8E] hover:text-[#005B8E] transition-colors"
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
-                </Link>
+                </a>
               )}
             </div>
           ))}
 
           <div className="pt-6">
-            <Link
+            <a
               href="/contact"
               onClick={() => setMobileOpen(false)}
               className="block w-full text-center py-3.5 rounded-xl font-bold text-white text-[15px] bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               Contact Us
-            </Link>
+            </a>
           </div>
         </nav>
       </div>
 
-      {/* ── Main Desktop Header ── */}
       <header className="w-full bg-white fixed top-0 left-0 right-0 z-[100] shadow-sm border-b border-gray-100">
         <div className="max-w-[1400px] 2xl:max-w-[1800px] mx-auto px-8 2xl:px-12 h-[72px] 2xl:h-[84px] flex items-center justify-between">
-          <Link href="/" className="flex items-center flex-shrink-0">
+          <a href="/" className="flex items-center flex-shrink-0">
             <Image
               src="/images/logo2.png"
               alt="SRK Care At Home"
@@ -162,20 +158,20 @@ export default function Header() {
               priority
               className="h-20 2xl:h-24 w-auto"
             />
-          </Link>
+          </a>
 
           <nav ref={dropdownRef} className="hidden lg:flex items-center gap-8 2xl:gap-10">
             {NAV_ITEMS.map((item) => (
               <div key={item.label} className="relative group/nav">
                 {"links" in item ? (
                   <div className="flex items-center gap-0.5 py-4">
-                    <Link
+                    <a
                       href={item.href || "#"}
                       className="relative text-[14px] 2xl:text-[15px] font-semibold text-[#005B8E] transition-colors cursor-pointer focus:outline-none after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                       style={{ color: openDropdown === item.label ? "#005B8E" : "" }}
                     >
                       {item.label}
-                    </Link>
+                    </a>
 
                     <button
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
@@ -190,35 +186,35 @@ export default function Header() {
                     {openDropdown === item.label && (
                       <div className="absolute top-[85%] left-1/2 -translate-x-1/2 mt-2 w-[280px] bg-white rounded-xl shadow-xl py-3 border border-slate-100 z-[110] flex flex-col gap-0.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                         {item.links?.map((link) => (
-                          <Link
+                          <a
                             key={link.label}
                             href={link.slug}
                             className="px-4 py-2.5 text-[13.5px] font-medium text-slate-700 hover:bg-slate-50 hover:text-[#005B8E] transition-all block leading-snug"
                             onClick={() => setOpenDropdown(null)}
                           >
                             {link.label}
-                          </Link>
+                          </a>
                         ))}
                       </div>
                     )}
                   </div>
                 ) : (
-                  <Link
+                  <a
                     href={item.href || "#"}
                     className="relative text-[14px] 2xl:text-[15px] font-semibold text-[#005B8E] transition-colors block after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 group-hover/nav:after:w-full"
                   >
                     {item.label}
-                  </Link>
+                  </a>
                 )}
               </div>
             ))}
 
-            <Link
+            <a
               href="/contact"
               className="relative text-[14px] 2xl:text-[15px] font-bold text-[#005B8E] transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#005B8E] after:transition-all after:duration-300 hover:after:w-full"
             >
               Contact Us
-            </Link>
+            </a>
 
             <a
               href="tel:+14439859368"

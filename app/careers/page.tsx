@@ -104,16 +104,7 @@ function HeroSection({ onScroll }: { onScroll: () => void }) {
   );
 }
 
-function PartnerBadge({ name }: { name: string }) {
-  return (
-    <div className="flex items-center gap-1 border border-gray-300 rounded px-1.5 py-0.5 bg-white">
-      <div className="w-3.5 h-3.5 bg-blue-700 rounded-sm flex items-center justify-center">
-        <span className="text-white font-bold text-[4px]">JH</span>
-      </div>
-      <span className="text-[10px] text-gray-700 font-semibold">{name}</span>
-    </div>
-  );
-}
+
 
 function MultiSelectFilter({
   label,
@@ -271,9 +262,7 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 mt-4">
-              {job.partner && <PartnerBadge name={job.partner} />}
-            </div>
+           
           </div>
 
           {/* Action Column Top-Right */}
@@ -690,11 +679,7 @@ export default function CareersPage() {
                       </div>
                     </div>
 
-                    {!selectedJob && job.partner && (
-                      <div className="absolute bottom-3 right-4 flex items-center gap-2">
-                        <PartnerBadge name={job.partner} />
-                      </div>
-                    )}
+              
                   </div>
                 );
               })}

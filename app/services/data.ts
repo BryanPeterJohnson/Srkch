@@ -52,7 +52,7 @@ export const services = [
   icon: Heart,
 
   // Updated image (professional caregiver assisting an elderly client at home)
-image: "/images/Services/0.png",
+image: "/images/Services/personal-care.png",
 
   accent: "#E57531",
   accentLight: "#fdf0f7",
