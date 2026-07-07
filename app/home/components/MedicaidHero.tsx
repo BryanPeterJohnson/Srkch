@@ -82,9 +82,9 @@ const programs = [
 
 export default function MedicaidHero() {
   return (
-    <section className="font-display bg-white py-20 px-4 sm:px-6 lg:px-8 2xl:px-12">
-      <div className="mx-auto max-w-7xl 2xl:max-w-[1440px]">
-        <div className="flex flex-col lg:flex-row lg:justify-between gap-10 lg:gap-16 2xl:gap-20 items-start">
+    <section className="font-display bg-white py-2 px-5 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-10 lg:gap-16 items-start">
 
           {/* LEFT: Eyebrow + Headline + Subcopy */}
           <div className="w-full lg:w-[380px] shrink-0 lg:sticky lg:top-24 overflow-hidden">
@@ -119,7 +119,7 @@ export default function MedicaidHero() {
           </div>
 
           {/* RIGHT: 3 program cards in a row */}
-          <div className="w-full lg:w-auto lg:flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 2xl:gap-6">
+          <div className="w-full lg:w-auto lg:flex-1 grid grid-cols-1 sm:grid-cols-3 gap-5">
             {programs.map((program) => (
               <div
                 key={program.id}

@@ -49,7 +49,7 @@ const steps = [
 export function GettingStarted() {
     return (
         <section
-            className="pt-16 sm:pt-0 pb-14 sm:pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 font-display"
+            className="pt-16 sm:pt-12 pb-14 sm:pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 font-display"
             style={{ background: "#FFFFFF" }}
         >
             <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto ">

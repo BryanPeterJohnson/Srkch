@@ -110,7 +110,7 @@ export default function Header() {
                   {mobileExpanded === item.label && (
                     <ul className="pb-3 pl-3 mt-1 space-y-1">
                       {item.links?.map((link) => (
-                        <li key={link.label} className="border-l-2 border-slate-100 pl-3">
+                        <li key={link.slug} className="border-l-2 border-slate-100 pl-3">
                           <a
                             href={link.slug}
                             className="block py-2 text-[14px] font-medium text-slate-600 hover:text-[#005B8E] transition-colors"
@@ -187,7 +187,7 @@ export default function Header() {
                       <div className="absolute top-[85%] left-1/2 -translate-x-1/2 mt-2 w-[280px] bg-white rounded-xl shadow-xl py-3 border border-slate-100 z-[110] flex flex-col gap-0.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                         {item.links?.map((link) => (
                           <a
-                            key={link.label}
+                            key={link.slug}
                             href={link.slug}
                             className="px-4 py-2.5 text-[13.5px] font-medium text-slate-700 hover:bg-slate-50 hover:text-[#005B8E] transition-all block leading-snug"
                             onClick={() => setOpenDropdown(null)}
