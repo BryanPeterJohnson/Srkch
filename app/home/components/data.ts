@@ -39,7 +39,7 @@ export const categoryData = [
             {
                 title: "Personal Care & Daily Living Assistance",
                 desc: "Support with bathing, grooming, dressing, mobility, and everyday routines to maintain dignity and independence at home.",
-                img: "https://images.unsplash.com/photo-1758686254601-a47850cb2226?w=560&h=480&fit=crop&auto=format",
+                     img: "/images/Home/services-1.png",
                 path: "/services/personal-care",
                 icon: "🤲",
             },
