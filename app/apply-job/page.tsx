@@ -1,10 +1,24 @@
 "use client";
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ALL_JOBS } from '@/app/data/jobs';
 
+/*
+ * Default export wraps the form in a Suspense boundary.
+ * useSearchParams() lives in the inner component (ApplicationFormContent),
+ * which is what Next.js 16 requires to statically prerender this route
+ * without the "useSearchParams() should be wrapped in a suspense boundary" error.
+ */
 export default function ApplicationForm() {
+  return (
+    <Suspense fallback={<ApplicationFormSkeleton />}>
+      <ApplicationFormContent />
+    </Suspense>
+  );
+}
+
+function ApplicationFormContent() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
   const job = ALL_JOBS.find((j) => j.id.toString() === jobId);
@@ -33,7 +47,7 @@ export default function ApplicationForm() {
                 <span className="font-medium">Reference:</span> #{job.id}
               </>
             ) : (
-              <span>Submit your details and we'll match you with open roles.</span>
+              <span>Submit your details and we&apos;ll match you with open roles.</span>
             )}
           </p>
         </header>
@@ -74,7 +88,7 @@ export default function ApplicationForm() {
 
             </div>
 
-          
+
           </div>
 
           {/* Section 2: Voluntary Self-Identification Forms */}
@@ -96,12 +110,12 @@ export default function ApplicationForm() {
                 We are a federal contractor or subcontractor. The law requires us to provide equal employment opportunity to qualified people with disabilities. We have a goal of having at least 7% of our workers as people with disabilities. The law says we must ask you to update our records towards this goal. To do this, we must ask applicants and employees if they have a disability or have ever had one. People can become disabled, so we need to ask this question at least every five years.
               </p>
               <p>
-                Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. For more information about the law or this form, visit the U.S. Department of Labor's Office of Federal Contract Compliance Programs (OFCCP) website at <a href="https://www.dol.gov/ofccp" target="_blank" rel="noreferrer" className="text-[#005B8E] underline">www.dol.gov/ofccp</a>.
+                Completing this form is voluntary, and we hope that you will choose to do so. Your answer is confidential. No one who makes hiring decisions will see it. Your decision to complete the form and your answer will not harm you in any way. For more information about the law or this form, visit the U.S. Department of Labor&apos;s Office of Federal Contract Compliance Programs (OFCCP) website at <a href="https://www.dol.gov/ofccp" target="_blank" rel="noreferrer" className="text-[#005B8E] underline">www.dol.gov/ofccp</a>.
               </p>
 
               <p className="font-semibold">How do you know if you have a disability?</p>
               <p>
-                A disability is a condition that substantially limits one or more of your "major life activities." If you have or have ever had such a condition, you are a person with a disability. <span className="font-semibold">Disabilities include, but are not limited to:</span>
+                A disability is a condition that substantially limits one or more of your &quot;major life activities.&quot; If you have or have ever had such a condition, you are a person with a disability. <span className="font-semibold">Disabilities include, but are not limited to:</span>
               </p>
 
               <ul className="list-disc pl-5 space-y-1 grid grid-cols-1 md:grid-cols-2 gap-x-4">
@@ -116,12 +130,12 @@ export default function ApplicationForm() {
                 <li>Diabetes</li>
                 <li>Disfigurement (caused by burns, wounds, accidents, congenital disorders)</li>
                 <li>Epilepsy or other seizure disorder</li>
-                <li>Gastrointestinal disorders (Crohn's disease, Irritable bowel syndrome)</li>
+                <li>Gastrointestinal disorders (Crohn&apos;s disease, Irritable bowel syndrome)</li>
                 <li>Intellectual or developmental disability</li>
                 <li>Mental health conditions (depression, bipolar, anxiety, schizophrenia, PTSD)</li>
                 <li>Missing limbs or partially missing limbs</li>
                 <li>Mobility impairment requiring use of wheelchair, scooter, walker, leg brace(s)</li>
-                <li>Nervous system condition (migraine headaches, Parkinson's disease, MS)</li>
+                <li>Nervous system condition (migraine headaches, Parkinson&apos;s disease, MS)</li>
                 <li>Neurodivergence (ADHD, autism spectrum disorder, dyslexia, dyspraxia)</li>
                 <li>Partial or complete paralysis (any cause)</li>
                 <li>Pulmonary or respiratory conditions (tuberculosis, asthma, emphysema)</li>
@@ -134,8 +148,8 @@ export default function ApplicationForm() {
                 <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="yes">Yes, I Have A Disability, Or Have A History/Record Of Having A Disability</option>
-                  <option value="no">No, I Don't Have A Disability, Or A History/Record Of Having A Disability</option>
-                  <option value="decline">I Don't Wish To Answer</option>
+                  <option value="no">No, I Don&apos;t Have A Disability, Or A History/Record Of Having A Disability</option>
+                  <option value="decline">I Don&apos;t Wish To Answer</option>
                 </select>
               </div>
             </section>
@@ -143,19 +157,19 @@ export default function ApplicationForm() {
             {/* Veteran Status Section */}
             <section className="space-y-3 pt-4 border-t border-[#159BA1]/40">
               <p>
-                If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans' Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of our outreach and positive recruitment efforts we undertake pursuant to VEVRAA.
+                If you believe you belong to any of the categories of protected veterans listed below, please indicate by making the appropriate selection. As a government contractor subject to the Vietnam Era Veterans&apos; Readjustment Assistance Act (VEVRAA), we request this information in order to measure the effectiveness of our outreach and positive recruitment efforts we undertake pursuant to VEVRAA.
               </p>
               <p>
-                A <strong>"disabled veteran"</strong> is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability.
+                A <strong>&quot;disabled veteran&quot;</strong> is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability.
               </p>
               <p>
-                A <strong>"recently separated veteran"</strong> means any veteran during the three-year period beginning on the date of such veteran's discharge or release from active duty in the U.S. military, ground, naval, or air service.
+                A <strong>&quot;recently separated veteran&quot;</strong> means any veteran during the three-year period beginning on the date of such veteran&apos;s discharge or release from active duty in the U.S. military, ground, naval, or air service.
               </p>
               <p>
-                An <strong>"active duty wartime or campaign badge veteran"</strong> means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
+                An <strong>&quot;active duty wartime or campaign badge veteran&quot;</strong> means a veteran who served on active duty in the U.S. military, ground, naval or air service during a war, or in a campaign or expedition for which a campaign badge has been authorized under the laws administered by the Department of Defense.
               </p>
               <p>
-                An <strong>"Armed Forces service medal veteran"</strong> means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
+                An <strong>&quot;Armed Forces service medal veteran&quot;</strong> means a veteran who, while serving on active duty in the U.S. military, ground, naval or air service, participated in a United States military operation for which an Armed Forces service medal was awarded pursuant to Executive Order 12985.
               </p>
 
               <div className="pt-2">
@@ -164,7 +178,7 @@ export default function ApplicationForm() {
                   <option value="">-- Please Select --</option>
                   <option value="protected">I identify as one or more of the classifications of protected veteran</option>
                   <option value="not_veteran">I am not a protected veteran</option>
-                  <option value="decline">I don't wish to answer</option>
+                  <option value="decline">I don&apos;t wish to answer</option>
                 </select>
               </div>
             </section>
@@ -176,7 +190,7 @@ export default function ApplicationForm() {
                 For government reporting purposes, we ask candidates to respond to the below self-identification survey. Completion of the form is entirely voluntary. Whatever your decision, it will not be considered in the hiring process or thereafter. Any information that you provide will be recorded and maintained in a confidential file.
               </p>
               <p>
-                As set forth in SRK Care at Home's Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
+                As set forth in SRK Care at Home&apos;s Equal Employment Opportunity policy, we do not discriminate on the basis of any protected group status under any applicable law.
               </p>
 
               <div className="grid grid-cols-1 gap-4 pt-2">
@@ -191,7 +205,7 @@ export default function ApplicationForm() {
                     <option value="native_american">American Indian or Alaska Native (Not Hispanic or Latino)</option>
                     <option value="hawaiian">Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)</option>
                     <option value="two_or_more">Two or More Races (Not Hispanic or Latino)</option>
-                    <option value="decline">I don't wish to answer</option>
+                    <option value="decline">I don&apos;t wish to answer</option>
                   </select>
                 </div>
 
@@ -201,7 +215,7 @@ export default function ApplicationForm() {
                     <option value="">-- Please Select --</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
-                    <option value="decline">I don't wish to answer</option>
+                    <option value="decline">I don&apos;t wish to answer</option>
                   </select>
                 </div>
               </div>
@@ -228,6 +242,40 @@ export default function ApplicationForm() {
         <a href="#" className="hover:underline">Privacy Policy</a>
         <p className="mt-2">© SRK Care at Home, All rights reserved.</p>
       </footer>
+    </div>
+  );
+}
+
+/* Skeleton fallback shown while the search params resolve — mirrors the form layout to avoid layout shift */
+function ApplicationFormSkeleton() {
+  return (
+    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
+      <div className="max-w-3xl mx-auto space-y-6 animate-pulse">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center space-y-3">
+          <div className="h-4 w-40 bg-gray-200 rounded" />
+          <div className="h-6 w-56 bg-gray-200 rounded" />
+          <div className="h-4 w-72 bg-gray-100 rounded" />
+        </div>
+
+        <div className="bg-[#159BA1]/5 p-6 rounded-lg shadow-sm border border-[#159BA1]/30 space-y-4">
+          <div className="h-5 w-44 bg-gray-200 rounded" />
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="space-y-1">
+              <div className="h-3 w-24 bg-gray-200 rounded" />
+              <div className="h-9 w-full bg-white border border-gray-200 rounded" />
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-[#159BA1]/5 p-6 rounded-lg shadow-sm border border-[#159BA1]/30 space-y-3">
+          <div className="h-5 w-64 bg-gray-200 rounded" />
+          <div className="h-3 w-full bg-gray-100 rounded" />
+          <div className="h-3 w-5/6 bg-gray-100 rounded" />
+          <div className="h-3 w-4/6 bg-gray-100 rounded" />
+        </div>
+
+        <div className="h-11 w-full sm:w-44 bg-gray-300 rounded" />
+      </div>
     </div>
   );
 }
