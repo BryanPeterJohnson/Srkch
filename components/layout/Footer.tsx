@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 
 import { Heart, Phone, Mail, MapPin, MessageCircle } from "lucide-react";
@@ -119,9 +118,17 @@ export function Footer() {
                             </li>
                             <li className="flex items-start gap-3">
                                 <MapPin size={16} className="text-[#00A693] flex-shrink-0 mt-0.5" />
-                                <span className="text-sm text-white/70" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
-                                    Serving the Greater Metropolitan Area
-                                </span>
+                                <a
+                                    href="https://maps.google.com/?q=8115+Maple+Lawn+Blvd+Suite+350,+Fulton,+MD+20759"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-white/70 hover:text-[#00A693] transition-colors"
+                                    style={{ fontFamily: "'Source Sans 3', sans-serif" }}
+                                >
+                                    8115 Maple Lawn Blvd, Suite 350
+                                    <br />
+                                    Fulton, MD 20759
+                                </a>
                             </li>
                             <li>
                                 <a

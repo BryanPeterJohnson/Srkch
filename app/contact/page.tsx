@@ -341,8 +341,18 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-3">
                   <MapPin size={18} className="text-[#005B8E] flex-shrink-0 mt-0.5" />
-                  <div className="text-[#6B7280] text-sm">
-                    Serving the Greater New York Metropolitan Area
+                  <div>
+                    <div className="text-[#1A1A2E] text-sm font-semibold">Office Address</div>
+                    <a
+                      href="https://maps.google.com/?q=8115+Maple+Lawn+Blvd+Suite+350,+Fulton,+MD+20759"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#6B7280] text-sm hover:text-[#005B8E] transition-colors block"
+                    >
+                      8115 Maple Lawn Blvd, Suite 350
+                      <br />
+                      Fulton, MD 20759
+                    </a>
                   </div>
                 </div>
 
@@ -382,9 +392,9 @@ export default function ContactPage() {
               <div className="text-center">
                 <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
                 <div className="text-sm text-[#6B7280]">
-                  Greater New York
+                  8115 Maple Lawn Blvd, Suite 350
                   <br />
-                  Metropolitan Area
+                  Fulton, MD 20759
                 </div>
               </div>
             </div>

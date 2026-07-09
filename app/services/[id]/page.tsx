@@ -133,8 +133,7 @@ function HeartDivider() {
 /* ─────────────────────── PAGE ─────────────────────── */
 export default function ServiceDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
-  const serviceId = parseInt(resolvedParams.id, 10);
-  const service   = services.find((s) => s.id === serviceId);
+  const service = services.find((s) => s.slug === resolvedParams.id);
 
   if (!service) notFound();
 
@@ -377,7 +376,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
     {related.map((item) => (
       <a
         key={item.id}
-        href={`/services/${item.id}`}
+        href={`/services/${item.slug}`}
         className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
       >
         <div className="h-28 overflow-hidden">

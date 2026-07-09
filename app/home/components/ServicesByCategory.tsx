@@ -7,6 +7,27 @@ import { ChevronLeft, ChevronRight, Plus, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { categoryData } from "./data";
 
+// Canonical slugs from app/services/data.ts — converts any old numeric
+// path (e.g. /services/2) into its slug route (e.g. /services/memory-care).
+// Paths that already use a slug pass through unchanged.
+const ID_TO_SLUG: Record<string, string> = {
+    "0": "personal-care",
+    "1": "companion-care",
+    "2": "memory-care",
+    "3": "home-nutrition",
+    "4": "respite-care",
+    "5": "disability-support",
+    "6": "recovery-care",
+    "7": "medication-wellness",
+    "8": "transportation",
+    "9": "pediatric-care",
+};
+
+const toSlugPath = (path: string) => {
+    const m = path?.match(/^\/services\/(\d+)\/?$/);
+    return m ? `/services/${ID_TO_SLUG[m[1]] ?? m[1]}` : path;
+};
+
 export function ServicesByCategory() {
     const [openCat, setOpenCat] = useState<number | null>(null);
     const [slideIndex, setSlideIndex] = useState(0);
@@ -192,24 +213,32 @@ export function ServicesByCategory() {
                     {/* RIGHT: Card Slider + Navigation */}
                     <div className="w-full flex-1 flex flex-col items-center overflow-hidden">
 
-                        {/* Clipped viewport — fixed width for exactly 4 cards, never shrinks/reflows */}
+                        {/* Clipped viewport — fixed width for exactly 4 cards, never shrinks/reflows.
+                            8px padding on each side (+16 total width) so card edges, ring,
+                            shadows and the hover lift are never cut by overflow-hidden. */}
                         <div
                             className="overflow-hidden max-w-full"
-                            style={{ width: viewportWidth }}
+                            style={{ width: viewportWidth + 16 }}
                         >
                             <div
                                 ref={sliderRef}
-                                className="flex gap-4 overflow-x-auto pb-2 scroll-smooth no-scrollbar"
+                                className="flex gap-4 overflow-x-auto px-2 pt-2 pb-4 scroll-smooth no-scrollbar"
                                 style={{
                                     scrollbarWidth: "none",
                                     msOverflowStyle: "none",
                                 }}
                             >
-                                {currentCat?.services.map((svc, i) => (
+                                {currentCat?.services.map((svc, i) => {
+                                    const isActiveCard = openCat !== null && i === slideIndex;
+                                    return (
                                     <Link
                                         key={`${openCat}-${i}`}
-                                        href={svc.path}
-                                        className="group flex flex-col flex-shrink-0 overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)]"
+                                        href={toSlugPath(svc.path)}
+                                        className={`group flex flex-col flex-shrink-0 overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)] ${
+                                            isActiveCard
+                                                ? "ring-2 ring-inset ring-[#0C447C] border border-transparent shadow-[0_8px_28px_rgba(11,45,91,0.18)]"
+                                                : "border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)]"
+                                        }`}
                                         style={{ width: CARD_W, flexShrink: 0 }}
                                     >
                                         {/* Image + overlapping icon badge */}
@@ -225,7 +254,7 @@ export function ServicesByCategory() {
                                             </div>
                                             <div
                                                 className="absolute -bottom-5 left-4 z-10 w-11 h-11 rounded-full flex items-center justify-center shadow-md border-4 border-white text-lg"
-                                                style={{ backgroundColor: BADGE_COLORS[i % BADGE_COLORS.length] }}
+                                                style={{ backgroundColor: isActiveCard ? "#E57531" : BADGE_COLORS[i % BADGE_COLORS.length] }}
                                             >
                                                 <span>{svc.icon}</span>
                                             </div>
@@ -247,7 +276,8 @@ export function ServicesByCategory() {
                                             </span>
                                         </div>
                                     </Link>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
 
