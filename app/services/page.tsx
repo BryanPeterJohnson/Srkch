@@ -188,7 +188,7 @@ export default function ServicesPage() {
                           {groupServices.map((service) => (
                             <Link
                               key={service.id}
-                              href={`/services/${service.id}`}
+                              href={`/services/${service.slug}`}
                               className="block whitespace-nowrap text-[12.5px] text-gray-600 hover:text-[#005B8E] hover:underline transition-all font-display"
                             >
                               • {service.title}
@@ -229,7 +229,7 @@ export default function ServicesPage() {
                       exit={{ opacity: 0, scale: 0.95 }}
                     >
                       <Link
-                        href={`/services/${service.id}`}
+                        href={`/services/${service.slug}`}
                         className="group block h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer font-display"
                       >
                         {/* Image + overlapping icon badge */}
