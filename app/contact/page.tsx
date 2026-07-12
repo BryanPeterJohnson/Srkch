@@ -291,14 +291,14 @@ export default function ContactPage() {
                 </div>
 
                 {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full py-3.5 rounded-md text-white font-bold text-base transition-all hover:bg-[#003A5C] disabled:opacity-60 disabled:cursor-not-allowed"
-                  style={{ background: "#005B8E" }}
-                >
-                  {submitting ? "Sending…" : "Send Message →"}
-                </button>
+              <button
+  type="submit"
+  disabled={submitting}
+  className="w-full py-3.5 rounded-md text-white font-bold text-base transition-all hover:bg-[#003A5C] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+  style={{ background: "#005B8E" }}
+>
+  {submitting ? "Sending…" : "Send Message →"}
+</button>
               </form>
             )}
           </div>

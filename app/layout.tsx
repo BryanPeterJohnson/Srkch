@@ -8,9 +8,9 @@ export const metadata = {
   title: "SRKCH",
   description: "SRK Care at home",
   icons: {
-    icon: "/images/logo1.png",
-    shortcut: "/images/logo1.png",
-    apple: "/images/logo.svg",
+    icon: "/images/logo1.ico",
+    shortcut: "/images/logo1.ico",
+    apple: "/images/logo.ico",
   },
 };
 

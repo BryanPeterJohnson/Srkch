@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Heart,
@@ -185,7 +185,7 @@ function MultiSelectFilter({
           </div>
 
           {/* Options List */}
-          <div className="overflow-y-auto flex-1 max-h-48">
+          <div className="overflow-y-auto flex-1 max-h-48" data-lenis-prevent>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <label
@@ -215,7 +215,7 @@ function MultiSelectFilter({
 
 // ── Job Detail Panel ──────────────────────────────────────────────────────────
 
-function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
+function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void; contentRef: React.RefObject<HTMLDivElement | null> }) {
   const router = useRouter();
 
   return (
@@ -295,7 +295,7 @@ function JobDetail({ job, onClose }: { job: Job; onClose: () => void }) {
       </div>
 
       {/* Description scrolls INSIDE the panel (like the video) — page itself stays put */}
-      <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 space-y-6">
+      <div ref={contentRef} className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 space-y-6" data-lenis-prevent>
         {job.tagline && (
           <div className="bg-[#f0f6fb] rounded-lg px-4 py-3.5 border border-blue-50">
             <p className="text-[11px] text-[#164e9a] font-bold uppercase tracking-wider mb-0.5">Opportunity</p>
@@ -408,6 +408,7 @@ function BenefitsCard() {
 export default function CareersPage() {
   const jobsSectionRef = useRef<HTMLDivElement>(null);
   const detailPanelRef = useRef<HTMLDivElement>(null);
+  const jobDescriptionRef = useRef<HTMLDivElement>(null);
   const jobsListRef = useRef<HTMLDivElement>(null);
 
   const scrollToJobs = () => {
@@ -421,11 +422,15 @@ export default function CareersPage() {
   const [savedJobs, setSavedJobs] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  // Scroll detail panel to top whenever selected job changes
-  useEffect(() => {
-    if (selectedJob && detailPanelRef.current) {
-      detailPanelRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
+  // Scroll job description to top whenever selected job changes
+  useLayoutEffect(() => {
+    if (!selectedJob) return;
+    const el = jobDescriptionRef.current;
+    if (!el) return;
+    el.scrollTop = 0;
+    requestAnimationFrame(() => {
+      if (jobDescriptionRef.current) jobDescriptionRef.current.scrollTop = 0;
+    });
   }, [selectedJob]);
 
   // Filter state
@@ -617,6 +622,7 @@ export default function CareersPage() {
           {/* Left Job Cards Column — independently scrollable */}
           <div
             ref={jobsListRef}
+            data-lenis-prevent
             className={`min-w-0 h-full overflow-y-auto overscroll-contain pr-1 transition-all duration-200 ${selectedJob ? "w-[320px] flex-shrink-0" : "flex-1"}`}
           >
             <div className="space-y-3">
@@ -625,7 +631,10 @@ export default function CareersPage() {
                 return (
                   <div
                     key={job.id}
-                    onClick={() => setSelectedJob(isSelected ? null : job)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedJob(isSelected ? null : job);
+                    }}
                     className={`flex items-start gap-3 p-3.5 rounded-lg border transition cursor-pointer relative ${isSelected
                         ? "border-[#1a365d] bg-[#f0f6fb] ring-1 ring-[#1a365d]/20"
                         : "border-gray-200 bg-white hover:bg-gray-50"
@@ -721,7 +730,12 @@ export default function CareersPage() {
               }`}
           >
             {selectedJob ? (
-              <JobDetail job={selectedJob} onClose={() => setSelectedJob(null)} />
+              <JobDetail
+                key={selectedJob.id}
+                job={selectedJob}
+                onClose={() => setSelectedJob(null)}
+                contentRef={jobDescriptionRef}
+              />
             ) : (
               <BenefitsCard />
             )}
