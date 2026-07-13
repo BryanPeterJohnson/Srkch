@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { ARTICLES_MAP } from './blog/articles'
 import { services } from './services/data'
-import { jobs } from './data/jobs'   // fix name after checking data/jobs.ts
+import { ALL_JOBS } from './data/jobs'
 
 const BASE = 'https://srkcah.com'
 
@@ -43,9 +43,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  const jobRoutes: MetadataRoute.Sitemap = jobs.map((job) => ({
+  const jobRoutes: MetadataRoute.Sitemap = ALL_JOBS.map((job) => ({
     url: `${BASE}/job-description/${job.id}`,
-    lastModified: now,
+    lastModified: new Date(job.datePosted),
     changeFrequency: 'weekly',
     priority: 0.6,
   }))
