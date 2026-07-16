@@ -347,11 +347,11 @@ export default function AboutPage() {
                     Request a Free Consultation
                   </Link>
                   <Link
-                    href="tel:+14439859368"
+                    href="tel:+14436273806"
                     className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm cursor-pointer"
                   >
                     <Phone size={15} />
-                    Call (443) 985-9368
+                    Call (443) 6273806
                   </Link>
                 </div>
               </div>
@@ -829,10 +829,10 @@ export default function AboutPage() {
               Not sure where to start? Call us anytime.
             </p>
             <a
-              href="tel:4439859368"
+              href="tel:4436273806"
               className="text-[#046e4c] font-bold text-sm font-display"
             >
-              (443) 985-9368
+              (443) 6273806
             </a>
           </div>
         </div>
