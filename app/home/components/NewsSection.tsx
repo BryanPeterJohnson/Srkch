@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { newsItems } from "./data";
-import { TrustBadgesMarquee } from "./TrustBadgesMarquee";
 
 export function NewsSection() {
     return (
@@ -78,7 +77,6 @@ export function NewsSection() {
                 </div>
             </div>
 
-            <TrustBadgesMarquee />
         </section>
     );
 }

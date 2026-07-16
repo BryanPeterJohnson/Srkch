@@ -54,6 +54,21 @@ export function CareAtHome() {
                                 </motion.li>
                             ))}
                         </ul>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="mt-8"
+                        >
+                            <a
+                                href="/about"
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm sm:text-base bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm font-display"
+                            >
+                                More About Us
+                            </a>
+                        </motion.div>
                     </motion.div>
 
                     {/* Right Image */}

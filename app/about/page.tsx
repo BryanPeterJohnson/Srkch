@@ -26,6 +26,8 @@ import {
   ChevronRight,
   Quote,
   HeartHandshake,
+  Heart,
+  Handshake,
 } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
@@ -39,12 +41,37 @@ const HERO_BADGES = [
   { icon: Clock, label: "Available\n24/7", color: "#E57531" },
 ];
 
-const VALUES = [
-  "Compassion",
-  "Integrity",
-  "Respect",
-  "Excellence",
-  "Accountability",
+type ValueItem = {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+};
+
+const VALUES: ValueItem[] = [
+  {
+    icon: Heart,
+    title: "Compassion",
+    description:
+      "We treat every client and their family with genuine kindness, empathy, and consideration for their unique experiences and needs.",
+  },
+  {
+    icon: Handshake,
+    title: "Respect",
+    description:
+      "We honor each client's cultural, religious, and personal values, ensuring these are reflected in every aspect of our service.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Integrity",
+    description:
+      "We uphold the highest ethical standards, prioritizing honesty, transparency, and accountability in all our interactions and decisions.",
+  },
+  {
+    icon: Award,
+    title: "Excellence",
+    description:
+      "We strive for continuous improvement, investing in staff development and quality assurance to deliver care that exceeds industry standards.",
+  },
 ];
 
 type MvvTab = {
@@ -53,7 +80,7 @@ type MvvTab = {
   icon: React.ElementType;
   title: string;
   description?: string[];
-  values?: string[];
+  values?: ValueItem[];
   image: string;
   accent: string;
 };
@@ -65,8 +92,8 @@ const MVV_TABS: MvvTab[] = [
     icon: Target,
     title: "Our Mission",
     description: [
-      "To enhance quality of life by providing personalized, compassionate care that empowers independence and brings peace of mind to families.",
-      "We do this by pairing every client with a caregiver who truly fits their needs, backed by RN-supervised care plans that adapt as those needs change—so families never have to navigate it alone.",
+      "To provide exceptional, client-centered non-medical care that promotes independence, safety, and quality of life for every individual we serve.",
+      "We support seniors, individuals with disabilities, post-surgical patients, and children with developmental delays, physical disabilities, autism spectrum disorder, and other chronic but stable conditions—empowering them to live with dignity in the comfort of their own homes, while upholding the highest standards of professionalism and respect for the diverse needs of Maryland's communities.",
     ],
     image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=1000&q=80",
     accent: "#046e4c",
@@ -77,8 +104,8 @@ const MVV_TABS: MvvTab[] = [
     icon: Eye,
     title: "Our Vision",
     description: [
-      "To be Maryland&apos;s most trusted partner in in-home care—known for our excellence, integrity, and unwavering commitment to our community.",
-      "We envision a future where every family, regardless of income or circumstance, has access to caregivers who treat their loved ones with the same dignity and attentiveness they would want for their own.",
+      "To be the region's most trusted leader in personalized home care services—recognized for delivering reliable, culturally attuned, and responsive support.",
+      "We aspire to set the benchmark for excellence by consistently exceeding expectations, ensuring that every client and family experiences care marked by empathy, integrity, and mutual respect.",
     ],
     image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1000&q=80",
     accent: "#0C447C",
@@ -198,8 +225,6 @@ export default function AboutPage() {
   /* ------------------------------------------------------------------ */
   /*  Hash navigation: /about#mission, /about#vision, /about#values,     */
   /*  /about#our-story — activates the right tab and scrolls to it.      */
-  /*  Works both when arriving from another page (header dropdown) and   */
-  /*  when clicking a hash link while already on /about.                 */
   /* ------------------------------------------------------------------ */
   useEffect(() => {
     const applyHash = () => {
@@ -208,7 +233,6 @@ export default function AboutPage() {
 
       if (hash === "mission" || hash === "vision" || hash === "values") {
         setMvvTab(hash as "mission" | "vision" | "values");
-        // All three tabs live in the same section (id="mission")
         requestAnimationFrame(() => {
           document
             .getElementById("mission")
@@ -237,7 +261,6 @@ export default function AboutPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: wire up to API route / email service
     console.log(formData);
   };
 
@@ -246,10 +269,9 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white font-display">
       {/* ---------------------------------------------------------------- */}
-      {/* Hero — same treatment as the home page HeroSlider, single static image */}
+      {/* Hero */}
       {/* ---------------------------------------------------------------- */}
       <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
-        {/* BACKGROUND IMAGE */}
         <Image
           src="/images/Home/1.png"
           alt="Caregiver sharing a warm moment with a senior client"
@@ -259,22 +281,18 @@ export default function AboutPage() {
           className="object-cover"
           style={{ objectPosition: "60% 10%" }}
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
         <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
 
-        {/* Decorative brand-color sweep along the bottom edge */}
         <div
           className="absolute bottom-0 right-0 z-[2] w-full h-2.5 sm:h-3 pointer-events-none bg-gradient-to-r from-[#E57531] via-[#159BA1] to-[#046e4c]"
           style={{ clipPath: "polygon(20% 100%, 100% 0%, 100% 100%)" }}
         />
 
-        {/* CONTENT */}
         <div className="absolute inset-0 z-[10]">
           <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-32">
             <div className="max-w-[600px] h-full flex flex-col justify-center items-start text-left">
               <div className="space-y-6">
-                {/* HEADLINE */}
                 <h1
                   className="font-display font-black text-[#0C447C]"
                   style={{
@@ -288,7 +306,6 @@ export default function AboutPage() {
                   Like <span className="text-[#E57531]">Family</span>
                 </h1>
 
-                {/* SUBTEXT */}
                 <p
                   className="font-display text-[#3E4C63]"
                   style={{
@@ -303,7 +320,6 @@ export default function AboutPage() {
                   Maryland.
                 </p>
 
-                {/* ICON BADGE ROW */}
                 <div className="flex flex-wrap items-start gap-x-6 gap-y-4 pt-1">
                   {HERO_BADGES.map((b, i) => (
                     <div key={i} className="flex items-center gap-2">
@@ -323,17 +339,16 @@ export default function AboutPage() {
                   ))}
                 </div>
 
-                {/* BUTTONS */}
                 <div className="flex gap-3 flex-wrap items-center pt-2">
                   <Link
                     href="/get-started"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm cursor-pointer"
                   >
                     Request a Free Consultation
                   </Link>
                   <Link
                     href="tel:+14439859368"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm cursor-pointer"
                   >
                     <Phone size={15} />
                     Call (443) 985-9368
@@ -352,7 +367,7 @@ export default function AboutPage() {
         id="our-story"
         className="scroll-mt-24 2xl:scroll-mt-28 max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 pt-6 md:pt-10 pb-8 md:pb-10 font-display"
       >
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
           <div>
             <div className="text-[#046e4c] text-m font-bold uppercase tracking-widest mb-3 font-display">
               Our Story
@@ -362,19 +377,23 @@ export default function AboutPage() {
               <br />A Community&apos;s Mission.
             </h2>
             <p className="text-slate-600 leading-7 mb-4 font-display">
-              SRK Care at Home was founded by a healthcare professional who
-              experienced firsthand the challenges families face when a loved
-              one needs care.
+              SRK Care at Home was co-founded by Omair Choudhry, a former
+              physician and community leader, and Salman Khan, a healthcare
+              entrepreneur—born from personal experience with the challenges
+              families face when a loved one needs care.
             </p>
-            <p className="text-slate-600 leading-7 font-display">
-              We built SRK to be the kind of agency we would trust with our
-              own family—where compassion meets clinical excellence, and
-              every client is treated with dignity, respect, and heart.
+            <p className="text-slate-600 leading-7 mb-4 font-display">
+              With over a decade of combined experience in healthcare,
+              compliance, and caregiving, our team sets the standard for
+              quality and trust in non-medical home care. Rooted in the
+              Laurel/Howard County community, we deliver care grounded in
+              respect for every family&apos;s cultural and religious
+              preferences.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-[1.1fr_1fr] gap-4 items-stretch">
-            <div className="relative w-full min-h-[220px] rounded-2xl overflow-hidden shadow-md">
+          <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] gap-4 items-stretch">
+            <div className="relative w-full min-h-[220px] h-full rounded-2xl overflow-hidden shadow-md">
               <Image
                 src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=900&q=80"
                 alt="Caregiver holding hands with a client"
@@ -382,7 +401,7 @@ export default function AboutPage() {
                 className="object-cover"
               />
             </div>
-            <div className="relative bg-[#EAF3F8] rounded-2xl p-6 flex flex-col justify-between">
+            <div className="relative h-full bg-[#EAF3F8] rounded-2xl p-6 flex flex-col justify-between">
               <Quote className="w-7 h-7 text-[#0C447C] mb-3" />
               <p className="text-[#0B2D5B] font-semibold leading-relaxed font-display">
                 We listen, we care, and we show up—every day. Your loved
@@ -396,22 +415,20 @@ export default function AboutPage() {
 
       {/* ---------------------------------------------------------------- */}
       {/* Mission, Vision & Values — interactive tabs                       */}
-      {/* /about#mission  /about#vision  /about#values all land here        */}
       {/* ---------------------------------------------------------------- */}
       <section
         id="mission"
         className="scroll-mt-24 2xl:scroll-mt-28 bg-slate-50 pt-5 md:pt-2 pb-8 md:pb-10 font-display"
       >
         <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 2xl:gap-20 items-center">
-            {/* Left: tab buttons + active content */}
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 2xl:gap-20 items-stretch">
             <div>
               <div className="flex flex-wrap gap-3 mb-8">
                 {MVV_TABS.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setMvvTab(tab.id)}
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all font-display ${
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all font-display cursor-pointer ${
                       mvvTab === tab.id
                         ? "bg-[#0C447C] text-white shadow-md"
                         : "bg-white border border-slate-200 text-slate-600 hover:border-[#0C447C]/40 hover:text-[#0C447C]"
@@ -431,35 +448,48 @@ export default function AboutPage() {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                    style={{ backgroundColor: `${activeMvv.accent}1A` }}
-                  >
-                    <activeMvv.icon
-                      className="w-6 h-6"
-                      style={{ color: activeMvv.accent }}
-                    />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: `${activeMvv.accent}1A` }}
+                    >
+                      <activeMvv.icon
+                        className="w-6 h-6"
+                        style={{ color: activeMvv.accent }}
+                      />
+                    </div>
+                    <div className="inline-block">
+                      <h3 className="text-2xl font-bold text-[#1a365d] font-display">
+                        {activeMvv.title}
+                      </h3>
+                      <div
+                        className="w-full h-[3px] rounded-full mt-1"
+                        style={{ backgroundColor: activeMvv.accent }}
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#1a365d] mb-2 font-display">
-                    {activeMvv.title}
-                  </h3>
-                  <div
-                    className="w-10 h-[3px] rounded-full mb-4"
-                    style={{ backgroundColor: activeMvv.accent }}
-                  />
 
                   {activeMvv.values ? (
-                    <ul className="space-y-2">
+                    <ul className="space-y-4">
                       {activeMvv.values.map((value) => (
-                        <li
-                          key={value}
-                          className="flex items-center gap-2 text-slate-600 text-sm font-display"
-                        >
-                          <CheckCircle
-                            className="w-4 h-4 flex-shrink-0"
-                            style={{ color: activeMvv.accent }}
-                          />
-                          {value}
+                        <li key={value.title}>
+                          <div className="flex items-center gap-3 mb-1">
+                            <div
+                              className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                              style={{ backgroundColor: `${activeMvv.accent}1A` }}
+                            >
+                              <value.icon
+                                className="w-4 h-4"
+                                style={{ color: activeMvv.accent }}
+                              />
+                            </div>
+                            <div className="font-bold text-[#1a365d] text-sm font-display">
+                              {value.title}
+                            </div>
+                          </div>
+                          <p className="text-slate-600 text-sm leading-relaxed font-display pl-12">
+                            {value.description}
+                          </p>
                         </li>
                       ))}
                     </ul>
@@ -479,8 +509,7 @@ export default function AboutPage() {
               </AnimatePresence>
             </div>
 
-            {/* Right: single photo, swaps with the active tab */}
-            <div className="relative w-full h-[380px] 2xl:h-[440px] rounded-2xl overflow-hidden shadow-md">
+            <div className="relative w-full min-h-[380px] 2xl:min-h-[440px] h-full rounded-2xl overflow-hidden shadow-md">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={mvvTab}
@@ -561,10 +590,7 @@ export default function AboutPage() {
           <div className="flex items-center gap-3">
             <div className="flex">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-4 h-4 text-white fill-white"
-                />
+                <Star key={i} className="w-4 h-4 text-white fill-white" />
               ))}
             </div>
             <div className="leading-tight">

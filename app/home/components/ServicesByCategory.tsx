@@ -3,9 +3,24 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Plus, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+    ChevronLeft, ChevronRight, ArrowRight, Plus, Minus, Heart, Search,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { categoryData } from "./data";
+
+// ─── Pull canonical img + desc from the SERVICES folder data.ts ───────────────
+// ADJUST field reads (`s.image`, `s.description`) if your services/data.ts
+// uses different field names.
+import { services as serviceDefs } from "../../services/data";
+
+const SERVICE_BY_PATH: Record<string, { image?: string; description?: string }> =
+    Object.fromEntries(
+        (serviceDefs ?? []).map((s: any) => [
+            s.path ?? `/services/${s.slug}`,
+            { image: s.image ?? s.img, description: s.description ?? s.desc },
+        ])
+    );
 
 // Canonical slugs from app/services/data.ts — converts any old numeric
 // path (e.g. /services/2) into its slug route (e.g. /services/memory-care).
@@ -28,9 +43,46 @@ const toSlugPath = (path: string) => {
     return m ? `/services/${ID_TO_SLUG[m[1]] ?? m[1]}` : path;
 };
 
+// Flattened list of every service across all categories, de-duplicated by
+// slug path — used to power the search results grid.
+type FlatService = {
+    title: string;
+    desc: string;
+    img: string;
+    icon: string;
+    path: string;
+    badgeIndex: number;
+};
+
+const ALL_SERVICES: FlatService[] = (() => {
+    const seen = new Set<string>();
+    const out: FlatService[] = [];
+    categoryData.forEach((cat) => {
+        cat.services.forEach((svc, i) => {
+            const key = toSlugPath(svc.path);
+            if (seen.has(key)) return;
+            seen.add(key);
+            out.push({
+                title: svc.title,
+                desc: svc.desc,
+                img: svc.img,
+                icon: svc.icon,
+                path: svc.path,
+                badgeIndex: i,
+            });
+        });
+    });
+    return out;
+})();
+
 export function ServicesByCategory() {
+    // openCat drives BOTH the accordion expansion and the slider's active category.
     const [openCat, setOpenCat] = useState<number | null>(null);
     const [slideIndex, setSlideIndex] = useState(0);
+    // The service the user explicitly picked (for ring + sidebar highlight),
+    // which may differ from slideIndex once the scroll target is clamped.
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [searchQuery, setSearchQuery] = useState("");
     const sliderRef = useRef<HTMLDivElement>(null);
 
     const CARD_W = 195;
@@ -41,13 +93,49 @@ export function ServicesByCategory() {
     const currentCat = categoryData[openCat ?? 0];
     const total = currentCat?.services?.length ?? 0;
 
+    // Search across ALL categories, matching the services page behavior.
+    const q = searchQuery.toLowerCase().trim();
+    const isSearching = q.length > 0;
+    const searchResults = isSearching
+        ? ALL_SERVICES.filter((s) => s.title.toLowerCase().includes(q))
+        : [];
+
     const handleCatClick = (i: number) => {
         setOpenCat(openCat === i ? null : i);
         setSlideIndex(0);
+        setSelectedIndex(0);
     };
 
+    // Last index that still fills the viewport with cards (no scrolling into blank space).
+    const maxIndex = Math.max(0, total - CARDS_VISIBLE);
+
+    // Page-based counter: how many slider pages (of CARDS_VISIBLE cards) exist,
+    // and which one is currently in view.
+    const totalPages = Math.max(1, Math.ceil(total / CARDS_VISIBLE));
+    const currentPage = Math.min(Math.floor(slideIndex / CARDS_VISIBLE) + 1, totalPages);
+
     const canPrev = slideIndex > 0;
-    const canNext = slideIndex < total - 1;
+    const canNext = slideIndex < maxIndex;
+
+    // Jump a full page, clamped so the last page never scrolls into blank space.
+    const goToPage = (page: number) => {
+        const clamped = Math.min(Math.max(page, 1), totalPages);
+        setSlideIndex(Math.min((clamped - 1) * CARDS_VISIBLE, maxIndex));
+    };
+
+    // Selecting a service from the sidebar: open its category and scroll it into
+    // view. Clamp to maxIndex so the target isn't overridden by the clamp effect,
+    // which is what previously prevented later services from ever showing.
+    const handleServiceSelect = (catIndex: number, serviceIndex: number) => {
+        if (openCat !== catIndex) setOpenCat(catIndex);
+        setSelectedIndex(serviceIndex);
+        setSlideIndex(Math.min(serviceIndex, Math.max(0, categoryData[catIndex].services.length - CARDS_VISIBLE)));
+    };
+
+    // Clamp when switching categories (a shorter list may have a smaller maxIndex).
+    useEffect(() => {
+        if (slideIndex > maxIndex) setSlideIndex(maxIndex);
+    }, [maxIndex, slideIndex]);
 
     useEffect(() => {
         if (sliderRef.current) {
@@ -59,8 +147,6 @@ export function ServicesByCategory() {
     }, [slideIndex]);
 
     // Visible viewport width = exactly 4 cards + 3 gaps between them, clipping the rest.
-    // This is a FIXED width (not 100%/maxWidth) so the row never shrinks the cards
-    // or reflows mid-transition on narrower screens — it scrolls internally instead.
     const viewportWidth = CARDS_VISIBLE * CARD_W + (CARDS_VISIBLE - 1) * CARD_GAP;
 
     return (
@@ -68,31 +154,25 @@ export function ServicesByCategory() {
             <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto">
 
                 {/* Header */}
-                <div className="text-center mb-12 sm:mb-14">
+                <div className="text-center mb-2 sm:mb-3">
                     <motion.div
-    className="font-display flex items-center justify-center gap-3"
-    initial={{ opacity: 0, y: 12 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
-    transition={{ duration: 0.5 }}
-    style={{
-        fontSize: 18,
-        fontWeight: 700,
-        letterSpacing: "1.5px",
-        color: "#0C447C",
-        marginBottom: "0.6rem",
-    }}
->
-    <span
-        className="h-[2px] w-[60px] sm:w-16"
-        style={{ backgroundColor: "#E57531" }}
-    />
-    OUR SERVICES
-    <span
-        className="h-[2px] w-[60px] sm:w-16"
-        style={{ backgroundColor: "#E57531" }}
-    />
-</motion.div>
+                        className="font-display flex items-center justify-center gap-3"
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.5 }}
+                        style={{
+                            fontSize: 18,
+                            fontWeight: 700,
+                            letterSpacing: "1.5px",
+                            color: "#0C447C",
+                            marginBottom: "0.6rem",
+                        }}
+                    >
+                        <span className="h-[2px] w-[60px] sm:w-16" style={{ backgroundColor: "#E57531" }} />
+                        OUR SERVICES
+                        <span className="h-[2px] w-[60px] sm:w-16" style={{ backgroundColor: "#E57531" }} />
+                    </motion.div>
 
                     <motion.h2
                         className="font-display"
@@ -132,183 +212,265 @@ export function ServicesByCategory() {
                 {/* Two-column layout */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
-                    {/* LEFT: Category Cards */}
-                    <div className="w-full lg:w-[350px] shrink-0 space-y-3.5 lg:ml-6">
-                        {categoryData.map((cat, i) => {
-                            const isOpen = openCat === i;
-                            const CatIcon = cat.Icon;
-                            return (
-                                <div
-                                    key={cat.id}
-                                    className={`w-full rounded-xl overflow-hidden transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.06)] ${
-                                        isOpen
-                                            ? "bg-[#0D2D52] border-0"
-                                            : "bg-white border border-[#ECECEC] hover:shadow-md"
-                                    }`}
-                                >
-                                    <button
-                                        onClick={() => handleCatClick(i)}
-                                        className="w-full px-4 py-3.5 flex items-center gap-3 text-left cursor-pointer"
-                                    >
-                                        <div
-                                            className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                                isOpen
-                                                    ? "bg-white/10 text-white"
-                                                    : "bg-[#F5F7FA] text-gray-400"
-                                            }`}
-                                        >
-                                            <CatIcon size={25} strokeWidth={2} />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3
-                                                className={`font-display font-bold text-[20px] leading-tight truncate ${
-                                                    isOpen ? "text-white" : "text-[#0D2D52]"
-                                                }`}
-                                            >
-                                                {cat.title}
-                                            </h3>
-                                            <p
-                                                className={`font-display mt-0.5 text-[12px] leading-tight ${
-                                                    isOpen ? "text-white/80" : "text-gray-500"
-                                                }`}
-                                            >
-                                                {cat.ageLabel}
-                                            </p>
-                                        </div>
-                                        <Plus
-                                            size={16}
-                                            className={`flex-shrink-0 transition-transform duration-200 ${
-                                                isOpen ? "text-white rotate-45" : "text-gray-300"
-                                            }`}
-                                        />
-                                    </button>
+                    {/* LEFT: Accordion filter — styled to match the services page */}
+                    <aside className="w-full lg:w-80 flex-shrink-0 lg:ml-6">
+                        <h3 className="font-bold text-black mb-6 text-xl font-display">Filter Categories</h3>
+                        <div className="flex flex-col">
 
-                                    {/* Expandable service list — light background, dark text, only header stays navy */}
-                                    <div
-                                        className="overflow-hidden transition-all duration-300 ease-in-out bg-white"
-                                        style={{ maxHeight: isOpen ? "400px" : "0px" }}
-                                    >
-                                        <ul className="pb-3.5 px-4 pl-[52px] pt-3 space-y-1.5">
-                                            {cat.services.map((svc, si) => (
-                                                <li key={svc.title}>
-                                                    <button
-                                                        onClick={() => setSlideIndex(si)}
-                                                        className={`text-left text-[12.5px] leading-tight transition-all hover:underline cursor-pointer font-display ${
-                                                            slideIndex === si
-                                                                ? "text-[#0D2D52] font-bold"
-                                                                : "text-gray-500 font-normal"
+                            {/* All Services — non-expandable, links to /services */}
+                            <div className="border-b border-gray-200">
+                                <Link
+                                    href="/services"
+                                    className="w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50"
+                                >
+                                    <div className="flex items-center gap-3 pr-3">
+                                        <Heart className="w-[18px] h-[18px] flex-shrink-0 mt-1 text-gray-500 group-hover:text-[#005B8E] transition-colors duration-200" />
+                                        <div className="font-semibold text-[18px] font-display text-[#1A1A2E] group-hover:text-[#005B8E] transition-colors duration-200">
+                                            All Services
+                                        </div>
+                                    </div>
+                                </Link>
+                            </div>
+
+                            {/* Age-group categories — expandable, drive the slider */}
+                            {categoryData.map((cat, i) => {
+                                const isActive = openCat === i;
+                                const CatIcon = cat.Icon;
+                                return (
+                                    <div key={cat.id} className="border-b border-gray-200 last:border-0">
+                                        <button
+                                            onClick={() => handleCatClick(i)}
+                                            className="w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50"
+                                        >
+                                            <div className="flex items-center gap-3 pr-3">
+                                                <CatIcon
+                                                    className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"
                                                         }`}
+                                                />
+                                                <div>
+                                                    <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
+                                                        }`}>
+                                                        {cat.title}
+                                                    </div>
+                                                    {cat.ageLabel && (
+                                                        <div className="text-[14px] text-gray-500 mt-0.5 font-display">
+                                                            {cat.ageLabel}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className={`transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"}`}>
+                                                {isActive ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                                            </div>
+                                        </button>
+
+                                        <motion.div
+                                            initial={false}
+                                            animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pb-4 pt-1 pl-8 space-y-2">
+                                                {cat.services.map((svc, si) => (
+                                                    <button
+                                                        key={svc.title}
+                                                        onClick={() => handleServiceSelect(i, si)}
+                                                        className={`block text-left whitespace-nowrap text-[12.5px] transition-all hover:underline font-display ${isActive && selectedIndex === si
+                                                                ? "text-[#005B8E] font-bold"
+                                                                : "text-gray-600 hover:text-[#005B8E]"
+                                                            }`}
                                                     >
                                                         • {svc.title}
                                                     </button>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                                ))}
+                                            </div>
+                                        </motion.div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
+                    </aside>
 
-                    {/* RIGHT: Card Slider + Navigation */}
+                    {/* RIGHT: Search + Slider (or search-results grid) */}
                     <div className="w-full flex-1 flex flex-col items-center overflow-hidden">
 
-                        {/* Clipped viewport — fixed width for exactly 4 cards, never shrinks/reflows.
-                            8px padding on each side (+16 total width) so card edges, ring,
-                            shadows and the hover lift are never cut by overflow-hidden. */}
-                        <div
-                            className="overflow-hidden max-w-full"
-                            style={{ width: viewportWidth + 16 }}
-                        >
-                            <div
-                                ref={sliderRef}
-                                className="flex gap-4 overflow-x-auto px-2 pt-2 pb-4 scroll-smooth no-scrollbar"
-                                style={{
-                                    scrollbarWidth: "none",
-                                    msOverflowStyle: "none",
-                                }}
-                            >
-                                {currentCat?.services.map((svc, i) => {
-                                    const isActiveCard = openCat !== null && i === slideIndex;
-                                    return (
-                                    <Link
-                                        key={`${openCat}-${i}`}
-                                        href={toSlugPath(svc.path)}
-                                        className={`group flex flex-col flex-shrink-0 overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)] ${
-                                            isActiveCard
-                                                ? "ring-2 ring-inset ring-[#0C447C] border border-transparent shadow-[0_8px_28px_rgba(11,45,91,0.18)]"
-                                                : "border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)]"
-                                        }`}
-                                        style={{ width: CARD_W, flexShrink: 0 }}
+                        {/* Search bar */}
+                        <div className="w-full relative mb-4" style={{ maxWidth: viewportWidth + 16 }}>
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Search services by name..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
+                            />
+                        </div>
+
+                        {isSearching ? (
+                            /* ── Search results grid (all categories) ── */
+                            <div className="w-full" style={{ maxWidth: viewportWidth + 16 }}>
+                                {searchResults.length > 0 ? (
+                                    <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                                        <AnimatePresence mode="popLayout">
+                                            {searchResults.map((svc, i) => {
+                                                const canonical = SERVICE_BY_PATH[toSlugPath(svc.path)];
+                                                const cardImg = canonical?.image ?? svc.img;
+                                                const cardDesc = canonical?.description ?? svc.desc;
+                                                return (
+                                                    <motion.div
+                                                        layout
+                                                        key={toSlugPath(svc.path)}
+                                                        initial={{ opacity: 0, scale: 0.95 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        exit={{ opacity: 0, scale: 0.95 }}
+                                                    >
+                                                        <Link
+                                                            href={toSlugPath(svc.path)}
+                                                            className="group flex flex-col h-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)]"
+                                                        >
+                                                            <div className="relative">
+                                                                <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
+                                                                    <Image
+                                                                        src={cardImg}
+                                                                        alt={svc.title}
+                                                                        fill
+                                                                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                                        sizes="195px"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    className="absolute -bottom-5 left-4 z-10 w-11 h-11 rounded-full flex items-center justify-center shadow-md border-4 border-white text-lg"
+                                                                    style={{ backgroundColor: BADGE_COLORS[i % BADGE_COLORS.length] }}
+                                                                >
+                                                                    <span>{svc.icon}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="pt-8 px-4 pb-4 flex flex-col flex-1">
+                                                                <h3 className="font-bold text-[#0D2D52] mb-2 leading-snug text-[15px] font-display">
+                                                                    {svc.title}
+                                                                </h3>
+                                                                <p className="text-[#6B7280] text-[13px] leading-relaxed line-clamp-3 mb-3 font-display flex-1">
+                                                                    {cardDesc}
+                                                                </p>
+                                                                <span
+                                                                    className="inline-flex items-center gap-1 text-[13px] font-bold font-display"
+                                                                    style={{ color: "#E57531" }}
+                                                                >
+                                                                    Learn More <ArrowRight size={14} />
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </motion.div>
+                                                );
+                                            })}
+                                        </AnimatePresence>
+                                    </motion.div>
+                                ) : (
+                                    <div className="text-center py-20 text-slate-400 font-display">
+                                        <p className="text-lg font-medium font-display">No services match your search.</p>
+                                        <button
+                                            onClick={() => setSearchQuery("")}
+                                            className="mt-4 text-sm text-[#005B8E] hover:underline font-semibold font-display cursor-pointer"
+                                        >
+                                            Clear search
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            /* ── Default slider ── */
+                            <>
+                                {/* Clipped viewport — fixed width for exactly 4 cards, never shrinks/reflows. */}
+                                <div className="overflow-hidden max-w-full" style={{ width: viewportWidth + 16 }}>
+                                    <div
+                                        ref={sliderRef}
+                                        className="flex gap-4 overflow-x-auto px-2 pt-2 pb-4 scroll-smooth no-scrollbar"
+                                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                                     >
-                                        {/* Image + overlapping icon badge */}
-                                        <div className="relative">
-                                            <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
-                                                <Image
-                                                    src={svc.img}
-                                                    alt={svc.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                    sizes="195px"
-                                                />
-                                            </div>
-                                            <div
-                                                className="absolute -bottom-5 left-4 z-10 w-11 h-11 rounded-full flex items-center justify-center shadow-md border-4 border-white text-lg"
-                                                style={{ backgroundColor: isActiveCard ? "#E57531" : BADGE_COLORS[i % BADGE_COLORS.length] }}
-                                            >
-                                                <span>{svc.icon}</span>
-                                            </div>
-                                        </div>
+                                        {currentCat?.services.map((svc, i) => {
+                                            const isActiveCard = openCat !== null && i === selectedIndex;
+                                            const canonical = SERVICE_BY_PATH[toSlugPath(svc.path)];
+                                            const cardImg = canonical?.image ?? svc.img;
+                                            const cardDesc = canonical?.description ?? svc.desc;
+                                            return (
+                                                <Link
+                                                    key={`${openCat}-${i}`}
+                                                    href={toSlugPath(svc.path)}
+                                                    className={`group flex flex-col flex-shrink-0 overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)] ${isActiveCard
+                                                            ? "ring-2 ring-inset ring-[#0C447C] border border-transparent shadow-[0_8px_28px_rgba(11,45,91,0.18)]"
+                                                            : "border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)]"
+                                                        }`}
+                                                    style={{ width: CARD_W, flexShrink: 0 }}
+                                                >
+                                                    <div className="relative">
+                                                        <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
+                                                            <Image
+                                                                src={cardImg}
+                                                                alt={svc.title}
+                                                                fill
+                                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                                sizes="195px"
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            className="absolute -bottom-5 left-4 z-10 w-11 h-11 rounded-full flex items-center justify-center shadow-md border-4 border-white text-lg"
+                                                            style={{ backgroundColor: isActiveCard ? "#E57531" : BADGE_COLORS[i % BADGE_COLORS.length] }}
+                                                        >
+                                                            <span>{svc.icon}</span>
+                                                        </div>
+                                                    </div>
 
-                                        {/* Text */}
-                                        <div className="pt-8 px-4 pb-4 flex flex-col flex-1">
-                                            <h3 className="font-bold text-[#0D2D52] mb-2 leading-snug text-[15px] font-display">
-                                                {svc.title}
-                                            </h3>
-                                            <p className="text-[#6B7280] text-[13px] leading-relaxed line-clamp-3 mb-3 font-display flex-1">
-                                                {svc.desc}
-                                            </p>
-                                            <span
-                                                className="inline-flex items-center gap-1 text-[13px] font-bold font-display"
-                                                style={{ color: "#E57531" }}
-                                            >
-                                                Learn More <ArrowRight size={14} />
-                                            </span>
-                                        </div>
-                                    </Link>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                                    <div className="pt-8 px-4 pb-4 flex flex-col flex-1">
+                                                        <h3 className="font-bold text-[#0D2D52] mb-2 leading-snug text-[15px] font-display">
+                                                            {svc.title}
+                                                        </h3>
+                                                        <p className="text-[#6B7280] text-[13px] leading-relaxed line-clamp-3 mb-3 font-display flex-1">
+                                                            {cardDesc}
+                                                        </p>
+                                                        <span
+                                                            className="inline-flex items-center gap-1 text-[13px] font-bold font-display"
+                                                            style={{ color: "#E57531" }}
+                                                        >
+                                                            Learn More <ArrowRight size={14} />
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
-                        {/* Navigation */}
-                        <div className="w-full flex justify-center mt-6">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => canPrev && setSlideIndex(slideIndex - 1)}
-                                    disabled={!canPrev}
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 bg-white transition-all ${canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
-                                        }`}
-                                    aria-label="Previous card"
-                                >
-                                    <ChevronLeft size={16} className="text-[#0D2D52]" />
-                                </button>
+                                {/* Navigation */}
+                                <div className="w-full flex justify-center mt-6">
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={() => canPrev && goToPage(currentPage - 1)}
+                                            disabled={!canPrev}
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 bg-white transition-all ${canPrev ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
+                                                }`}
+                                            aria-label="Previous page"
+                                        >
+                                            <ChevronLeft size={16} className="text-[#0D2D52]" />
+                                        </button>
 
-                                <span className="text-[#0C447C] text-sm font-bold min-w-[110px] text-center font-display">
-                                    {slideIndex + 1} of {total} Services
-                                </span>
+                                        <span className="text-[#0C447C] text-sm font-bold min-w-[110px] text-center font-display">
+                                            {currentPage} of {totalPages} Services
+                                        </span>
 
-                                <button
-                                    onClick={() => canNext && setSlideIndex(slideIndex + 1)}
-                                    disabled={!canNext}
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 bg-white transition-all ${canNext ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
-                                        }`}
-                                    aria-label="Next card"
-                                >
-                                    <ChevronRight size={16} className="text-[#0D2D52]" />
-                                </button>
-                            </div>
-                        </div>
+                                        <button
+                                            onClick={() => canNext && goToPage(currentPage + 1)}
+                                            disabled={!canNext}
+                                            className={`w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 bg-white transition-all ${canNext ? "opacity-100 cursor-pointer hover:bg-gray-50" : "opacity-40 cursor-not-allowed"
+                                                }`}
+                                            aria-label="Next page"
+                                        >
+                                            <ChevronRight size={16} className="text-[#0D2D52]" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
 
                     </div>
                 </div>

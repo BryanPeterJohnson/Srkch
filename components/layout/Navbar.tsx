@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 
 const NAV_ITEMS = [
+  { label: "Home", href: "/" },
   {
     label: "Our Services",
     href: "/services",
@@ -79,8 +80,8 @@ export default function Header() {
         </div>
 
         <nav className="px-6 py-4 divide-y divide-gray-100">
-          <a href="tel:+14439859368" className="flex items-center gap-2 py-4 text-[#005B8E] font-bold text-[16px]">
-            <Phone size={18} /> +1 (443) 985-9368
+          <a href="tel:+14436273806" className="flex items-center gap-2 py-4 text-[#005B8E] font-bold text-[16px]">
+            <Phone size={18} /> +1 (443) 627-3806
           </a>
 
           {NAV_ITEMS.map((item) => (
@@ -217,11 +218,11 @@ export default function Header() {
             </a>
 
             <a
-              href="tel:+14439859368"
+              href="tel:+14436273806"
               className="inline-flex items-center gap-2 px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-bold text-white bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               <Phone size={18} />
-              <span>+1 (443) 985-9368</span>
+              <span>+1 (443) 627-3806</span>
             </a>
           </nav>
 
