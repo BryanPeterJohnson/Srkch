@@ -465,7 +465,7 @@ export function ServicesByCategory() {
                                         </button>
 
                                         <span className="text-[#0C447C] text-sm font-bold min-w-[140px] text-center font-display">
-                                            Page {currentPage} of {totalPages} · {total} Services
+                                            Page {currentPage} of {totalPages} Services
                                         </span>
 
                                         <button

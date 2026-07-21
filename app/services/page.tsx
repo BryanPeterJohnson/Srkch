@@ -24,11 +24,15 @@ const FILTER_OPTIONS: {
   ];
 
 /**
- * NO DE-DUPLICATION.
+ * FILTER / SEARCH PRIORITY
  *
- * Every age variant is its own card with its own inner content and its own
- * page, so "All Services" lists all of them. Collapsing variants would make
- * the other age groups unreachable from the All tab.
+ * 1. Search wins. A non-empty query spans EVERY service in EVERY age group,
+ *    ignoring `activeFilter` entirely — matching the homepage section. This
+ *    prevents "no results" when the match exists in a group that isn't open.
+ * 2. Otherwise the age-group filter applies; "all" lists every variant.
+ *
+ * NO DE-DUPLICATION: every age variant is its own card with its own page,
+ * so collapsing variants would make other age groups unreachable.
  */
 
 export default function ServicesPage() {
@@ -36,28 +40,31 @@ export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const q = searchQuery.toLowerCase().trim();
+  const isSearching = q.length > 0;
+
   const handleFilterChange = (id: PatientGroup | "all") => {
     const next = activeFilter === id && id !== "all" ? "all" : id;
     setActiveFilter(next);
+    setSearchQuery("");
     gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const filteredServices = useMemo(() => {
-    // Pick the right variant set first, THEN dedupe, THEN search.
-    const base =
-      activeFilter === "all"
-        ? services
-        : services.filter((s) => s.group === activeFilter);
+    // PRIORITY 1 — Search overrides the filter and spans all groups.
+    if (isSearching) {
+      return services.filter(
+        (s) =>
+          s.title.toLowerCase().includes(q) ||
+          s.shortTitle.toLowerCase().includes(q)
+      );
+    }
 
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return base;
-
-    return base.filter(
-      (s) =>
-        s.title.toLowerCase().includes(q) ||
-        s.shortTitle.toLowerCase().includes(q)
-    );
-  }, [activeFilter, searchQuery]);
+    // PRIORITY 2 — Age-group filter.
+    return activeFilter === "all"
+      ? services
+      : services.filter((s) => s.group === activeFilter);
+  }, [activeFilter, q, isSearching]);
 
   return (
     <div className="min-h-screen bg-white font-display">
@@ -149,13 +156,17 @@ export default function ServicesPage() {
 
         <div className="flex flex-col md:flex-row gap-4 2xl:gap-8">
 
-          {/* Sidebar Accordion */}
-          <aside className="w-full md:w-80 flex-shrink-0">
+          {/* Sidebar Accordion — dimmed while a search is active, since search
+              spans all groups and the filter is not in effect. */}
+          <aside
+            className={`w-full md:w-80 flex-shrink-0 transition-opacity duration-200 ${isSearching ? "opacity-60" : "opacity-100"
+              }`}
+          >
             <h3 className="font-bold text-black mb-6 text-xl font-display">Filter Categories</h3>
             <div className="flex flex-col">
               {FILTER_OPTIONS.map((option) => {
                 const Icon = option.icon;
-                const isActive = activeFilter === option.id;
+                const isActive = !isSearching && activeFilter === option.id;
                 const isAll = option.id === "all";
 
                 // This panel only renders for the age groups, so it always
@@ -166,10 +177,11 @@ export default function ServicesPage() {
                   <div key={option.id} className="border-b border-gray-200 last:border-0">
                     <button
                       onClick={() => handleFilterChange(option.id)}
-                      className="w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50"
+                      className={`w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50 ${isActive ? "bg-gray-50" : ""
+                        }`}
                     >
                       <div className="flex items-center gap-3 pr-3">
-                        <Icon className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"
+                        <Icon className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500 group-hover:text-[#005B8E]"
                           }`} />
                         <div>
                           <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"
@@ -218,7 +230,7 @@ export default function ServicesPage() {
 
           {/* Main Grid */}
           <div className="flex-1" ref={gridRef}>
-            <div className="relative mb-8">
+            <div className="relative mb-4">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
@@ -228,6 +240,25 @@ export default function ServicesPage() {
                 className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 focus:border-[#1a365d]/30 transition font-display"
               />
             </div>
+
+            {/* Search-active banner — makes the override explicit */}
+            {isSearching && (
+              <div className="mb-6 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-2.5 text-[13px] text-slate-600 font-display">
+                <span>
+                  Showing{" "}
+                  <b className="text-[#0C447C]">{filteredServices.length}</b> result
+                  {filteredServices.length === 1 ? "" : "s"} across all age groups
+                </span>
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-[#005B8E] font-semibold hover:underline cursor-pointer"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+
+            {!isSearching && <div className="mb-8" />}
 
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 2xl:gap-6">
               <AnimatePresence mode="popLayout">
@@ -306,7 +337,7 @@ export default function ServicesPage() {
                 <p className="text-lg font-medium font-display">No services match your search.</p>
                 <button
                   onClick={() => { setActiveFilter("all"); setSearchQuery(""); }}
-                  className="mt-4 text-sm text-[#005B8E] hover:underline font-semibold font-display"
+                  className="mt-4 text-sm text-[#005B8E] hover:underline font-semibold font-display cursor-pointer"
                 >
                   Clear filters
                 </button>

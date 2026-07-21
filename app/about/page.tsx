@@ -107,7 +107,7 @@ const MVV_TABS: MvvTab[] = [
       "To be the region's most trusted leader in personalized home care services—recognized for delivering reliable, culturally attuned, and responsive support.",
       "We aspire to set the benchmark for excellence by consistently exceeding expectations, ensuring that every client and family experiences care marked by empathy, integrity, and mutual respect.",
     ],
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1000&q=80",
+image: "/images/About/vision.png",
     accent: "#0C447C",
   },
   {
