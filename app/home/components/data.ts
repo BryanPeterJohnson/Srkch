@@ -29,6 +29,10 @@ export const heroSlides = [
 ];
 
 // ─── Services-by-Category Data ────────────────────────────────────────────────
+// NOTE: ServicesByCategory.tsx no longer reads this array — it derives its
+// categories from app/services/data.ts so the two can't drift apart. Kept here
+// only in case another component still imports it. Safe to delete once nothing
+// references `categoryData`.
 export const categoryData = [
     {
         id: "seniors",
@@ -39,7 +43,7 @@ export const categoryData = [
             {
                 title: "Personal Care & Daily Living Assistance",
                 desc: "Support with bathing, grooming, dressing, mobility, and everyday routines to maintain dignity and independence at home.",
-                     img: "/images/Home/services-1.png",
+                img: "/images/Home/services-1.png",
                 path: "/services/personal-care",
                 icon: "🤲",
             },
