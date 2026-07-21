@@ -54,6 +54,46 @@ const CARD_DESC: Record<string, string> = {
     "pediatric-care": "Gentle personal care and companionship tailored for children's comfort and well-being.",
 };
 
+/**
+ * SEARCH INDEX
+ *
+ * Mirrors /services: search spans TWO fields only — the service name and the
+ * categorizedFeatures list. Description, tagline, whoFor, howItWorks and
+ * category metadata are deliberately excluded, since matching on those
+ * surfaced cards where the query term was nowhere in the visible copy.
+ *
+ * Keyed by the same `${baseId}-${group}` identity used for card keys.
+ */
+type SearchField = "title" | "features";
+
+const FIELD_LABELS: Record<SearchField, string> = {
+    title: "Service name",
+    features: "What's included",
+};
+
+/** Priority order — the first matching field is the one shown on the card. */
+const FIELD_ORDER: SearchField[] = ["title", "features"];
+
+const searchIndex = new Map<string, Record<SearchField, string>>(
+    services.map((s) => [
+        `${s.baseId}-${s.group}`,
+        {
+            title: [s.title, s.shortTitle].filter(Boolean).join(" ").toLowerCase(),
+            features: (s.categorizedFeatures ?? [])
+                .flatMap((f) => [f.title, ...f.items])
+                .join(" ")
+                .toLowerCase(),
+        },
+    ])
+);
+
+/** Returns the highest-priority field containing `q`, or null if none match. */
+function matchField(key: string, q: string): SearchField | null {
+    const entry = searchIndex.get(key);
+    if (!entry) return null;
+    return FIELD_ORDER.find((f) => entry[f].includes(q)) ?? null;
+}
+
 const GROUP_META: {
     id: PatientGroup;
     title: string;
@@ -109,15 +149,20 @@ export function ServicesByCategory() {
     const q = searchQuery.toLowerCase().trim();
     const isSearching = q.length > 0;
 
-    // Search spans every service in every age group.
+    /**
+     * Search spans every service in every age group, ignoring the open
+     * category. Each result carries the field its match came from so a
+     * feature-only hit can label itself on the card.
+     */
     const searchResults = useMemo(
         () =>
             isSearching
-                ? services.filter(
-                    (s) =>
-                        s.title.toLowerCase().includes(q) ||
-                        s.shortTitle.toLowerCase().includes(q)
-                )
+                ? services
+                    .map((s) => ({
+                        service: s,
+                        matchedIn: matchField(`${s.baseId}-${s.group}`, q),
+                    }))
+                    .filter((r) => r.matchedIn !== null)
                 : [],
         [q, isSearching]
     );
@@ -126,6 +171,7 @@ export function ServicesByCategory() {
         setOpenCat(openCat === i ? null : i);
         setSlideIndex(0);
         setSelectedIndex(0);
+        setSearchQuery("");
     };
 
     const maxIndex = Math.max(0, total - CARDS_VISIBLE);
@@ -145,6 +191,7 @@ export function ServicesByCategory() {
         setSelectedIndex(serviceIndex);
         const catTotal = CATEGORIES[catIndex].services.length;
         setSlideIndex(Math.min(serviceIndex, Math.max(0, catTotal - CARDS_VISIBLE)));
+        setSearchQuery("");
     };
 
     useEffect(() => {
@@ -225,8 +272,11 @@ export function ServicesByCategory() {
                 {/* Two-column layout */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
-                    {/* LEFT: Accordion filter */}
-                    <aside className="w-full lg:w-80 flex-shrink-0 lg:ml-6">
+                    {/* LEFT: Accordion filter — dimmed while a search is active, since
+                        search spans all groups and the category is not in effect. */}
+                    <aside
+                        className={`w-full lg:w-80 flex-shrink-0 lg:ml-6 transition-opacity duration-200 ${isSearching ? "opacity-60" : "opacity-100"}`}
+                    >
                         <h3 className="font-bold text-black mb-6 text-xl font-display">Filter Categories</h3>
                         <div className="flex flex-col">
 
@@ -234,11 +284,11 @@ export function ServicesByCategory() {
                             <div className="border-b border-gray-200">
                                 <button
                                     onClick={() => handleCatClick(null)}
-                                    className={`w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group ${openCat === null ? "bg-gray-50 text-[#005B8E]" : "hover:bg-gray-50"}`}
+                                    className={`w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group ${!isSearching && openCat === null ? "bg-gray-50 text-[#005B8E]" : "hover:bg-gray-50"}`}
                                 >
                                     <div className="flex items-center gap-3 pr-3">
-                                        <Heart className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${openCat === null ? "text-[#005B8E]" : "text-gray-500 group-hover:text-[#005B8E]"}`} />
-                                        <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${openCat === null ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"}`}>
+                                        <Heart className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${!isSearching && openCat === null ? "text-[#005B8E]" : "text-gray-500 group-hover:text-[#005B8E]"}`} />
+                                        <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${!isSearching && openCat === null ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"}`}>
                                             All Services
                                         </div>
                                     </div>
@@ -247,7 +297,7 @@ export function ServicesByCategory() {
 
                             {/* Age-group categories — expandable, drive the slider */}
                             {CATEGORIES.map((cat, i) => {
-                                const isActive = openCat === i;
+                                const isActive = !isSearching && openCat === i;
                                 const CatIcon = cat.Icon;
 
                                 return (
@@ -312,7 +362,7 @@ export function ServicesByCategory() {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             <input
                                 type="text"
-                                placeholder="Search services by name..."
+                                placeholder="Search services by name or what's included..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C447C]/20 focus:border-[#0C447C]/30 transition font-display"
@@ -322,10 +372,26 @@ export function ServicesByCategory() {
                         {isSearching ? (
                             /* ── Search results grid (all groups) ── */
                             <div className="w-full" style={{ maxWidth: viewportWidth + 16 }}>
+
+                                {/* Search-active banner — makes the override explicit */}
+                                <div className="mb-6 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-2.5 text-[13px] text-slate-600 font-display">
+                                    <span>
+                                        Showing{" "}
+                                        <b className="text-[#0C447C]">{searchResults.length}</b> result
+                                        {searchResults.length === 1 ? "" : "s"} across all age groups
+                                    </span>
+                                    <button
+                                        onClick={() => setSearchQuery("")}
+                                        className="text-[#005B8E] font-semibold hover:underline cursor-pointer"
+                                    >
+                                        Clear
+                                    </button>
+                                </div>
+
                                 {searchResults.length > 0 ? (
                                     <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                                         <AnimatePresence mode="popLayout">
-                                            {searchResults.map((svc, i) => (
+                                            {searchResults.map(({ service: svc, matchedIn }, i) => (
                                                 <motion.div
                                                     layout
                                                     key={`${svc.baseId}-${svc.group}`}
@@ -365,6 +431,16 @@ export function ServicesByCategory() {
                                                             <p className="text-[#6B7280] text-[13px] leading-relaxed line-clamp-3 mb-3 font-display flex-1">
                                                                 {cardDesc(svc)}
                                                             </p>
+
+                                                            {/* Match attribution — only meaningful for feature hits,
+                                                                where the query isn't visible in the card copy. */}
+                                                            {matchedIn === "features" && (
+                                                                <div className="mb-3 inline-flex items-center gap-1 self-start rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 font-display">
+                                                                    <Search className="w-2.5 h-2.5" />
+                                                                    Matched in {FIELD_LABELS.features}
+                                                                </div>
+                                                            )}
+
                                                             <span
                                                                 className="inline-flex items-center gap-1 text-[13px] font-bold font-display"
                                                                 style={{ color: "#E57531" }}

@@ -24,6 +24,46 @@ const FILTER_OPTIONS: {
   ];
 
 /**
+ * SEARCH INDEX
+ *
+ * Search spans TWO fields only: the service name and the categorizedFeatures
+ * list. Description, tagline, whoFor, howItWorks and category metadata are
+ * deliberately excluded — matching on those produced cards where the query
+ * term was nowhere in the visible copy.
+ *
+ * Keyed by the same `${baseId}-${group}` identity used for card keys.
+ */
+type SearchField = "title" | "features";
+
+const FIELD_LABELS: Record<SearchField, string> = {
+  title: "Service name",
+  features: "What's included",
+};
+
+/** Priority order — the first matching field is the one shown on the card. */
+const FIELD_ORDER: SearchField[] = ["title", "features"];
+
+const searchIndex = new Map<string, Record<SearchField, string>>(
+  services.map((s) => [
+    `${s.baseId}-${s.group}`,
+    {
+      title: [s.title, s.shortTitle].filter(Boolean).join(" ").toLowerCase(),
+      features: (s.categorizedFeatures ?? [])
+        .flatMap((f) => [f.title, ...f.items])
+        .join(" ")
+        .toLowerCase(),
+    },
+  ])
+);
+
+/** Returns the highest-priority field containing `q`, or null if none match. */
+function matchField(key: string, q: string): SearchField | null {
+  const entry = searchIndex.get(key);
+  if (!entry) return null;
+  return FIELD_ORDER.find((f) => entry[f].includes(q)) ?? null;
+}
+
+/**
  * FILTER / SEARCH PRIORITY
  *
  * 1. Search wins. A non-empty query spans EVERY service in EVERY age group,
@@ -50,20 +90,28 @@ export default function ServicesPage() {
     gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  /**
+   * Each result carries the service plus the field its match came from, so a
+   * feature-only hit can label itself on the card.
+   */
   const filteredServices = useMemo(() => {
     // PRIORITY 1 — Search overrides the filter and spans all groups.
     if (isSearching) {
-      return services.filter(
-        (s) =>
-          s.title.toLowerCase().includes(q) ||
-          s.shortTitle.toLowerCase().includes(q)
-      );
+      return services
+        .map((s) => ({
+          service: s,
+          matchedIn: matchField(`${s.baseId}-${s.group}`, q),
+        }))
+        .filter((r) => r.matchedIn !== null);
     }
 
     // PRIORITY 2 — Age-group filter.
-    return activeFilter === "all"
-      ? services
-      : services.filter((s) => s.group === activeFilter);
+    const base =
+      activeFilter === "all"
+        ? services
+        : services.filter((s) => s.group === activeFilter);
+
+    return base.map((s) => ({ service: s, matchedIn: null as SearchField | null }));
   }, [activeFilter, q, isSearching]);
 
   return (
@@ -234,7 +282,7 @@ export default function ServicesPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search services by name..."
+                placeholder="Search services by name or what's included..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-14 pl-12 pr-4 text-base text-black bg-white border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a365d]/20 focus:border-[#1a365d]/30 transition font-display"
@@ -262,7 +310,7 @@ export default function ServicesPage() {
 
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 2xl:gap-6">
               <AnimatePresence mode="popLayout">
-                {filteredServices.map((service) => {
+                {filteredServices.map(({ service, matchedIn }) => {
                   const Icon = service.icon;
 
                   return (
@@ -318,6 +366,16 @@ export default function ServicesPage() {
                           <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-2 font-display">
                             {service.description}
                           </p>
+
+                          {/* Match attribution — only meaningful for feature hits,
+                              where the query isn't visible in the card copy. */}
+                          {matchedIn === "features" && (
+                            <div className="mb-2 inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 font-display">
+                              <Search className="w-2.5 h-2.5" />
+                              Matched in {FIELD_LABELS.features}
+                            </div>
+                          )}
+
                           <div
                             className="flex items-center gap-1 text-xs font-bold font-display"
                             style={{ color: service.accent }}
