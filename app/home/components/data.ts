@@ -244,9 +244,9 @@ export const trustBadges = [
 
 // ─── Care at Home section ─────────────────────────────────────────────────────
 export const carePoints = [
-    "Personalized care tailored to your specific health care needs.",
-    "Recovery and support in the comfort and safety of your home.",
-    "Assistance with managing chronic conditions or illnesses.",
-    "Care coordination to support your transition home from the hospital or inpatient rehab center.",
-    "Greater independence and peace of mind for both patients and caregivers.",
+    "Personal care and daily living assistance.",
+    "Companionship and safety support.",
+    "Meal preparation and light housekeeping.",
+    "Medication reminders and wellness checks.",
+    "Respite and post-hospital support.",
 ];

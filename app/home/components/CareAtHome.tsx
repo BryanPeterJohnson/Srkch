@@ -18,7 +18,7 @@ export function CareAtHome() {
                         transition={{ duration: 0.7, ease: "easeOut" }}
                     >
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0D2D52] mb-5 sm:mb-6 font-display">
-                            The care you need in a place you love. <span className="text-[#E57531]"> At Home. </span>
+                            The Care You Need, in the Place You Love— <span className="text-[#E57531]"> At Home. </span>
                         </h2>
 
                         <p
