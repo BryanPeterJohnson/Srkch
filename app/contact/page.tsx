@@ -323,7 +323,7 @@ export default function ContactPage() {
                   <Phone size={18} className="text-[#005B8E] flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-[#1A1A2E] font-semibold text-sm">
-                      (800) SRK-CARE
+                      (443) 627-3806
                     </div>
                     <div className="text-[#6B7280] text-xs">Emergency line available 24/7</div>
                   </div>
