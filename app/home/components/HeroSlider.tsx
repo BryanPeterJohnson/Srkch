@@ -106,18 +106,12 @@ export function HeroSlider() {
 
                             {/* BUTTONS */}
                             <div className="flex gap-3 flex-wrap items-center pt-2">
-                                <button
-                                    onClick={() => {
-                                        document.getElementById("services")?.scrollIntoView({
-                                            behavior: "smooth",
-                                            block: "start",
-                                        });
-                                    }}
-                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0A3968] text-white font-bold rounded-xl transition-all shadow-md text-sm"
-                                >
-                                    Find a Services
-                                    
-                                </button>
+                               <Link
+    href="/services"
+    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0A3968] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+>
+    Find a Service
+</Link>
 
                                 <Link
                                     href="/get-started"

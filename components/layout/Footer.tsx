@@ -6,6 +6,7 @@ import {
     FaInstagram,
     FaTwitter,
     FaYoutube,
+    FaLinkedinIn,
 } from "react-icons/fa";
 const services = [
     { name: "Personal Care", path: "/services/personal-care" },
@@ -15,6 +16,22 @@ const services = [
     { name: "Meal Preparation", path: "/services/meal-preparation" },
     { name: "Skilled Nursing Care", path: "/services/skilled-nursing" },
     { name: "24-Hour Home Care", path: "/services/24-hour-care" },
+];
+
+const socials = [
+    {
+        icon: FaFacebookF,
+        label: "Facebook",
+        href: "https://www.facebook.com/profile.php?id=61591856372880",
+    },
+    {
+        icon: FaLinkedinIn,
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/company/srk-care-at-home/?viewAsMember=true",
+    },
+    { icon: FaInstagram, label: "Instagram", href: "#" },
+    { icon: FaTwitter, label: "Twitter", href: "#" },
+    { icon: FaYoutube, label: "YouTube", href: "#" },
 ];
 
 export function Footer() {
@@ -37,16 +54,13 @@ export function Footer() {
                             Compassionate, professional home care services tailored to help your loved ones remain independent in the comfort of their own home.
                         </p>
                         <div className="flex items-center gap-3">
-                            {[
-                                { icon: FaFacebookF, label: "Facebook" },
-                                { icon: FaInstagram, label: "Instagram" },
-                                { icon: FaTwitter, label: "Twitter" },
-                                { icon: FaYoutube, label: "YouTube" },
-                            ].map(({ icon: Icon, label }) => (
+                            {socials.map(({ icon: Icon, label, href }) => (
                                 <a
                                     key={label}
-                                    href="#"
+                                    href={href}
                                     aria-label={label}
+                                    target={href === "#" ? undefined : "_blank"}
+                                    rel={href === "#" ? undefined : "noopener noreferrer"}
                                     className="w-9 h-9 rounded-full flex items-center justify-center bg-white/10 text-white/70 hover:bg-[#00A693] hover:text-white transition-all"
                                 >
                                     <Icon size={16} />
@@ -106,7 +120,7 @@ export function Footer() {
                             <li className="flex items-start gap-3">
                                 <Phone size={16} className="text-[#00A693] flex-shrink-0 mt-0.5" />
                                 <div>
-                                    <div className="text-sm text-white font-semibold" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>(800) SRK-CARE</div>
+                                    <a href="tel:+14436273806" className="text-sm text-white font-semibold hover:text-[#00A693] transition-colors" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>(443) 627-3806</a>
                                     <div className="text-xs text-white/60" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>Available 24/7</div>
                                 </div>
                             </li>
@@ -130,9 +144,23 @@ export function Footer() {
                                     Fulton, MD 20759
                                 </a>
                             </li>
+                            <li className="flex items-start gap-3">
+                                <MapPin size={16} className="text-[#00A693] flex-shrink-0 mt-0.5" />
+                                <a
+                                    href="https://maps.google.com/?q=10451+Mill+Run+Cir+%23400,+Owings+Mills,+MD+21117"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-white/70 hover:text-[#00A693] transition-colors"
+                                    style={{ fontFamily: "'Source Sans 3', sans-serif" }}
+                                >
+                                    10451 Mill Run Cir #400
+                                    <br />
+                                    Owings Mills, MD 21117
+                                </a>
+                            </li>
                             <li>
                                 <a
-                                    href="https://wa.me/18005752273"
+                                    href="https://wa.me/14436273806"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"

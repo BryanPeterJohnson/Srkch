@@ -109,11 +109,11 @@ function PromiseCard() {
         <p className="mb-4 text-[11px] leading-5 text-slate-600">
           Every caregiver is background-checked, insured, and rigorously trained before entering a client's home.
         </p>
-        <a href="/contact" className="flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-4 text-[11px] font-black text-white transition hover:bg-[#08345F]">
+        <a href="/get-started" className="flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-4 text-[11px] font-black text-white transition hover:bg-[#08345F]">
           Request a Free Consultation <ArrowRight className="h-3 w-3 shrink-0" />
         </a>
-        <a href="tel:+14439859368" className="mt-2 flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white px-4 text-[11px] font-black text-[#0C447C] transition hover:bg-[#F3F8FC]">
-          <Phone className="h-3 w-3" /> Call (443) 985-9368
+        <a href="tel:+14436273806" className="mt-2 flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white px-4 text-[11px] font-black text-[#0C447C] transition hover:bg-[#F3F8FC]">
+          <Phone className="h-3 w-3" /> Call (443) 627-3806
         </a>
       </div>
     </div>
@@ -215,11 +215,11 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </div>
 
             <div className="mt-8 flex gap-4">
-              <a href="/contact" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
+              <a href="/get-started" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
                 Request a Free Consultation <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="tel:+14439859368" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
-                <Phone className="h-4 w-4" /> Call (443) 985-9368
+              <a href="tel:+14436273806" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
+                <Phone className="h-4 w-4" /> Call (443) 6273806
               </a>
             </div>
           </div>
@@ -421,10 +421,10 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-<a href="tel:+14439859368" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
-              <Phone className="h-4 w-4" /> Call (443) 985-9368
+<a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
+              <Phone className="h-4 w-4" /> Call (443) 627-3806
             </a>
-<a href="/contact" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap">            
+<a href="/get-started" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap">            
    Request a Free Consultation <ArrowRight className="h-4 w-4" />
             </a>
           </div>

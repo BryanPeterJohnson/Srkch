@@ -342,7 +342,7 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <MapPin size={18} className="text-[#005B8E] flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-[#1A1A2E] text-sm font-semibold">Office Address</div>
+                    <div className="text-[#1A1A2E] text-sm font-semibold">Fulton Office</div>
                     <a
                       href="https://maps.google.com/?q=8115+Maple+Lawn+Blvd+Suite+350,+Fulton,+MD+20759"
                       target="_blank"
@@ -352,6 +352,23 @@ export default function ContactPage() {
                       8115 Maple Lawn Blvd, Suite 350
                       <br />
                       Fulton, MD 20759
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <MapPin size={18} className="text-[#005B8E] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-[#1A1A2E] text-sm font-semibold">Owings Mills Office</div>
+                    <a
+                      href="https://maps.google.com/?q=10451+Mill+Run+Cir+%23400,+Owings+Mills,+MD+21117"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#6B7280] text-sm hover:text-[#005B8E] transition-colors block"
+                    >
+                      10451 Mill Run Cir #400
+                      <br />
+                      Owings Mills, MD 21117
                     </a>
                   </div>
                 </div>
@@ -380,21 +397,41 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Map placeholder */}
-            <div
-              className="rounded-2xl overflow-hidden flex items-center justify-center"
-              style={{
-                height: 220,
-                background: "linear-gradient(135deg, #E8F4FD, #D4EEF7)",
-                boxShadow: "0 4px 20px rgba(0,91,142,0.08)",
-              }}
-            >
-              <div className="text-center">
-                <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
-                <div className="text-sm text-[#6B7280]">
-                  8115 Maple Lawn Blvd, Suite 350
-                  <br />
-                  Fulton, MD 20759
+            {/* Map placeholders */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div
+                className="rounded-2xl overflow-hidden flex items-center justify-center"
+                style={{
+                  height: 220,
+                  background: "linear-gradient(135deg, #E8F4FD, #D4EEF7)",
+                  boxShadow: "0 4px 20px rgba(0,91,142,0.08)",
+                }}
+              >
+                <div className="text-center px-3">
+                  <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
+                  <div className="text-sm text-[#6B7280]">
+                    8115 Maple Lawn Blvd, Suite 350
+                    <br />
+                    Fulton, MD 20759
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="rounded-2xl overflow-hidden flex items-center justify-center"
+                style={{
+                  height: 220,
+                  background: "linear-gradient(135deg, #E8F4FD, #D4EEF7)",
+                  boxShadow: "0 4px 20px rgba(0,91,142,0.08)",
+                }}
+              >
+                <div className="text-center px-3">
+                  <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
+                  <div className="text-sm text-[#6B7280]">
+                    10451 Mill Run Cir #400
+                    <br />
+                    Owings Mills, MD 21117
+                  </div>
                 </div>
               </div>
             </div>
