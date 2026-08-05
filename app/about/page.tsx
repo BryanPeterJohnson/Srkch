@@ -377,18 +377,18 @@ export default function AboutPage() {
               <br />A Community&apos;s Mission.
             </h2>
             <p className="text-slate-600 leading-7 mb-4 font-display">
-              SRK Care at Home was co-founded by Omair Choudhry, a former
-              physician and community leader, and Salman Khan, a healthcare
-              entrepreneur—born from personal experience with the challenges
-              families face when a loved one needs care.
+              SRK Care at Home was co-founded by Dr. Omair Choudhry, MD,FACS,CPHQ,MPH., and Salman Khan, who share a common vision of
+               redefining home care through compassion, excellence, and unwavering commitment to the families they serve.
             </p>
             <p className="text-slate-600 leading-7 mb-4 font-display">
-              With over a decade of combined experience in healthcare,
-              compliance, and caregiving, our team sets the standard for
-              quality and trust in non-medical home care. Rooted in the
-              Laurel/Howard County community, we deliver care grounded in
-              respect for every family&apos;s cultural and religious
-              preferences.
+              Together, they bring a unique blend of clinical expertise, healthcare leadership, entrepreneurial innovation, and operational excellence. Dr. Choudhry contributes more than two decades of experience in healthcare, quality improvement, and patient-centered care, while Salman Khan, an accomplished healthcare entrepreneur and leader, brings extensive experience in building 
+              and leading healthcare organizations focused on exceptional service and positive patient experiences.
+            </p>
+                 <p className="text-slate-600 leading-7 mb-4 font-display">
+             Their combined expertise has shaped SRK Care at Home into a trusted provider of personalized, medical and non-medical home care. They believe every individual deserves to age with dignity, independence, and respect while receiving care tailored to their unique needs, values, cultural traditions, and religious preferences.
+            </p>
+                 <p className="text-slate-600 leading-7 mb-4 font-display">
+             Today, SRK Care at Home proudly serves families across all counties in Maryland, delivering dependable, compassionate care that enhances quality of life and provides families with confidence and peace of mind. Every decision is guided by the founders' shared commitment to treating every client as they would their own family.
             </p>
           </div>
 
