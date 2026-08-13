@@ -22,6 +22,8 @@ export function HeroSlider() {
     }, [current, next]);
 
     const activeImage = heroSlides[current].img;
+    const activePosition = heroSlides[current].objectPosition ?? "60% 25%";
+    const activeShift = heroSlides[current].translateY ?? "0px";
 
     const badges = [
         { icon: Mail, label: "Medicaid\nAccepted", color: "#E57531" },
@@ -31,7 +33,7 @@ export function HeroSlider() {
     ];
 
     return (
-        <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
+        <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:min-h-[620px] 2xl:max-h-[680px] overflow-hidden bg-white font-display">
 
             {/* SINGLE BACKGROUND IMAGE (prevents flick) */}
             <Image
@@ -41,7 +43,11 @@ export function HeroSlider() {
                 priority
                 sizes="100vw"
                 className="object-cover transition-opacity duration-1000"
-                style={{ opacity: 1, objectPosition: "60% 10%" }}
+                style={{
+                    opacity: 1,
+                    objectPosition: activePosition,
+                    transform: `translateY(${activeShift})`,
+                }}
             />
 
             {/* Gradient overlay */}
@@ -53,15 +59,14 @@ export function HeroSlider() {
 
             {/* STATIC CONTENT (never changes) */}
             <div className="absolute inset-0 z-[10]">
-                <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-32">
-                    <div className="max-w-[600px] h-full flex flex-col justify-center items-start text-left">
-                        <div className="space-y-6">
+                <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-40 mx-auto max-w-[1920px]">
+                    <div className="max-w-[600px] 2xl:max-w-[820px] h-full flex flex-col justify-center items-start text-left">
+                        <div className="space-y-6 2xl:space-y-9">
 
                             {/* HEADLINE */}
                             <h1
-                                className="font-display font-black text-[#0C447C]"
+                                className="font-display font-black text-[#0C447C] text-[clamp(34px,4.5vw,46px)] 2xl:text-[64px]"
                                 style={{
-                                    fontSize: "clamp(34px, 4.5vw, 46px)",
                                     lineHeight: 1.12,
                                     letterSpacing: "-0.5px",
                                 }}
@@ -72,11 +77,9 @@ export function HeroSlider() {
 
                             {/* SUBTEXT */}
                             <p
-                                className="font-display text-[#3E4C63]"
+                                className="font-display text-[#3E4C63] text-[clamp(14px,1.1vw,16px)] 2xl:text-[21px] max-w-[460px] 2xl:max-w-[620px]"
                                 style={{
-                                    fontSize: "clamp(14px, 1.1vw, 16px)",
                                     lineHeight: 1.6,
-                                    maxWidth: 460,
                                 }}
                             >
                                 Compassionate, professional home care services — so your
@@ -85,18 +88,16 @@ export function HeroSlider() {
                             </p>
 
                             {/* ICON BADGE ROW */}
-                            <div className="flex flex-wrap items-start gap-x-6 gap-y-4 pt-1">
+                            <div className="flex flex-wrap items-start gap-x-6 gap-y-4 2xl:gap-x-9 2xl:gap-y-5 pt-1">
                                 {badges.map((b, i) => (
-                                    <div key={i} className="flex items-center gap-2">
+                                    <div key={i} className="flex items-center gap-2 2xl:gap-3">
                                         <b.icon
-                                            size={22}
                                             strokeWidth={1.75}
-                                            className="flex-shrink-0"
+                                            className="flex-shrink-0 w-[22px] h-[22px] 2xl:w-8 2xl:h-8"
                                             style={{ color: b.color }}
                                         />
                                         <span
-                                            className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight"
-                                            style={{ fontSize: 12 }}
+                                            className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight text-[12px] 2xl:text-[16px]"
                                         >
                                             {b.label}
                                         </span>
@@ -105,19 +106,19 @@ export function HeroSlider() {
                             </div>
 
                             {/* BUTTONS */}
-                            <div className="flex gap-3 flex-wrap items-center pt-2">
+                            <div className="flex gap-3 2xl:gap-4 flex-wrap items-center pt-2">
                                <Link
     href="/services"
-    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0A3968] text-white font-bold rounded-xl transition-all shadow-md text-sm"
+    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#E57531] hover:bg-[#0A3968] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all shadow-md text-sm 2xl:text-lg"
 >
     Find a Service
 </Link>
 
                                 <Link
                                     href="/get-started"
-                                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm"
+                                    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all text-sm 2xl:text-lg"
                                 >
-                                    <Phone size={15} />
+                                    <Phone className="w-[15px] h-[15px] 2xl:w-5 2xl:h-5" />
                                     Request a Free Consultation
                                 </Link>
                             </div>
@@ -128,7 +129,7 @@ export function HeroSlider() {
             </div>
 
             {/* DOTS */}
-            <div className="absolute bottom-8 left-6 lg:left-16 z-20 flex items-center gap-3">
+            <div className="absolute bottom-8 2xl:bottom-12 left-6 lg:left-16 2xl:left-40 z-20 flex items-center gap-3">
                 {heroSlides.map((_, i) => (
                     <button
                         key={i}

@@ -406,12 +406,13 @@ export function ServicesByCategory() {
                                                         <div className="relative">
                                                             <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
                                                                 <Image
-                                                                    src={svc.image || "/images/placeholder-care.jpg"}
-                                                                    alt={svc.title}
-                                                                    fill
-                                                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                                    sizes="195px"
-                                                                />
+    src={svc.image || "/images/placeholder-care.jpg"}
+    alt={svc.title}
+    fill
+    className="object-cover group-hover:scale-105 transition-transform duration-500"
+    style={{ objectPosition: cardPosition(svc) }}
+    sizes="390px"
+/>
                                                                 <div className="absolute top-2 right-2 z-10 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/95 text-slate-600 shadow-sm font-display">
                                                                     {GROUP_NAMES[svc.group]}
                                                                 </div>
@@ -493,7 +494,7 @@ export function ServicesByCategory() {
                                                                 alt={svc.title}
                                                                 fill
                                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                                sizes="195px"
+                                                                sizes="390px"
                                                             />
                                                             <div className="absolute top-2 right-2 z-10 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/95 text-slate-600 shadow-sm font-display">
                                                                 {GROUP_NAMES[svc.group]}

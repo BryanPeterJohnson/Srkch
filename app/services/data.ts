@@ -98,7 +98,7 @@ export const services = [
     baseId: "personal-care",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/personal-care",
+    href: "/services/personal-care?group=seniors",
 
     categorizedFeatures: [
       {
@@ -211,7 +211,7 @@ export const services = [
     icon: Heart,
 
     // Updated image (professional caregiver assisting an elderly client at home)
-    image: "/images/Services/personal-care.png",
+    image: "/images/Services/Adults/personal-care.jpg",
 
     accent: "#E57531",
     accentLight: "#fdf0f7",
@@ -222,7 +222,7 @@ export const services = [
     baseId: "personal-care",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/personal-care",
+    href: "/services/personal-care?group=adults",
 
     categorizedFeatures: [
       {
@@ -341,7 +341,7 @@ export const services = [
     baseId: "companion-care",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/companion-care",
+    href: "/services/companion-care?group=seniors",
     categorizedFeatures: [
       { title: "Companionship & Emotional Support", icon: MessageCircle, items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"] },
       { title: "Recreational & Leisure Activities", icon: Gamepad2, items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"] },
@@ -372,7 +372,8 @@ export const services = [
     tagline: "Connection that transforms quality of life.",
     description: "At SRK Care at Home, our companion care services support adults ages 19–64 who are socially isolated because of disability, chronic illness, or limited mobility. Our caregivers provide conversation, shared activities, and accompaniment to community events, appointments, and errands—helping adults stay connected to the interests, people, and routines that matter to them. Companionship also gives family members reassurance that their relative is not spending long stretches alone. We also support eligible adults through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Users,
-    image: "/images/Services/0.png",
+    image: "/images/Services/Adults/Companion.png",
+    
     accent: "#E57531",
     accentLight: "#f0fdfb",
     category: "Wellness",
@@ -381,7 +382,7 @@ export const services = [
     baseId: "companion-care",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/companion-care",
+    href: "/services/companion-care?group=adults",
     categorizedFeatures: [
       { title: "Companionship & Emotional Support", icon: MessageCircle, items: ["Friendly conversation", "Emotional reassurance", "Meaningful companionship", "Social interaction and engagement"] },
       { title: "Recreational & Leisure Activities", icon: Gamepad2, items: ["Games and puzzles", "Reading and storytelling", "Arts and crafts", "Music and hobbies", "Indoor and outdoor activities"] },
@@ -412,7 +413,7 @@ export const services = [
     tagline: "Specialized, compassionate support for cognitive change.",
     description: "At SRK Care at Home, our Memory Care services support seniors age 65 and older living with memory loss, Alzheimer's, or dementia. Our compassionate caregivers provide personalized assistance, safety monitoring, daily routine support, companionship, and emotional reassurance to help your loved one feel safe, respected, and cared for at home. Familiar surroundings and a consistent daily structure can reduce confusion and agitation, and our caregivers also watch for fall risks, wandering, and changes in condition. We also support eligible seniors through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services, helping families access reliable in-home memory care.",
     icon: Brain,
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Services/Seniors/Memory.jpg",
     accent: "#E57531",
     accentLight: "#f5f0ff",
     category: "Specialized Care",
@@ -421,7 +422,7 @@ export const services = [
     baseId: "memory-care",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/memory-care",
+    href: "/services/memory-care?group=seniors",
     categorizedFeatures: [
       { title: "Alzheimer's & Dementia Support", icon: Brain, items: ["Memory cueing and reminders", "Routine reinforcement", "Orientation assistance", "Structured daily schedules", "Redirection and reassurance"] },
       { title: "Cognitive Wellness Support", icon: Lightbulb, items: ["Reminiscence activities", "Memory games and exercises", "Cognitive engagement activities", "Social interaction for cognitive stimulation"] },
@@ -460,7 +461,7 @@ export const services = [
     baseId: "home-nutrition",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/home-nutrition",
+    href: "/services/home-nutrition?group=seniors",
     categorizedFeatures: [
       { title: "Meal Planning & Preparation", icon: ChefHat, items: ["Meal planning", "Grocery list preparation", "Meal preparation", "Healthy snack preparation", "Special dietary accommodation support"] },
       { title: "Nutrition & Hydration Support", icon: Droplets, items: ["Feeding assistance", "Hydration reminders", "Nutrition encouragement", "Monitoring food intake"] },
@@ -485,7 +486,7 @@ export const services = [
     tagline: "Rest is not a luxury. It's a medical necessity.",
     description: "At SRK Care at Home, our respite care services give family caregivers of seniors age 65 and older a reliable break. A trained caregiver steps into the existing routine—personal care, meals, medication reminders, companionship, and safety monitoring—so your loved one's day continues uninterrupted while you rest, work, travel, or handle your own health. Respite runs from a few hours a week to multi-week coverage. We also support eligible seniors through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Smile,
-    image: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Services/Seniors/family_respite_adult.jpg",
     accent: "#E57531",
     accentLight: "#fff0f3",
     category: "Family Support",
@@ -494,7 +495,7 @@ export const services = [
     baseId: "respite-care",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/respite-care",
+    href: "/services/respite-care?group=seniors",
     categorizedFeatures: [
       { title: "In-Home Respite Care", icon: Home, items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"] },
       { title: "Overnight Respite Support", icon: MoonStar, items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"] },
@@ -524,7 +525,7 @@ export const services = [
     tagline: "Rest is not a luxury. It's a medical necessity.",
     description: "At SRK Care at Home, our respite care services support families caring for an adult ages 19–64 with a disability, chronic illness, or complex daily needs. Caring for an adult relative is often a long-term commitment with no natural pause built in. Our caregivers provide temporary relief while maintaining the established routine—personal care, mobility support, meals, medication reminders, and supervision—so the person receiving care experiences continuity, not disruption. We also support eligible adults through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Smile,
-    image: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Services/Adults/family-respite.jpg",
     accent: "#E57531",
     accentLight: "#fff0f3",
     category: "Family Support",
@@ -533,7 +534,7 @@ export const services = [
     baseId: "respite-care",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/respite-care",
+    href: "/services/respite-care?group=adults",
     categorizedFeatures: [
       { title: "In-Home Respite Care", icon: Home, items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"] },
       { title: "Overnight Respite Support", icon: MoonStar, items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"] },
@@ -563,7 +564,7 @@ export const services = [
     tagline: "Rest is not a luxury. It's a medical necessity.",
     description: "At SRK Care at Home, our respite care services give parents and guardians of children ages 2–18 dependable, short-term relief. Raising a child with a disability, medical need, or high-supervision requirement is constant work, and rest is not optional. Our caregivers follow your child's established routine—meals, hygiene, bedtime, schoolwork, play, and supervision—so the day feels normal to your child while you rest, work, or spend time with siblings. Coverage ranges from a few hours to overnight and multi-day stays. We also support eligible families through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Smile,
-    image: "https://images.unsplash.com/photo-1516307365426-bea591f05011?auto=format&fit=crop&w=1200&q=80",
+       image: "/images/Services/Childrens/family-respite.jpg",
     accent: "#E57531",
     accentLight: "#fff0f3",
     category: "Family Support",
@@ -572,7 +573,7 @@ export const services = [
     baseId: "respite-care",
     group: "children" as PatientGroup,
     patientGroups: ["children"] as PatientGroup[],
-    href: "/services/respite-care",
+    href: "/services/respite-care?group=children",
     categorizedFeatures: [
       { title: "In-Home Respite Care", icon: Home, items: ["Short-term caregiver relief", "Scheduled respite visits", "Temporary family caregiver coverage", "Flexible respite scheduling"] },
       { title: "Overnight Respite Support", icon: MoonStar, items: ["Evening supervision", "Overnight monitoring", "Bedtime assistance", "Nighttime safety support"] },
@@ -602,7 +603,7 @@ export const services = [
     tagline: "Maximizing capability, comfort, and independence.",
     description: "At SRK Care at Home, we provide compassionate in-home care for adults with disabilities ages 19–64 across Maryland. Our caregivers help adults with physical, intellectual, developmental, cognitive, mobility, vision, hearing, and neuromuscular support needs live safely and independently at home. Our disability support services include safety supervision, companionship, personal care assistance, dressing, grooming, mobility support, medication reminders, meal preparation, light housekeeping, laundry support, grocery assistance, transportation support, and cognitive activities such as reading, games, hobbies, and conversation. We also support eligible adults through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services, helping individuals and families access reliable care tailored to daily needs, independence, and quality of life.",
     icon: ShieldAlert,
-    image: "/images/Services/disability.png",
+    image: "/images/Services/Adults/Disability.png",
     accent: "#E57531",
     accentLight: "#eef2ff",
     category: "Specialized Care",
@@ -611,7 +612,7 @@ export const services = [
     baseId: "disability-support",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/disability-support",
+    href: "/services/disability-support?group=adults",
     categorizedFeatures: [
       { title: "Physical Disability Support", icon: Accessibility, items: ["Mobility assistance", "Transfer assistance", "Personal care support", "Daily activity assistance", "Adaptive equipment support"] },
       { title: "Developmental Disability Support", icon: Layers, items: ["Structured daily routines", "Personal assistance services", "Community participation support", "Life skills reinforcement", "Independence-building activities"] },
@@ -636,7 +637,7 @@ export const services = [
     tagline: "A safe bridge from hospital to home.",
     description: "At SRK Care at Home, our post-hospital care services help seniors age 65 and older recover safely at home after surgery, illness, injury, or hospitalization. The first weeks after discharge carry the highest risk of falls and readmission for older adults. Our non-medical caregivers provide daily support with personal care, mobility assistance, meal preparation, medication reminders, light housekeeping, transportation to follow-up visits, and wellness checks. This is non-clinical support that complements, rather than replaces, skilled nursing or home health care. We also support eligible seniors through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Activity,
-    image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=80",
+      image: "/images/Services/Seniors/recovery-post.jpg",
     accent: "#E57531",
     accentLight: "#f0fdf4",
     category: "Clinical Support",
@@ -645,7 +646,7 @@ export const services = [
     baseId: "recovery-care",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/recovery-care",
+    href: "/services/recovery-care?group=seniors",
     categorizedFeatures: [
       { title: "Hospital-to-Home Transition Services", icon: RefreshCw, items: ["Support following hospital discharge", "Assistance after rehabilitation stays", "Recovery support after illness", "Recovery support following surgery"] },
       { title: "Daily Living Recovery Assistance", icon: ClipboardList, items: ["Personal care assistance", "Mobility support", "Meal preparation", "Household support"] },
@@ -675,7 +676,7 @@ export const services = [
     tagline: "A safe bridge from hospital to home.",
     description: "At SRK Care at Home, our post-hospital care services help adults ages 19–64 in Maryland recover safely and comfortably at home after surgery, illness, injury, or hospitalization. Our non-skilled caregivers provide daily support with personal care, bathing, dressing, grooming, mobility assistance, meal preparation, medication reminders, light housekeeping, transportation support, and wellness checks. Our services focus on non-medical in-home support that helps adults regain strength, keep up with daily routines, reduce stress, and get back to work and normal life without setbacks. We also support eligible adults through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Activity,
-    image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=80",
+      image: "/images/Services/Adults/recovery-post.jpg",
     accent: "#E57531",
     accentLight: "#f0fdf4",
     category: "Clinical Support",
@@ -684,7 +685,7 @@ export const services = [
     baseId: "recovery-care",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/recovery-care",
+    href: "/services/recovery-care?group=adults",
     categorizedFeatures: [
       { title: "Hospital-to-Home Transition Services", icon: RefreshCw, items: ["Support following hospital discharge", "Assistance after rehabilitation stays", "Recovery support after illness", "Recovery support following surgery"] },
       { title: "Daily Living Recovery Assistance", icon: ClipboardList, items: ["Personal care assistance", "Mobility support", "Meal preparation", "Household support"] },
@@ -714,7 +715,7 @@ export const services = [
     tagline: "A safe bridge from hospital to home.",
     description: "At SRK Care at Home, our post-hospital care services support children ages 2–18 recovering at home after surgery, illness, injury, or a hospital stay. Our caregivers assist with personal care, feeding, mobility, supervision, medication reminders, transportation to follow-up appointments, and getting back into normal school and home routines. We work closely with parents and guardians, following your instructions and the discharge plan, and reporting any change in your child's condition promptly. We also support eligible families through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Activity,
-    image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=80",
+         image: "/images/Services/Childrens/recovery-post.jpg",
     accent: "#E57531",
     accentLight: "#f0fdf4",
     category: "Clinical Support",
@@ -723,7 +724,7 @@ export const services = [
     baseId: "recovery-care",
     group: "children" as PatientGroup,
     patientGroups: ["children"] as PatientGroup[],
-    href: "/services/recovery-care",
+    href: "/services/recovery-care?group=children",
     categorizedFeatures: [
       { title: "Hospital-to-Home Transition Services", icon: RefreshCw, items: ["Support following hospital discharge", "Assistance after rehabilitation stays", "Recovery support after illness", "Recovery support following surgery"] },
       { title: "Daily Living Recovery Assistance", icon: ClipboardList, items: ["Personal care assistance", "Mobility support", "Meal preparation", "Household support"] },
@@ -753,7 +754,7 @@ export const services = [
     tagline: "Consistent wellness management, day after day.",
     description: "At SRK Care at Home, we provide medication reminder and wellness check services for seniors age 65 and older across Maryland. Many older adults manage several prescriptions on different schedules, and a missed or doubled dose can undo weeks of progress. Our caregivers do not administer, prepare, measure, or dispense medications. They provide verbal reminders, daily check-ins, and routine observation to help seniors take medications on time as directed by their healthcare provider, and report missed doses or changes in condition to family. Eligible seniors may also receive support through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Clock,
-    image: "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1200&q=80",
+          image: "/images/Services/Seniors/Medication-Reminders.png",
     accent: "#E57531",
     accentLight: "#fff7ed",
     category: "Wellness",
@@ -762,7 +763,7 @@ export const services = [
     baseId: "medication-wellness",
     group: "seniors" as PatientGroup,
     patientGroups: ["seniors"] as PatientGroup[],
-    href: "/services/medication-wellness",
+    href: "/services/medication-wellness?group=seniors",
     categorizedFeatures: [
       { title: "Medication Reminder Services", icon: Bell, items: ["Verbal medication reminders", "Medication schedule prompts", "Reminder documentation", "Observation of self-administration"] },
       { title: "Medication Compliance Monitoring", icon: ScanLine, items: ["Reporting missed doses", "Reporting medication refusals", "Reporting medication-related concerns", "Family notification as authorized"] },
@@ -792,7 +793,7 @@ export const services = [
     tagline: "Consistent wellness management, day after day.",
     description: "At SRK Care at Home, we provide medication reminder services for adults ages 19–64 across Maryland. Our non-medical in-home caregivers help clients stay consistent with prescribed medication routines while remaining safe, comfortable, and independent at home. Our caregivers do not administer, prepare, measure, or dispense medications. Instead, they provide gentle reminders, daily check-ins, and routine support to help clients take medications on time as directed by their healthcare provider. Medication reminders can help reduce missed doses, support wellness, and give families peace of mind. Eligible adults may also receive support through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Clock,
-    image: "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1200&q=80",
+     image: "/images/Services/Adults/Medication-reminder.jpg",
     accent: "#E57531",
     accentLight: "#fff7ed",
     category: "Wellness",
@@ -801,7 +802,7 @@ export const services = [
     baseId: "medication-wellness",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/medication-wellness",
+    href: "/services/medication-wellness?group=adults",
     categorizedFeatures: [
       { title: "Medication Reminder Services", icon: Bell, items: ["Verbal medication reminders", "Medication schedule prompts", "Reminder documentation", "Observation of self-administration"] },
       { title: "Medication Compliance Monitoring", icon: ScanLine, items: ["Reporting missed doses", "Reporting medication refusals", "Reporting medication-related concerns", "Family notification as authorized"] },
@@ -831,7 +832,7 @@ export const services = [
     tagline: "Consistent wellness management, day after day.",
     description: "At SRK Care at Home, we provide medication reminder and wellness check services for children ages 2–18 across Maryland. Our caregivers do not administer, prepare, measure, or dispense medications. They provide scheduled verbal reminders, observe self-administration where age-appropriate, document the reminders given, and report any missed dose or change in your child's condition directly to parents or guardians. All medication routines follow the instructions set by you and your child's healthcare provider. We also support eligible families through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Clock,
-    image: "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1200&q=80",
+     image: "/images/Services/Childrens/medication-wellness.jpg",
     accent: "#E57531",
     accentLight: "#fff7ed",
     category: "Wellness",
@@ -840,7 +841,7 @@ export const services = [
     baseId: "medication-wellness",
     group: "children" as PatientGroup,
     patientGroups: ["children"] as PatientGroup[],
-    href: "/services/medication-wellness",
+    href: "/services/medication-wellness?group=children",
     categorizedFeatures: [
       { title: "Medication Reminder Services", icon: Bell, items: ["Verbal medication reminders", "Medication schedule prompts", "Reminder documentation", "Observation of self-administration"] },
       { title: "Medication Compliance Monitoring", icon: ScanLine, items: ["Reporting missed doses", "Reporting medication refusals", "Reporting medication-related concerns", "Family notification as authorized"] },
@@ -870,7 +871,7 @@ export const services = [
     tagline: "Never miss an appointment that matters.",
     description: "At SRK Care at Home, our transportation support services help adults ages 19–64 across Maryland stay active, independent, and connected to their community. Our caregivers provide reliable non-medical transportation, mobility assistance, and door-to-door supervision for medical appointments, therapy visits, work, vocational programs, errands, grocery shopping, and community activities. Unlike a taxi or rideshare, our caregivers accompany clients into the appointment, assist with check-in, and stay through the visit. Transportation support helps adults maintain independence, confidence, and quality of life.",
     icon: Car,
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+     image: "/images/Services/Adults/Transportation.jpg",
     accent: "#E57531",
     accentLight: "#f0f9ff",
     category: "Community Access",
@@ -879,7 +880,7 @@ export const services = [
     baseId: "transportation",
     group: "adults" as PatientGroup,
     patientGroups: ["adults"] as PatientGroup[],
-    href: "/services/transportation",
+    href: "/services/transportation?group=adults",
     categorizedFeatures: [
       { title: "Medical Transportation", icon: Stethoscope, items: ["Physician appointments", "Specialist appointments", "Therapy visits", "Diagnostic testing appointments", "Outpatient procedure transportation"] },
       { title: "Healthcare Escort Services", icon: UserCheck, items: ["Accompaniment to appointments", "Assistance with check-in and registration", "Mobility assistance during appointments", "Return-home assistance"] },
@@ -910,7 +911,7 @@ export const services = [
     tagline: "Never miss an appointment that matters.",
     description: "At SRK Care at Home, our transportation support services help families with children ages 2–18 across Maryland get where they need to be safely. Our caregivers provide door-to-door transportation and supervision for school runs, educational and school-sponsored programs, physician and therapy appointments, recreational activities, and religious services. Caregivers assist with vehicle entry and exit, secure mobility equipment, and supervise your child for the full trip—handing off directly to you, school staff, or an authorized adult. We also support eligible families through Maryland Medicaid, LTSS, In-Home Aides Services, and Home and Community-Based Services.",
     icon: Car,
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+ image: "/images/Services/Childrens/Transportation.jpg",
     accent: "#E57531",
     accentLight: "#f0f9ff",
     category: "Community Access",
@@ -919,7 +920,7 @@ export const services = [
     baseId: "transportation",
     group: "children" as PatientGroup,
     patientGroups: ["children"] as PatientGroup[],
-    href: "/services/transportation",
+    href: "/services/transportation?group=children",
     categorizedFeatures: [
       { title: "Medical Transportation", icon: Stethoscope, items: ["Physician appointments", "Specialist appointments", "Therapy visits", "Diagnostic testing appointments", "Outpatient procedure transportation"] },
       { title: "Healthcare Escort Services", icon: UserCheck, items: ["Accompaniment to appointments", "Assistance with check-in and registration", "Mobility assistance during appointments", "Return-home assistance"] },
@@ -959,7 +960,7 @@ export const services = [
     baseId: "pediatric-care",
     group: "children" as PatientGroup,
     patientGroups: ["children"] as PatientGroup[],
-    href: "/services/pediatric-care",
+    href: "/services/pediatric-care?group=children",
     categorizedFeatures: [
       { title: "Personal Hygiene & Grooming", icon: ShowerHead, items: ["Bathing assistance", "Oral hygiene assistance", "Hair care and grooming", "Dressing and undressing assistance", "Toileting assistance", "Diapering assistance", "Continence care assistance"] },
       { title: "Mobility & Daily Living Support", icon: Accessibility, items: ["Ambulation assistance", "Transfer assistance", "Positioning and repositioning", "Assistance with mobility devices", "Daily routine assistance"] },

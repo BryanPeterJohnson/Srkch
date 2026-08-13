@@ -4,6 +4,7 @@ import { User, UserCheck, Activity } from "lucide-react";
 export const heroSlides = [
     {
         img: "/images/Home/1.png",
+          objectPosition: "60% 7%",
         pill: "Compassionate Home Care",
         headline: "Trusted Home Care— So You Can Focus on What Matters Most",
         sub: "Driven by purpose and led by our hearts, we deliver the highest-quality home health care to keep you or your loved ones safe, comfortable, and independent.",
@@ -12,6 +13,7 @@ export const heroSlides = [
     },
     {
         img: "/images/Home/2.png",
+          objectPosition: "60% 5%",
         pill: "Trusted Since 2004",
         headline: "Two Decades of Caring for Your Loved Ones",
         sub: "Our certified caregivers bring warmth, skill, and genuine compassion to every home visit.",
@@ -19,7 +21,8 @@ export const heroSlides = [
         cta2: { label: "Our Services ↗", to: "/services" },
     },
     {
-        img: "https://images.unsplash.com/photo-1755189118414-14c8dacdb082?w=1440&h=600&fit=crop&auto=format",
+           img: "/images/Home/services-1.png",
+           objectPosition: "60% 5%",
         pill: "Medicare & Medicaid Accepted",
         headline: "Quality Care That Works With Your Coverage",
         sub: "We accept Medicare, Medicaid Long-Term Care, and private pay — so cost never stands in the way.",
@@ -33,6 +36,7 @@ export const heroSlides = [
 // categories from app/services/data.ts so the two can't drift apart. Kept here
 // only in case another component still imports it. Safe to delete once nothing
 // references `categoryData`.
+// ─── Services-by-Category Data ────────────────────────────────────────────────
 export const categoryData = [
     {
         id: "seniors",
@@ -43,35 +47,35 @@ export const categoryData = [
             {
                 title: "Personal Care & Daily Living Assistance",
                 desc: "Support with bathing, grooming, dressing, mobility, and everyday routines to maintain dignity and independence at home.",
-                img: "/images/Home/services-1.png",
+                img: "/images/Services/personal-care.png",              // id 0
                 path: "/services/personal-care",
                 icon: "🤲",
             },
             {
                 title: "Companion & Social Engagement Care",
                 desc: "Friendly companionship, conversation, and emotional support to reduce loneliness and improve quality of life.",
-                img: "https://images.unsplash.com/photo-1758686254601-a47850cb2226?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/0.png",                          // id 2
                 path: "/services/companion-care",
                 icon: "💙",
             },
             {
                 title: "Memory Care & Safety Monitoring",
                 desc: "Specialized support for dementia and memory-related conditions with fall prevention and continuous safety monitoring.",
-                img: "https://images.unsplash.com/photo-1666887360680-9dc27a1d2753?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Seniors/Memory.jpg",             // id 4
                 path: "/services/memory-care",
                 icon: "🧠",
             },
             {
                 title: "Household & Nutrition Support",
                 desc: "Light housekeeping, meal preparation, and nutritional support tailored to individual health needs.",
-                img: "https://images.unsplash.com/photo-1653233797467-1a528819fd4f?w=560&h=480&fit=crop&auto=format",
-                path: "/services/meal-preparation",
+                img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80", // id 5
+                path: "/services/home-nutrition",
                 icon: "🍽️",
             },
             {
                 title: "Family Respite & Caregiver Support",
                 desc: "Short-term relief for family caregivers so they can rest while loved ones continue receiving quality care.",
-                img: "https://images.unsplash.com/photo-1758691031844-c8c880a9b764?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Seniors/family_respite_adult.jpg", // id 6
                 path: "/services/respite-care",
                 icon: "🌿",
             },
@@ -86,49 +90,49 @@ export const categoryData = [
             {
                 title: "Personal Care Assistance",
                 desc: "Help with daily hygiene, grooming, mobility, and personal routines to support independence at home.",
-                img: "https://images.unsplash.com/photo-1742676971866-edc9a855d227?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Adults/personal-care.jpg",       // id 1
                 path: "/services/personal-care",
                 icon: "🤲",
             },
             {
                 title: "Disability Support Services",
                 desc: "Dedicated assistance for adults with disabilities to promote independence, comfort, and dignity.",
-                img: "https://images.unsplash.com/photo-1666887360680-9dc27a1d2753?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Adults/Disability.png",          // id 9
                 path: "/services/disability-support",
                 icon: "♿",
             },
             {
                 title: "Companion & Lifestyle Assistance",
                 desc: "Social engagement, daily support, errands, and companionship for a balanced lifestyle.",
-                img: "https://images.unsplash.com/photo-1758686254601-a47850cb2226?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Adults/Companion.png",           // id 3
                 path: "/services/companion-care",
                 icon: "💙",
             },
             {
                 title: "Recovery & Post-Hospital Support",
                 desc: "Assistance during recovery after illness, surgery, or hospitalization for a smooth transition home.",
-                img: "https://images.unsplash.com/photo-1666887360726-f55472d96c34?w=560&h=480&fit=crop&auto=format",
-                path: "/services/post-hospital-care",
+                img: "/images/Services/Adults/recovery-post.jpg",       // id 11
+                path: "/services/recovery-care",
                 icon: "🏥",
             },
             {
                 title: "Medication Reminders & Wellness Checks",
                 desc: "Regular health monitoring, medication reminders, and wellness support for ongoing care.",
-                img: "https://images.unsplash.com/photo-1618498082410-b4aa22193b38?w=560&h=480&fit=crop&auto=format",
-                path: "/services/medication-support",
+                img: "/images/Services/Adults/Medication-reminder.jpg", // id 14
+                path: "/services/medication-wellness",
                 icon: "💊",
             },
             {
                 title: "Respite & Family Support Services",
                 desc: "Temporary caregiver relief and family support to ensure continuous quality care.",
-                img: "https://images.unsplash.com/photo-1758691031844-c8c880a9b764?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Adults/family-respite.jpg",      // id 7
                 path: "/services/respite-care",
                 icon: "🌿",
             },
             {
                 title: "Transportation & Appointment Assistance",
                 desc: "Safe and reliable transport for medical visits, therapy sessions, and daily errands.",
-                img: "https://images.unsplash.com/photo-1666887360726-f55472d96c34?w=560&h=480&fit=crop&auto=format",
+                img: "/images/Services/Adults/Transportation.jpg",      // id 16
                 path: "/services/transportation",
                 icon: "🚗",
             },
@@ -143,36 +147,36 @@ export const categoryData = [
             {
                 title: "Pediatric Companion & Personal Care Assistance",
                 desc: "Gentle personal care and companionship tailored for children's comfort and well-being.",
-                img: "https://images.unsplash.com/photo-1666887360680-9dc27a1d2753?w=560&h=480&fit=crop&auto=format",
+                img: "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=1200&q=80", // id 18
                 path: "/services/pediatric-care",
                 icon: "🧸",
             },
             {
                 title: "Special Needs & Developmental Support",
                 desc: "Personalized care and developmental assistance for children with special needs.",
-                img: "https://images.unsplash.com/photo-1618498082410-b4aa22193b38?w=560&h=480&fit=crop&auto=format",
-                path: "/services/special-needs-care",
+                img: "/images/Services/Childrens/recovery-post.jpg",    // nearest child image
+                path: "/services/pediatric-care",
                 icon: "🌈",
             },
             {
                 title: "Home Safety & Wellness Support",
                 desc: "Ensuring a safe, healthy, and supportive home environment for children.",
-                img: "https://images.unsplash.com/photo-1758686253708-f0e21317d2aa?w=560&h=480&fit=crop&auto=format",
-                path: "/services/home-safety",
+                img: "/images/Services/Childrens/medication-wellness.png", // nearest child image
+                path: "/services/medication-wellness?group=children",
                 icon: "🏠",
             },
             {
                 title: "Meal Preparation & Feeding Assistance",
                 desc: "Healthy meal preparation and feeding support tailored to children's nutritional needs.",
-                img: "https://images.unsplash.com/photo-1653233797467-1a528819fd4f?w=560&h=480&fit=crop&auto=format",
-                path: "/services/child-nutrition",
+                img: "/images/Services/Childrens/family-respite.jpg",   // nearest child image
+                path: "/services/pediatric-care",
                 icon: "🍎",
             },
             {
                 title: "Respite Care for Parents & Caregivers",
                 desc: "Short-term relief for parents so they can rest while their child receives quality care.",
-                img: "https://images.unsplash.com/photo-1758691031844-c8c880a9b764?w=560&h=480&fit=crop&auto=format",
-                path: "/services/child-respite-care",
+                img: "/images/Services/Childrens/family-respite.jpg",   // id 8
+                path: "/services/respite-care?group=children",
                 icon: "🌿",
             },
         ],

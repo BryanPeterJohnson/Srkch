@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Brain,
@@ -133,7 +133,16 @@ function HeartDivider() {
 /* ─────────────────────── PAGE ─────────────────────── */
 export default function ServiceDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
-  const service = services.find((s) => s.slug === resolvedParams.id);
+  const searchParams = useSearchParams();
+  const group = searchParams.get("group");
+
+  // Match on both slug AND group so age-variants that share a slug resolve to
+  // the correct entry. Falls back to the first slug match for links with no
+  // ?group= query so old URLs keep working.
+  const service =
+    services.find(
+      (s) => s.slug === resolvedParams.id && (s as any).group === group
+    ) ?? services.find((s) => s.slug === resolvedParams.id);
 
   if (!service) notFound();
 
@@ -169,14 +178,14 @@ export default function ServiceDetailPage({ params }: PageProps) {
       {/* ═══════════════════════════════════════════
           HERO
       ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-white min-h-[480px]">
+    <section className="relative overflow-hidden bg-white min-h-[480px] sm:min-h-[550px] lg:aspect-[16/6] lg:min-h-0">
         <div className="absolute inset-0">
-          <img
-            src={(service as any).image}
-            alt={service.title}
-            className="h-full w-full object-cover object-[right_20%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[50%] to-white" />
+     <img
+  src={(service as any).image}
+  alt={service.title}
+  className="h-full w-full object-cover object-[75%_20%] lg:object-[right_20%]"
+/>
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
         </div>
 
 <div className="relative ml-0 max-w-7xl pl-14 pr-4 py-14 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-20">
@@ -376,14 +385,15 @@ export default function ServiceDetailPage({ params }: PageProps) {
     {related.map((item) => (
       <a
         key={item.id}
-        href={`/services/${item.slug}`}
+        href={`/services/${item.slug}?group=${(item as any).group}`}
         className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
       >
-        <div className="h-28 overflow-hidden">
+      <div className="h-28 overflow-hidden">
           <img
             src={(item as any).image}
             alt={item.title}
             className="h-full w-full object-cover transition group-hover:scale-105"
+            style={{ objectPosition: (item as any).objectPosition ?? "right 10%" }}
           />
         </div>
         <div className="flex flex-1 items-center justify-between gap-2 p-3">

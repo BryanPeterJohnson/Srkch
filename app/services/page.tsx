@@ -332,7 +332,7 @@ export default function ServicesPage() {
                               src={service.image || "/images/placeholder-care.jpg"}
                               alt={service.title}
                               fill
-                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-cover object-[75%_20%] lg:object-[right_10%]"
                               sizes="(max-width: 1280px) 25vw, 100vw"
                             />
                             <div

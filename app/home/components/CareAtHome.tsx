@@ -79,13 +79,13 @@ export function CareAtHome() {
                         transition={{ duration: 0.7, ease: "easeOut" }}
                         className="relative h-[320px] sm:h-[400px] lg:h-[500px] 2xl:h-[560px] rounded-lg overflow-hidden shadow-xl"
                     >
-                        <Image
-                            src="https://images.unsplash.com/photo-1666886573531-48d2e3c2b684?w=1080&h=800&fit=crop&auto=format"
-                            alt="Healthcare professional providing care at home"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
+                       <Image
+    src="/images/home/caregivers.png"
+    alt="Healthcare professional providing care at home"
+    fill
+    className="object-cover"
+    sizes="(max-width: 1024px) 100vw, 50vw"
+/>
                     </motion.div>
 
                 </div>
