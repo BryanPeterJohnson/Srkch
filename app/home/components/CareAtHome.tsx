@@ -80,7 +80,7 @@ export function CareAtHome() {
                         className="relative h-[320px] sm:h-[400px] lg:h-[500px] 2xl:h-[560px] rounded-lg overflow-hidden shadow-xl"
                     >
                        <Image
-    src="/images/home/caregivers.png"
+    src="/images/Home/caregivers.png"
     alt="Healthcare professional providing care at home"
     fill
     className="object-cover"
