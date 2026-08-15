@@ -171,7 +171,7 @@ const LIFE_STAGES = [
   {
     icon: UserCheck,
     title: "Adults",
-    image: "/images/About/our-values.png",
+    image: "/images/About/adults.jpg",
     description:
       "Support for adults recovering from illness, managing chronic conditions, or needing extra help.",
     accent: "#E57531",
