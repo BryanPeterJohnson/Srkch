@@ -61,7 +61,7 @@ export default function DiversityPage() {
         </div>
         <div className="relative h-[320px] w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200">
           <Image
-            src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1200&q=80"
+           src="/images/About/Diversity.png"
             alt="Diverse caregiver and client sharing a warm moment"
             fill
             className="object-cover"
@@ -138,7 +138,7 @@ export default function DiversityPage() {
         <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="relative h-[320px] w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 md:order-1 order-2">
             <Image
-              src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1200&q=80"
+              src="/images/About/Practice.png"
               alt="Multicultural healthcare team collaborating"
               fill
               className="object-cover"

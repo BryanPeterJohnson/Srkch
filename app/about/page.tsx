@@ -95,7 +95,7 @@ const MVV_TABS: MvvTab[] = [
       "To provide exceptional, client-centered non-medical care that promotes independence, safety, and quality of life for every individual we serve.",
       "We support seniors, individuals with disabilities, post-surgical patients, and children with developmental delays, physical disabilities, autism spectrum disorder, and other chronic but stable conditions—empowering them to live with dignity in the comfort of their own homes, while upholding the highest standards of professionalism and respect for the diverse needs of Maryland's communities.",
     ],
-    image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/About/mission.png",
     accent: "#046e4c",
   },
   {
@@ -107,7 +107,7 @@ const MVV_TABS: MvvTab[] = [
       "To be the region's most trusted leader in personalized home care services—recognized for delivering reliable, culturally attuned, and responsive support.",
       "We aspire to set the benchmark for excellence by consistently exceeding expectations, ensuring that every client and family experiences care marked by empathy, integrity, and mutual respect.",
     ],
-image: "/images/About/vision.png",
+    image: "/images/About/vision.png",
     accent: "#0C447C",
   },
   {
@@ -116,7 +116,7 @@ image: "/images/About/vision.png",
     icon: Gem,
     title: "Our Values",
     values: VALUES,
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/About/our-values.png",
     accent: "#E57531",
   },
 ];
@@ -162,26 +162,29 @@ const LIFE_STAGES = [
   {
     icon: User,
     title: "Seniors",
-    image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80",
+    image: "/images/About/seniors.png",
     description:
       "Compassionate care that helps older adults maintain safety, active, and independent lives.",
     accent: "#046e4c",
+    href: "/services#seniors",
   },
   {
     icon: UserCheck,
     title: "Adults",
-    image: "https://images.unsplash.com/photo-1581595219315-a187dd40c322?auto=format&fit=crop&w=800&q=80",
+    image: "/images/About/our-values.png",
     description:
       "Support for adults recovering from illness, managing chronic conditions, or needing extra help.",
     accent: "#E57531",
+    href: "/services#adults",
   },
   {
     icon: Activity,
     title: "Children",
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0?auto=format&fit=crop&w=800&q=80",
+    image: "/images/About/childrens.jpg",
     description:
       "Specialized care for children with medical needs, developmental differences, or disabilities.",
     accent: "#0C447C",
+    href: "/services#children",
   },
 ];
 
@@ -191,7 +194,8 @@ const TESTIMONIALS = [
       "SRK Care at Home has been a blessing for our family. Their caregivers treat my mom with such kindness and respect. We finally have peace of mind knowing she's in good hands.",
     name: "Lisa B.",
     relation: "Daughter of Client",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
     rating: 5,
   },
   {
@@ -199,7 +203,8 @@ const TESTIMONIALS = [
       "The care coordinators listened to exactly what our family needed and matched us with a caregiver who fit perfectly. The communication has been outstanding from day one.",
     name: "Marcus T.",
     relation: "Son of Client",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
     rating: 5,
   },
 ];
@@ -269,34 +274,41 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white font-display">
       {/* ---------------------------------------------------------------- */}
-      {/* Hero */}
+      {/* Hero — matched to Home hero text sizes, spacing & positioning     */}
       {/* ---------------------------------------------------------------- */}
-      <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:max-h-[640px] overflow-hidden bg-white font-display">
+      <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:min-h-[620px] 2xl:max-h-[680px] overflow-hidden bg-white font-display">
         <Image
-          src="/images/Home/1.png"
+          src="/images/About/hero.png"
           alt="Caregiver sharing a warm moment with a senior client"
           fill
           priority
           sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: "60% 10%" }}
+          className="object-cover object-[85%_20%] lg:object-[right_10%]"
         />
-        <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
+
+        {/* Gradient overlay */}
+        {/* Desktop */}
+        <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[50%]" />
+
+        {/* Mobile */}
         <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
 
+        {/* Accent stripe */}
         <div
           className="absolute bottom-0 right-0 z-[2] w-full h-2.5 sm:h-3 pointer-events-none bg-gradient-to-r from-[#E57531] via-[#159BA1] to-[#046e4c]"
           style={{ clipPath: "polygon(20% 100%, 100% 0%, 100% 100%)" }}
         />
 
+        {/* CONTENT */}
         <div className="absolute inset-0 z-[10]">
-          <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-32">
-            <div className="max-w-[600px] h-full flex flex-col justify-center items-start text-left">
-              <div className="space-y-6">
+          <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-40 mx-auto max-w-[1920px]">
+            <div className="max-w-[600px] 2xl:max-w-[820px] h-full flex flex-col justify-center items-start text-left">
+              <div className="space-y-6 2xl:space-y-9">
+
+                {/* HEADLINE */}
                 <h1
-                  className="font-display font-black text-[#0C447C]"
+                  className="font-display font-black text-[#0C447C] text-[clamp(28px,3.8vw,40px)] 2xl:text-[54px]"
                   style={{
-                    fontSize: "clamp(34px, 4.5vw, 46px)",
                     lineHeight: 1.12,
                     letterSpacing: "-0.5px",
                   }}
@@ -306,12 +318,11 @@ export default function AboutPage() {
                   Like <span className="text-[#E57531]">Family</span>
                 </h1>
 
+                {/* SUBTEXT */}
                 <p
-                  className="font-display text-[#3E4C63]"
+                  className="font-display text-[#3E4C63] text-[clamp(13px,1vw,15px)] 2xl:text-[19px] max-w-[460px] 2xl:max-w-[620px]"
                   style={{
-                    fontSize: "clamp(14px, 1.1vw, 16px)",
                     lineHeight: 1.6,
-                    maxWidth: 460,
                   }}
                 >
                   At SRK Care at Home, we believe everyone deserves to live
@@ -320,40 +331,39 @@ export default function AboutPage() {
                   Maryland.
                 </p>
 
-                <div className="flex flex-wrap items-start gap-x-6 gap-y-4 pt-1">
+                {/* ICON BADGE ROW */}
+                <div className="flex flex-wrap items-start gap-x-6 gap-y-4 2xl:gap-x-9 2xl:gap-y-5 pt-1">
                   {HERO_BADGES.map((b, i) => (
-                    <div key={i} className="flex items-center gap-2">
+                    <div key={i} className="flex items-center gap-2 2xl:gap-3">
                       <b.icon
-                        size={22}
                         strokeWidth={1.75}
-                        className="flex-shrink-0"
+                        className="flex-shrink-0 w-[20px] h-[20px] 2xl:w-7 2xl:h-7"
                         style={{ color: b.color }}
                       />
-                      <span
-                        className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight"
-                        style={{ fontSize: 12 }}
-                      >
+                      <span className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight text-[11px] 2xl:text-[14px]">
                         {b.label}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex gap-3 flex-wrap items-center pt-2">
+                {/* BUTTONS */}
+                <div className="flex gap-3 2xl:gap-4 flex-wrap items-center pt-2">
                   <Link
                     href="/get-started"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-md text-sm cursor-pointer"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all shadow-md text-[13px] 2xl:text-base cursor-pointer"
                   >
                     Request a Free Consultation
                   </Link>
                   <Link
                     href="tel:+14436273806"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm cursor-pointer"
+                    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all text-[13px] 2xl:text-base cursor-pointer"
                   >
-                    <Phone size={15} />
+                    <Phone className="w-[14px] h-[14px] 2xl:w-[18px] 2xl:h-[18px]" />
                     Call (443) 6273806
                   </Link>
                 </div>
+
               </div>
             </div>
           </div>
@@ -378,36 +388,30 @@ export default function AboutPage() {
             </h2>
             <p className="text-slate-600 leading-7 mb-4 font-display">
               SRK Care at Home was co-founded by Dr. Omair Choudhry, MD,FACS,CPHQ,MPH., and Salman Khan, who share a common vision of
-               redefining home care through compassion, excellence, and unwavering commitment to the families they serve.
+              redefining home care through compassion, excellence, and unwavering commitment to the families they serve.
             </p>
             <p className="text-slate-600 leading-7 mb-4 font-display">
-              Together, they bring a unique blend of clinical expertise, healthcare leadership, entrepreneurial innovation, and operational excellence. Dr. Choudhry contributes more than two decades of experience in healthcare, quality improvement, and patient-centered care, while Salman Khan, an accomplished healthcare entrepreneur and leader, brings extensive experience in building 
+              Together, they bring a unique blend of clinical expertise, healthcare leadership, entrepreneurial innovation, and operational excellence. Dr. Choudhry contributes more than two decades of experience in healthcare, quality improvement, and patient-centered care, while Salman Khan, an accomplished healthcare entrepreneur and leader, brings extensive experience in building
               and leading healthcare organizations focused on exceptional service and positive patient experiences.
             </p>
-                 <p className="text-slate-600 leading-7 mb-4 font-display">
-             Their combined expertise has shaped SRK Care at Home into a trusted provider of personalized, medical and non-medical home care. They believe every individual deserves to age with dignity, independence, and respect while receiving care tailored to their unique needs, values, cultural traditions, and religious preferences.
+            <p className="text-slate-600 leading-7 mb-4 font-display">
+              Their combined expertise has shaped SRK Care at Home into a trusted provider of personalized, medical and non-medical home care. They believe every individual deserves to age with dignity, independence, and respect while receiving care tailored to their unique needs, values, cultural traditions, and religious preferences.
             </p>
-                 <p className="text-slate-600 leading-7 mb-4 font-display">
-             Today, SRK Care at Home proudly serves families across all counties in Maryland, delivering dependable, compassionate care that enhances quality of life and provides families with confidence and peace of mind. Every decision is guided by the founders' shared commitment to treating every client as they would their own family.
+            <p className="text-slate-600 leading-7 mb-4 font-display">
+              Today, SRK Care at Home proudly serves families across all counties in Maryland, delivering dependable, compassionate care that enhances quality of life and provides families with confidence and peace of mind. Every decision is guided by the founders' shared commitment to treating every client as they would their own family.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] gap-4 items-stretch">
-            <div className="relative w-full min-h-[220px] h-full rounded-2xl overflow-hidden shadow-md">
+          <div className="grid grid-cols-1 items-stretch">
+            <div className="relative w-full h-[681px] rounded-2xl overflow-hidden shadow-md">
               <Image
-                src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=900&q=80"
-                alt="Caregiver holding hands with a client"
+                src="/images/About/our-story.png"
+                alt="SRK Care at Home providing compassionate care"
                 fill
+                priority
                 className="object-cover"
+                sizes="(max-width: 640px) 100vw, 655px"
               />
-            </div>
-            <div className="relative h-full bg-[#EAF3F8] rounded-2xl p-6 flex flex-col justify-between">
-              <Quote className="w-7 h-7 text-[#0C447C] mb-3" />
-              <p className="text-[#0B2D5B] font-semibold leading-relaxed font-display">
-                We listen, we care, and we show up—every day. Your loved
-                one&apos;s well-being is our highest priority.
-              </p>
-              <HeartHandshake className="w-8 h-8 text-[#0C447C]/30 self-end mt-4" />
             </div>
           </div>
         </div>
@@ -615,39 +619,42 @@ export default function AboutPage() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {LIFE_STAGES.map((stage) => (
-            <div
+            <Link
               key={stage.title}
-              className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col sm:flex-row md:flex-col"
+              href={stage.href}
+              className="group relative block rounded-2xl overflow-hidden shadow-sm h-80 md:h-96 cursor-pointer"
             >
-              <div className="relative w-full sm:w-40 md:w-full h-40 flex-shrink-0">
-                <Image
-                  src={stage.image}
-                  alt={stage.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-5">
+              {/* Full-card image */}
+              <Image
+                src={stage.image}
+                alt={stage.title}
+                fill
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+
+              {/* Gradient scrim for text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B2D5B]/90 via-[#0B2D5B]/35 to-transparent" />
+
+              {/* Text overlay */}
+              <div className="absolute inset-x-0 bottom-0 p-6">
                 <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center mb-3"
-                  style={{ backgroundColor: `${stage.accent}1A` }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center mb-3 backdrop-blur-sm"
+                  style={{ backgroundColor: `${stage.accent}E6` }}
                 >
-                  <stage.icon className="w-4 h-4" style={{ color: stage.accent }} />
+                  <stage.icon className="w-4 h-4 text-white" />
                 </div>
-                <h3 className="text-base font-bold text-[#1a365d] mb-2 font-display">
+                <h3 className="text-xl font-bold text-white mb-2 font-display">
                   {stage.title}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed mb-3 font-display">
+                <p className="text-white/85 text-sm leading-relaxed mb-3 font-display">
                   {stage.description}
                 </p>
-                <div
-                  className="inline-flex items-center gap-1 text-sm font-bold font-display"
-                  style={{ color: stage.accent }}
-                >
+                <div className="inline-flex items-center gap-1 text-sm font-bold text-white font-display group-hover:gap-2 transition-all">
                   Learn More <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

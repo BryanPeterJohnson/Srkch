@@ -207,32 +207,28 @@ export const newsItems = [
         title: "SRK Recognized for Excellence in Home Healthcare",
         description:
             "Our commitment to quality care has earned us prestigious accreditation and recognition from leading healthcare organizations.",
-        image:
-            "https://images.unsplash.com/photo-1618498082410-b4aa22193b38?w=600&h=400&fit=crop&auto=format",
+      img: "/images/Home/News/1.jpg",
         link: "#",
     },
     {
         title: "New Telehealth Services Now Available",
         description:
             "Expanding access to care with innovative virtual health consultations for our patients and their families.",
-        image:
-            "https://images.unsplash.com/photo-1758691462743-f9fc9e430d39?w=600&h=400&fit=crop&auto=format",
+         img: "/images/Home/News/2.jpg",
         link: "#",
     },
     {
         title: "Staff Training Excellence Program Launched",
         description:
             "SRK invests in continuous education to ensure our caregivers provide the highest quality of care.",
-        image:
-            "https://images.unsplash.com/photo-1691139601099-932c01ec198b?w=600&h=400&fit=crop&auto=format",
+           img: "/images/Home/News/3.jpg",
         link: "#",
     },
     {
         title: "Community Outreach Initiative Success",
         description:
             "Our team partners with local communities to provide health education and wellness programs.",
-        image:
-            "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop&auto=format",
+           img: "/images/Home/News/4.jpg",
         link: "#",
     },
 ];

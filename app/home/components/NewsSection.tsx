@@ -42,15 +42,16 @@ export function NewsSection() {
                         >
                             <Card className="h-full hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
                                 {/* Image */}
-                                <div className="h-[140px] sm:h-[150px] relative overflow-hidden flex-shrink-0">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.title}
-                                        fill
-                                        className="object-cover hover:scale-105 transition-transform duration-300"
-                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                                    />
-                                </div>
+                
+<div className="relative h-[170px] sm:h-[180px] overflow-hidden flex-shrink-0 bg-white">
+    <Image
+        src={item.img}
+        alt={item.title}
+        fill
+        className="object-contain"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+    />
+</div>
 
                                 {/* Content */}
                                 <CardHeader className="flex-grow py-2 pb-1 px-3">

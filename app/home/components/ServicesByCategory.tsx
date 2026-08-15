@@ -404,15 +404,16 @@ export function ServicesByCategory() {
                                                         className="group flex flex-col h-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-[0_4px_20px_rgba(11,45,91,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(11,45,91,0.12)]"
                                                     >
                                                         <div className="relative">
-                                                            <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
-                                                                <Image
-    src={svc.image || "/images/placeholder-care.jpg"}
-    alt={svc.title}
-    fill
-    className="object-cover group-hover:scale-105 transition-transform duration-500"
-    style={{ objectPosition: cardPosition(svc) }}
-    sizes="390px"
-/>
+                                                   <div className="relative w-full h-[150px] bg-slate-200 overflow-hidden">
+    <Image
+        src={svc.image || "/images/placeholder-care.jpg"}
+        alt={svc.title}
+        fill
+        className="object-cover object-[75%_20%] lg:object-[right_10%] group-hover:scale-105 transition-transform duration-500"
+        sizes="195px"
+    />
+ 
+
                                                                 <div className="absolute top-2 right-2 z-10 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/95 text-slate-600 shadow-sm font-display">
                                                                     {GROUP_NAMES[svc.group]}
                                                                 </div>
@@ -493,7 +494,7 @@ export function ServicesByCategory() {
                                                                 src={svc.image || "/images/placeholder-care.jpg"}
                                                                 alt={svc.title}
                                                                 fill
-                                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                                className="object-cover object-[75%_20%] lg:object-[right_10%] group-hover:scale-105 transition-transform duration-500"
                                                                 sizes="390px"
                                                             />
                                                             <div className="absolute top-2 right-2 z-10 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/95 text-slate-600 shadow-sm font-display">

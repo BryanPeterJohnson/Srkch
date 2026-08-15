@@ -170,7 +170,7 @@ export default function HistoryPage() {
 
           <div className="relative h-[320px] 2xl:h-[380px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
             <Image
-              src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80"
+                    src="/images/About/history.png"
               alt="Caregiver and senior client sharing a warm moment"
               fill
               className="object-cover"
@@ -232,7 +232,7 @@ export default function HistoryPage() {
           <div className="absolute -bottom-4 -right-4 w-full h-full rounded-2xl bg-[#E57531]" />
           <div className="relative h-[350px] 2xl:h-[400px] w-full rounded-2xl overflow-hidden shadow-lg">
             <Image
-              src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=1200&q=80"
+                src="/images/About/how-we-began.png"
               alt="Compassionate elderly care home visit"
               fill
               className="object-cover"

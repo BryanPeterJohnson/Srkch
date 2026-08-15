@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useMemo } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
@@ -130,6 +130,84 @@ function HeartDivider() {
   );
 }
 
+/* ─────────────────────── RELATED SERVICES SLIDER ───────────────────────
+   Paginates the related services into pages of PER_PAGE cards. The prev/next
+   buttons move between pages and the counter reflects the live page. When
+   everything fits on one page the controls disable themselves. */
+function RelatedServicesSlider({ related }: { related: typeof services }) {
+  const PER_PAGE = 5;
+  const [page, setPage] = useState(0);
+
+  const totalPages = Math.max(1, Math.ceil(related.length / PER_PAGE));
+  const canPrev = page > 0;
+  const canNext = page < totalPages - 1;
+
+  const pageItems = related.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+
+  return (
+    <div>
+      <h2 className="font-display font-black text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
+
+      <div className="grid grid-cols-2 mt-4 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+        {pageItems.map((item) => (
+          <a
+            key={item.id}
+            href={`/services/${item.slug}?group=${(item as any).group}`}
+            className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div className="h-28 overflow-hidden">
+              <img
+                src={(item as any).image}
+                alt={item.title}
+                className="h-full w-full object-cover transition group-hover:scale-105"
+                style={{ objectPosition: (item as any).objectPosition ?? "right 10%" }}
+              />
+            </div>
+            <div className="flex flex-1 items-center justify-between gap-2 p-3">
+              <span className="text-xs font-black leading-snug text-[#0B2D5B] line-clamp-2">
+                {item.title}
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <button
+          onClick={() => canPrev && setPage((p) => p - 1)}
+          disabled={!canPrev}
+          aria-label="Previous services"
+          className={`flex h-10 w-10 items-center justify-center rounded-full border transition ${
+            canPrev
+              ? "border-slate-200 text-[#0B2D5B] hover:bg-slate-50 cursor-pointer"
+              : "border-slate-200 text-slate-300 cursor-not-allowed"
+          }`}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        <span className="text-sm font-medium text-slate-500">
+          {page + 1} of {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+        </span>
+
+        <button
+          onClick={() => canNext && setPage((p) => p + 1)}
+          disabled={!canNext}
+          aria-label="Next services"
+          className={`flex h-10 w-10 items-center justify-center rounded-full transition ${
+            canNext
+              ? "bg-[#0B2D5B] text-white hover:bg-[#08345F] cursor-pointer"
+              : "bg-slate-200 text-slate-400 cursor-not-allowed"
+          }`}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────── PAGE ─────────────────────── */
 export default function ServiceDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
@@ -169,8 +247,8 @@ export default function ServiceDetailPage({ params }: PageProps) {
   );
   const related =
     relatedByGroup.length >= 3
-      ? relatedByGroup.slice(0, 5)
-      : services.filter((s) => s.id !== service.id).slice(0, 5);
+      ? relatedByGroup
+      : services.filter((s) => s.id !== service.id);
 
   return (
     <main className="min-h-screen bg-white font-sans text-[#102A43]">
@@ -178,7 +256,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
       {/* ═══════════════════════════════════════════
           HERO
       ═══════════════════════════════════════════ */}
-    <section className="relative overflow-hidden bg-white min-h-[480px] sm:min-h-[550px] lg:aspect-[16/6] lg:min-h-0">
+    <section className="relative overflow-hidden bg-white min-h-[400px] sm:min-h-[440px] lg:aspect-[16/6] lg:min-h-0">
         <div className="absolute inset-0">
      <img
   src={(service as any).image}
@@ -188,7 +266,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
           <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
         </div>
 
-<div className="relative ml-0 max-w-7xl pl-14 pr-4 py-14 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-20">
+<div className="relative ml-0 max-w-7xl pl-14 pr-4 py-10 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
 
 
           <div className="max-w-[540px] text-left">
@@ -378,44 +456,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
     ))}
   </div>
 
-        
-<div>
-  <h2 className="font-display font-black text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
-  <div className="grid grid-cols-2 mt-4 gap-3 sm:grid-cols-3 xl:grid-cols-5">
-    {related.map((item) => (
-      <a
-        key={item.id}
-        href={`/services/${item.slug}?group=${(item as any).group}`}
-        className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-      >
-      <div className="h-28 overflow-hidden">
-          <img
-            src={(item as any).image}
-            alt={item.title}
-            className="h-full w-full object-cover transition group-hover:scale-105"
-            style={{ objectPosition: (item as any).objectPosition ?? "right 10%" }}
-          />
-        </div>
-        <div className="flex flex-1 items-center justify-between gap-2 p-3">
-          <span className="text-xs font-black leading-snug text-[#0B2D5B] line-clamp-2">
-            {item.title}
-          </span>
-          <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
-        </div>
-      </a>
-    ))}
-  </div>
-
-  <div className="mt-6 flex items-center justify-center gap-4">
-    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-300">
-      <ChevronLeft className="h-4 w-4" />
-    </button>
-    <span className="text-sm font-medium text-slate-500">1 of 5 Services</span>
-    <button className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B2D5B] text-white">
-      <ChevronRight className="h-4 w-4" />
-    </button>
-  </div>
-</div>
+  <RelatedServicesSlider related={related} />
     </div>
       </section>
       {/* ═══════════════════════════════════════════
