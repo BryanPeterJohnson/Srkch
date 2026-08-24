@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart, ShieldCheck, ArrowRight,
-  User, UserCheck, Activity, Search, Plus, Minus, Calendar, Phone,
+  User, UserCheck, Activity, Search, Plus, Minus, Clock, Phone, Users2,
 } from "lucide-react";
 import { services, GROUP_NAMES, type PatientGroup } from "./data";
 import CareManagerCTA from "../home/components/CareManagerCTA";
@@ -117,77 +117,84 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-white font-display">
 
-      <section className="relative bg-white overflow-hidden font-display lg:h-[420px] xl:h-[520px] 2xl:h-[580px]">
-        {/* Image Area - Positioned to the right with a rounded cutout effect */}
-        <div className="relative lg:absolute lg:inset-y-0 lg:right-0 w-full lg:w-[100%] h-[260px] sm:h-[320px] lg:h-full">
+      {/* Hero
+          - Mobile / tablet (< lg): text block on white (CENTERED), then the
+            FULL image below it in its own block — image is never cropped.
+          - Desktop (lg+): image becomes an absolutely-positioned background and
+            the text is overlaid on top with a left-to-right white gradient. */}
+      <section className="relative bg-white overflow-hidden font-display flex flex-col lg:block lg:h-[420px] xl:h-[520px] 2xl:h-[580px]">
+
+        {/* Content Container
+            - order-1 on mobile so it sits above the image
+            - overlaid + centered on desktop */}
+        <div className="relative z-10 order-1 lg:order-none w-full max-w-7xl 2xl:max-w-[1440px] px-6 lg:px-20 py-8 md:py-8 lg:py-14 lg:h-full flex items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-[560px] text-left"
+          >
+            {/* Eyebrow label */}
+            <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[#159BA1] font-display">
+              Our Care Services
+            </p>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-[#0B2D5B] leading-tight mb-4 font-display">
+              Care That Fits Your Life. Support That <span className="text-[#046e4c]">Feels</span> Like <span className="text-[#E57531]">Family</span>.
+            </h1>
+
+            <p className="text-sm sm:text-base text-slate-600 leading-7 mb-6 max-w-md font-display">
+              Personalized care services designed to support your loved one&apos;s
+              health, independence, and comfort—at home. Our compassionate
+              caregivers are here, every step of the way.
+            </p>
+
+            {/* Trust badges — inline circular icons, above the buttons */}
+            <div className="mb-7 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
+              {([
+                [Users2,      "Compassionate", "Caregivers"],
+                [ShieldCheck, "Background",    "Checked"],
+                [Clock,       "Available",     "24/7"],
+              ] as [React.ElementType, string, string][]).map(([Icon, line1, line2]) => (
+                <div key={line1} className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0C447C] shadow-sm">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="text-left text-sm font-bold leading-[1.35] text-[#102A43] font-display">
+                    <p>{line1}</p>
+                    <p>{line2}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA buttons — last, right before the image */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/get-started" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F] font-display">
+                Request a Free Consultation <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white font-display">
+                <Phone className="h-4 w-4" /> Call (443) 627-3806
+              </a>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Image Area
+            - order-2 on mobile: full image block below the text, uncropped subject
+            - lg+: absolutely-positioned right-side background */}
+        <div className="relative order-2 lg:order-none lg:absolute lg:inset-y-0 lg:right-0 w-full lg:w-[100%] h-[300px] sm:h-[380px] lg:h-full mt-2 md:mt-3 lg:mt-0">
           <div className="relative w-full h-full overflow-hidden rounded-none lg:rounded-l-[100px]">
             <Image
               src="/images/Services/0.png"
               alt="Caregiver supporting senior at home"
               fill
               priority
-              className="object-cover object-[center_20%]"
+              className="object-cover object-[right_20%] lg:object-[center_20%]"
             />
-            {/* Gradient overlay to blend image into background */}
-            {/* Desktop */}
+            {/* Desktop-only left-to-right white gradient to blend the overlaid text */}
             <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[65%]" />
-
-            {/* Mobile */}
-            <div className="absolute inset-0 lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
           </div>
-        </div>
-
-        {/* Content Container */}
-        <div className="relative z-10 w-full max-w-7xl 2xl:max-w-[1440px] px-6 lg:px-20 py-10 lg:py-14 lg:h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-[500px] text-left"
-          >
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-[#0B2D5B] leading-tight mb-3 font-display">
-              Care That Fits Your Life.<br />
-              Support That <span className="text-[#046e4c]">Feels</span> Like <span className="text-[#E57531]">Family</span>.
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-7 mb-5 max-w-md font-display">
-              Personalized care services designed to support your loved one&apos;s
-              health, independence, and comfort—at home. Our compassionate
-              caregivers are here, every step of the way.
-            </p>
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <Link href="/get-started">
-                <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl transition-all shadow-lg text-sm font-display cursor-pointer">
-                  <Calendar className="w-3 h-3" />
-                  Request a Free Consultation
-                </button>
-              </Link>
-
-              <a href="tel:+14436273806">
-                <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl transition-all text-sm font-display cursor-pointer">
-                  <Phone className="w-3 h-3" />
-                  Call (443) 627-3806
-                </button>
-              </a>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-5 border-t border-slate-200">
-              {[
-                { icon: Heart, label: "Compassionate\nCaregivers", color: "#E57531" },
-                { icon: ShieldCheck, label: "Licensed &\nInsured", color: "#0C447C" },
-                { icon: ShieldCheck, label: "Medicaid\nCertified", color: "#046e4c" },
-                { icon: UserCheck, label: "Background Checked\n& Trusted", color: "#159BA1" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <div style={{ color: item.color }}>
-                    <item.icon className="w-10 h-10" />
-                  </div>
-                  <span className="text-slate-700 text-[11px] font-medium leading-tight whitespace-pre-line font-display">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </section>
 

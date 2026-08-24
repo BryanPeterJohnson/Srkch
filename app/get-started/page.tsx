@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { useFormspree } from "../../components/Useformspree";
 
 // ─── Color tokens (SRK Care at Home brand) ────────────────────────────────────
 // Primary navy:   #005B8E
@@ -52,46 +52,11 @@ const CARE_TYPES = [
   "Transportation Assistance",
 ];
 
-const NJ_SERVICES = [
-  { label: "Live-In Home Care", href: "/services/live-in-care" },
-  { label: "Dementia Home Care", href: "/services/dementia-care" },
-  { label: "Hospice Care at Home", href: "/services/hospice-care" },
-  { label: "Companion Care", href: "/services/companion-care" },
-  { label: "Personal Care", href: "/services/personal-care" },
-  { label: "Opt-out Preferences", href: "/opt-out" },
-  { label: "Truth in Advertising Statement", href: "/advertising" },
-];
+// ─── Validation helpers ─────────────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^\+?[\d\s\-().]{7,}$/;
+const ZIP_RE = /^\d{5}(-\d{4})?$/;
 
-const NJ_LOCATIONS = [
-  "View All of New Jersey",
-  "Bridgewater, NJ",
-  "Edison, NJ",
-  "Flemington, NJ",
-  "Hillsborough, NJ",
-  "Lakewood, NJ",
-  "Livingston, NJ",
-  "Monroe Township, NJ",
-  "Montclair, NJ",
-  "Morristown, NJ",
-  "Princeton, NJ",
-  "Red Bank, NJ",
-  "Stockton, NJ",
-  "Summit, NJ",
-];
-
-const FOOTER_SERVICES = [
-  "Live-In Home Care",
-  "Dementia Home Care",
-  "Hospice Care at Home",
-  "Companion Care",
-  "Personal Care",
-  "Opt-out Preferences",
-  "Truth in Advertising Statement",
-];
-
-const NAV_LINKS = ["Home", "About Us", "Services", "Get Started", "Resources", "Careers", "Contact Us", "Service Area"];
-
-// ─── Validation ───────────────────────────────────────────────────────────────
 function validate(s: FormState): FormErrors {
   const e: FormErrors = {};
   if (!s.whoNeedsCare) e.whoNeedsCare = "Please select who needs care.";
@@ -100,12 +65,29 @@ function validate(s: FormState): FormErrors {
   if (!s.careNeeds.length) e.careNeeds = "Please select at least one type of care.";
   if (!s.firstName.trim()) e.firstName = "First name is required.";
   if (!s.lastName.trim()) e.lastName = "Last name is required.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email)) e.email = "Enter a valid email address.";
-  if (!/^\+?[\d\s\-().]{7,}$/.test(s.phone)) e.phone = "Enter a valid phone number.";
-  if (!/^\d{5}(-\d{4})?$/.test(s.zipcode)) e.zipcode = "Enter a valid 5-digit zip code.";
+  if (!EMAIL_RE.test(s.email)) e.email = "Enter a valid email address.";
+  if (!PHONE_RE.test(s.phone)) e.phone = "Enter a valid phone number.";
+  if (!ZIP_RE.test(s.zipcode)) e.zipcode = "Enter a valid 5-digit zip code.";
   if (!s.optInConsent) e.optInConsent = "You must agree to receive communications.";
   if (!s.privacyConsent) e.privacyConsent = "You must agree to the privacy policy.";
   return e;
+}
+
+// Every required field filled + both checkboxes → button enabled.
+function isComplete(s: FormState): boolean {
+  return (
+    s.whoNeedsCare !== "" &&
+    s.gender !== "" &&
+    s.livingSituation !== "" &&
+    s.careNeeds.length > 0 &&
+    s.firstName.trim() !== "" &&
+    s.lastName.trim() !== "" &&
+    EMAIL_RE.test(s.email) &&
+    PHONE_RE.test(s.phone) &&
+    ZIP_RE.test(s.zipcode) &&
+    s.optInConsent &&
+    s.privacyConsent
+  );
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -126,6 +108,7 @@ function SelectField({
         {label} <span style={{ color: "#C0392B" }}>*</span>
       </label>
       <select
+        required
         value={value}
         onChange={(e) => onChange(e.target.value)}
         style={{
@@ -157,6 +140,7 @@ function TextInput({
       </label>
       <input
         type={type}
+        required
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder || label}
@@ -180,8 +164,9 @@ export default function GetStartedPage() {
     optInConsent: false, privacyConsent: false,
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+
+  // Formspree — replace "myegojrw" if the endpoint ever changes.
+  const { submit, submitting, submitted, error } = useFormspree("myegojrw");
 
   function setField<K extends keyof FormState>(k: K, v: FormState[K]) {
     setForm((p) => ({ ...p, [k]: v }));
@@ -196,22 +181,27 @@ export default function GetStartedPage() {
     setErrors((p) => ({ ...p, careNeeds: undefined }));
   }
 
+  const formValid = isComplete(form);
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const errs = validate(form);
     if (Object.keys(errs).length) { setErrors(errs); return; }
-    setSubmitting(true);
-    // TODO: replace with your real API call
-    await new Promise((r) => setTimeout(r, 1200));
-    setSubmitting(false);
-    setSubmitted(true);
+    await submit({
+      whoNeedsCare: form.whoNeedsCare,
+      gender: form.gender,
+      livingSituation: form.livingSituation,
+      careNeeds: form.careNeeds.join(", "),
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email,
+      phone: form.phone,
+      zipcode: form.zipcode,
+    });
   }
 
   return (
     <div style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif", color: "#1A2B3C", background: "#F7F8FA", minHeight: "100vh" }}>
-
- 
-
 
       {/* ── Hero banner ─────────────────────────────────────────────────────── */}
       <div style={{ position: "relative", background: "#003A5C", overflow: "hidden" }}>
@@ -313,6 +303,7 @@ export default function GetStartedPage() {
                     </div>
                     <input
                       type="tel"
+                      required
                       value={form.phone}
                       onChange={(e) => setField("phone", e.target.value)}
                       placeholder="(555) 000-0000"
@@ -330,6 +321,7 @@ export default function GetStartedPage() {
                   <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5 }}>
                     <input
                       type="checkbox"
+                      required
                       checked={form.optInConsent}
                       onChange={(e) => setField("optInConsent", e.target.checked)}
                       style={{ accentColor: "#005B8E", width: 15, height: 15, marginTop: 2, flexShrink: 0 }}
@@ -341,6 +333,7 @@ export default function GetStartedPage() {
                   <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5 }}>
                     <input
                       type="checkbox"
+                      required
                       checked={form.privacyConsent}
                       onChange={(e) => setField("privacyConsent", e.target.checked)}
                       style={{ accentColor: "#005B8E", width: 15, height: 15, marginTop: 2, flexShrink: 0 }}
@@ -354,15 +347,24 @@ export default function GetStartedPage() {
                   <FieldError msg={errors.privacyConsent} />
                 </div>
 
-                {/* Submit */}
+                {/* Form-wide submit error */}
+                {error && (
+                  <div style={{ border: "1px solid rgba(192,57,43,0.3)", background: "rgba(192,57,43,0.05)", borderRadius: 6, padding: "10px 14px" }}>
+                    <p style={{ margin: 0, fontSize: 13, color: "#C0392B" }}>{error}</p>
+                  </div>
+                )}
+
+                {/* Submit — disabled until every required field + both checkboxes are valid */}
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !formValid}
                   style={{
-                    width: "100%", padding: "14px", background: submitting ? "#8AAEC4" : "#E8A020",
+                    width: "100%", padding: "14px",
+                    background: submitting || !formValid ? "#C9B47A" : "#E8A020",
                     color: "#fff", fontWeight: 800, fontSize: 14, border: "none", borderRadius: 6,
-                    cursor: submitting ? "not-allowed" : "pointer", textTransform: "uppercase",
+                    cursor: submitting || !formValid ? "not-allowed" : "pointer", textTransform: "uppercase",
                     letterSpacing: 1.5, transition: "background 0.2s",
+                    opacity: !formValid && !submitting ? 0.7 : 1,
                   }}
                 >
                   {submitting ? "Submitting…" : "Submit the Form"}
@@ -371,27 +373,26 @@ export default function GetStartedPage() {
             )}
           </div>
 
-    {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
-      {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
+          {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {/* Caregiver photo */}
             <div style={{ borderRadius: 10, overflow: "hidden" }}>
               <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover" }} />
             </div>
 
-   {/* Assessment Card */}
-<div style={{ 
-  background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)", 
-  borderRadius: 16, 
-  padding: 32, 
-  textAlign: "center",
-  boxShadow: "0 4px 24px rgba(0,91,142,0.18)"
-}}>
-  <h3 style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: "0 0 16px 0" }}>Get Free Care Assessment</h3>
-  <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, margin: 0 }}>Request a free consultation by completing the form and our team can help answer all your questions.</p>
-</div>
+            {/* Assessment Card */}
+            <div style={{ 
+              background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)", 
+              borderRadius: 16, 
+              padding: 32, 
+              textAlign: "center",
+              boxShadow: "0 4px 24px rgba(0,91,142,0.18)"
+            }}>
+              <h3 style={{ color: "#fff", fontSize: 20, fontWeight: 700, margin: "0 0 16px 0" }}>Get Free Care Assessment</h3>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, margin: 0 }}>Request a free consultation by completing the form and our team can help answer all your questions.</p>
+            </div>
 
-            {/* NEW: What You Can Expect */}
+            {/* What You Can Expect */}
             <div style={{ background: "#fff", borderRadius: 10, padding: 32, border: "1px solid #D8DFE8" }}>
               <h3 style={{ color: "#005B8E", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>What you can Expect</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>

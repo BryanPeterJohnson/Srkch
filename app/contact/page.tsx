@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Phone,
   Mail,
@@ -12,6 +11,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { useFormspree } from "../../components/Useformspree";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const services = [
@@ -64,6 +64,12 @@ interface FormState {
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
+// ─── Shared input style (beats any global CSS) ──────────────────────────────────
+const FIELD_TEXT_COLOR = "#1A1A2E";
+
+// ─── Validation ────────────────────────────────────────────────────────────────
+const EMAIL_RE = /\S+@\S+\.\S+/;
+
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function ContactPage() {
   const [formState, setFormState] = useState<FormState>({
@@ -75,9 +81,10 @@ export default function ContactPage() {
     consent: false,
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // Formspree — replace "meajvrgk" if the endpoint ever changes.
+  const { submit, submitting, submitted, error } = useFormspree("meajvrgk");
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function setField<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -89,12 +96,20 @@ export default function ContactPage() {
     const e: FormErrors = {};
     if (!formState.name.trim()) e.name = "Full name is required.";
     if (!formState.phone.trim()) e.phone = "Phone number is required.";
-    if (!formState.email.trim() || !/\S+@\S+\.\S+/.test(formState.email))
+    if (!formState.email.trim() || !EMAIL_RE.test(formState.email))
       e.email = "Valid email is required.";
     if (!formState.service) e.service = "Please select a service.";
     if (!formState.consent) e.consent = "Please agree to be contacted.";
     return e;
   }
+
+  // All required fields filled + consent checked → button becomes enabled.
+  const isFormValid =
+    formState.name.trim() !== "" &&
+    formState.phone.trim() !== "" &&
+    EMAIL_RE.test(formState.email) &&
+    formState.service !== "" &&
+    formState.consent;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,17 +118,19 @@ export default function ContactPage() {
       setErrors(errs);
       return;
     }
-    setSubmitting(true);
-    // TODO: replace with your real API route
-    // await fetch("/api/contact", { method: "POST", body: JSON.stringify(formState) });
-    await new Promise((r) => setTimeout(r, 1000));
-    setSubmitting(false);
-    setSubmitted(true);
+    await submit({
+      name: formState.name,
+      phone: formState.phone,
+      email: formState.email,
+      service: formState.service,
+      message: formState.message,
+    });
   }
 
   const inputClass = (field: keyof FormErrors) =>
     [
       "w-full px-4 py-3 rounded-lg border text-sm outline-none transition-all",
+      "placeholder-gray-400",
       errors[field]
         ? "border-[#D94F3D] focus:ring-2 focus:ring-[#D94F3D]/30"
         : "border-gray-200 focus:border-[#005B8E] focus:ring-2 focus:ring-[#005B8E]/20",
@@ -188,7 +205,9 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
+                    required
                     className={inputClass("name")}
+                    style={{ color: FIELD_TEXT_COLOR }}
                     placeholder="Jane Smith"
                     autoComplete="name"
                     value={formState.name}
@@ -207,7 +226,9 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="tel"
+                      required
                       className={inputClass("phone")}
+                      style={{ color: FIELD_TEXT_COLOR }}
                       placeholder="(212) 555-0100"
                       autoComplete="tel"
                       value={formState.phone}
@@ -223,7 +244,9 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="email"
+                      required
                       className={inputClass("email")}
+                      style={{ color: FIELD_TEXT_COLOR }}
                       placeholder="jane@example.com"
                       autoComplete="email"
                       value={formState.email}
@@ -241,13 +264,17 @@ export default function ContactPage() {
                     Service of Interest <span className="text-[#D94F3D]">*</span>
                   </label>
                   <select
+                    required
                     className={inputClass("service")}
+                    style={{ color: formState.service ? FIELD_TEXT_COLOR : "#9CA3AF" }}
                     value={formState.service}
                     onChange={(e) => setField("service", e.target.value)}
                   >
-                    <option value="">Select a service...</option>
+                    <option value="" style={{ color: "#9CA3AF" }}>
+                      Select a service...
+                    </option>
                     {services.map((s) => (
-                      <option key={s} value={s}>
+                      <option key={s} value={s} style={{ color: FIELD_TEXT_COLOR }}>
                         {s}
                       </option>
                     ))}
@@ -264,7 +291,8 @@ export default function ContactPage() {
                   </label>
                   <textarea
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none transition-all focus:border-[#005B8E] focus:ring-2 focus:ring-[#005B8E]/20 resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none transition-all focus:border-[#005B8E] focus:ring-2 focus:ring-[#005B8E]/20 resize-none placeholder-gray-400"
+                    style={{ color: FIELD_TEXT_COLOR }}
                     placeholder="Tell us a bit about your care needs..."
                     value={formState.message}
                     onChange={(e) => setField("message", e.target.value)}
@@ -276,13 +304,14 @@ export default function ContactPage() {
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
+                      required
                       className="mt-0.5 flex-shrink-0 accent-[#005B8E]"
                       checked={formState.consent}
                       onChange={(e) => setField("consent", e.target.checked)}
                     />
                     <span className="text-sm text-[#6B7280]">
                       I agree to be contacted by SRK Care at Home via phone or email regarding my
-                      inquiry.
+                      inquiry. <span className="text-[#D94F3D]">*</span>
                     </span>
                   </label>
                   {errors.consent && (
@@ -290,15 +319,22 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {/* Submit */}
-              <button
-  type="submit"
-  disabled={submitting}
-  className="w-full py-3.5 rounded-md text-white font-bold text-base transition-all hover:bg-[#003A5C] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-  style={{ background: "#005B8E" }}
->
-  {submitting ? "Sending…" : "Send Message →"}
-</button>
+                {/* Form-wide submit error */}
+                {error && (
+                  <div className="rounded-lg border border-[#D94F3D]/30 bg-[#D94F3D]/5 px-4 py-3">
+                    <p className="text-sm text-[#D94F3D]">{error}</p>
+                  </div>
+                )}
+
+                {/* Submit — disabled until all required fields + consent are valid */}
+                <button
+                  type="submit"
+                  disabled={submitting || !isFormValid}
+                  className="w-full py-3.5 rounded-md text-white font-bold text-base transition-all hover:bg-[#003A5C] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-[#005B8E] cursor-pointer"
+                  style={{ background: "#005B8E" }}
+                >
+                  {submitting ? "Sending…" : "Send Message →"}
+                </button>
               </form>
             )}
           </div>
@@ -397,42 +433,38 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Map placeholders */}
+            {/* Maps */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div
-                className="rounded-2xl overflow-hidden flex items-center justify-center"
-                style={{
-                  height: 220,
-                  background: "linear-gradient(135deg, #E8F4FD, #D4EEF7)",
-                  boxShadow: "0 4px 20px rgba(0,91,142,0.08)",
-                }}
+                className="rounded-2xl overflow-hidden"
+                style={{ height: 220, boxShadow: "0 4px 20px rgba(0,91,142,0.08)" }}
               >
-                <div className="text-center px-3">
-                  <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
-                  <div className="text-sm text-[#6B7280]">
-                    8115 Maple Lawn Blvd, Suite 350
-                    <br />
-                    Fulton, MD 20759
-                  </div>
-                </div>
+                <iframe
+                  title="Fulton Office"
+                  src="https://maps.google.com/maps?q=8115+Maple+Lawn+Blvd+Suite+350,+Fulton,+MD+20759&z=15&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
               </div>
 
               <div
-                className="rounded-2xl overflow-hidden flex items-center justify-center"
-                style={{
-                  height: 220,
-                  background: "linear-gradient(135deg, #E8F4FD, #D4EEF7)",
-                  boxShadow: "0 4px 20px rgba(0,91,142,0.08)",
-                }}
+                className="rounded-2xl overflow-hidden"
+                style={{ height: 220, boxShadow: "0 4px 20px rgba(0,91,142,0.08)" }}
               >
-                <div className="text-center px-3">
-                  <MapPin size={32} className="text-[#005B8E] mx-auto mb-2" />
-                  <div className="text-sm text-[#6B7280]">
-                    10451 Mill Run Cir #400
-                    <br />
-                    Owings Mills, MD 21117
-                  </div>
-                </div>
+                <iframe
+                  title="Owings Mills Office"
+                  src="https://maps.google.com/maps?q=10451+Mill+Run+Cir+%23400,+Owings+Mills,+MD+21117&z=15&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
               </div>
             </div>
           </div>
@@ -462,7 +494,7 @@ export default function ContactPage() {
               >
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between px-6 py-4 text-left"
+                  className="w-full flex items-center justify-between px-6 py-4 text-left cursor-pointer"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   aria-expanded={openFaq === i}
                 >

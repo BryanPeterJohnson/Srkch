@@ -22,6 +22,12 @@ import {
   GraduationCap,
   Activity,
   CheckCircle,
+  Check,
+  Copy,
+  Mail,
+  Linkedin,
+  Twitter,
+  Facebook,
 } from "lucide-react";
 
 // ── Real Data Import ─────────────────────────────────────────────────────────
@@ -104,8 +110,6 @@ function HeroSection({ onScroll }: { onScroll: () => void }) {
   );
 }
 
-
-
 function MultiSelectFilter({
   label,
   values,
@@ -141,7 +145,6 @@ function MultiSelectFilter({
     }
   };
 
-  // Filter options based on user search query
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -163,7 +166,6 @@ function MultiSelectFilter({
 
       {open && (
         <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-20 min-w-[240px] max-h-72 flex flex-col overflow-hidden">
-          {/* Search Box inside dropdown */}
           <div className="p-2 border-b border-gray-100 sticky top-0 bg-white z-10 flex items-center gap-1.5">
             <Search className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 ml-1" />
             <input
@@ -184,7 +186,6 @@ function MultiSelectFilter({
             )}
           </div>
 
-          {/* Options List */}
           <div className="overflow-y-auto flex-1 max-h-48" data-lenis-prevent>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
@@ -217,6 +218,33 @@ function MultiSelectFilter({
 
 function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void; contentRef: React.RefObject<HTMLDivElement | null> }) {
   const router = useRouter();
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/job-description/${job.id}` : "";
+
+  const handleShareClick = async () => {
+    // If mobile browser supports native sharing API, use it
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: job.title,
+          url: shareUrl,
+        });
+        return;
+      } catch (err) {
+        console.log("Error sharing natively:", err);
+      }
+    }
+    // Otherwise open custom dialog
+    setIsShareOpen(!isShareOpen);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="h-full flex flex-col overflow-hidden bg-white">
@@ -261,19 +289,109 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
                 {job.license}
               </span>
             </div>
-
-           
           </div>
 
           {/* Action Column Top-Right */}
           <div className="flex flex-col items-end flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <button aria-label="Save job" className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
-                <Heart className="w-4 h-4" />
-              </button>
-              <button aria-label="Share job" className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
-                <Share2 className="w-4 h-4" />
-              </button>
+            <div className="flex items-center gap-2 relative">
+      
+
+              {/* Share Button & Popover Dialog Box */}
+              <div className="relative">
+             <button 
+  onClick={handleShareClick}
+  aria-label="Share job" 
+  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition cursor-pointer"
+>
+  <Share2 className="w-4 h-4" />
+</button>
+
+                {isShareOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsShareOpen(false)} />
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 p-4 text-left">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-gray-900 text-sm">Share this job</h3>
+                        <button 
+                          onClick={() => setIsShareOpen(false)}
+                          className="text-gray-400 hover:text-gray-600 rounded-full p-1"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Copy Link Section */}
+                      <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-200 mb-4">
+                        <input 
+                          type="text" 
+                          readOnly 
+                          value={shareUrl} 
+                          className="bg-transparent text-xs text-gray-600 px-2 outline-none w-full truncate"
+                        />
+                        <button
+                          onClick={handleCopyLink}
+                          className="flex items-center gap-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition shadow-sm shrink-0 cursor-pointer"
+                        >
+                          {copied ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-green-600" />
+                              <span className="text-green-600">Copied</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 text-gray-500" />
+                              <span>Copy</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      {/* Social Share options */}
+                      <div className="text-xs font-medium text-gray-500 mb-2">Share via social media</div>
+                      <div className="grid grid-cols-4 gap-2">
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 transition"
+                        >
+                          <Linkedin className="w-4 h-4" />
+                          <span className="text-[10px]">LinkedIn</span>
+                        </a>
+
+                        <a
+                          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Check out this job: ${job.title}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 transition"
+                        >
+                          <Twitter className="w-4 h-4" />
+                          <span className="text-[10px]">Twitter</span>
+                        </a>
+
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 transition"
+                        >
+                          <Facebook className="w-4 h-4" />
+                          <span className="text-[10px]">Facebook</span>
+                        </a>
+
+                        <a
+                          href={`mailto:?subject=${encodeURIComponent(`Job Opportunity: ${job.title}`)}&body=${encodeURIComponent(`Check out this job opening: ${shareUrl}`)}`}
+                          className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 transition"
+                        >
+                          <Mail className="w-4 h-4" />
+                          <span className="text-[10px]">Email</span>
+                        </a>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
               <button
                 onClick={onClose}
                 aria-label="Close details"
@@ -283,18 +401,16 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
               </button>
             </div>
 
-            {/* Pushed slightly down with mt-6 */}
-        <button
-  onClick={() => router.push(`/apply-job?jobId=${job.id}`)}
-  className="mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap cursor-pointer"
->
-  Apply Now
-</button>
+            <button
+              onClick={() => router.push(`/apply-job?jobId=${job.id}`)}
+              className="mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap cursor-pointer"
+            >
+              Apply Now
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Description scrolls INSIDE the panel (like the video) — page itself stays put */}
       <div ref={contentRef} className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 space-y-6" data-lenis-prevent>
         {job.tagline && (
           <div className="bg-[#f0f6fb] rounded-lg px-4 py-3.5 border border-blue-50">
@@ -422,7 +538,6 @@ export default function CareersPage() {
   const [savedJobs, setSavedJobs] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  // Scroll job description to top whenever selected job changes
   useLayoutEffect(() => {
     if (!selectedJob) return;
     const el = jobDescriptionRef.current;
@@ -433,7 +548,6 @@ export default function CareersPage() {
     });
   }, [selectedJob]);
 
-  // Filter state
   const [keyword, setKeyword] = useState("");
   const [appliedKeyword, setAppliedKeyword] = useState("");
   const [jobCategories, setJobCategories] = useState<string[]>([]);
@@ -443,7 +557,6 @@ export default function CareersPage() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Scroll the jobs list back to top when the page number changes
   useEffect(() => {
     if (jobsListRef.current) {
       jobsListRef.current.scrollTo({ top: 0, behavior: "smooth" });
@@ -531,7 +644,6 @@ export default function CareersPage() {
           Explore Career Opportunities
         </h1>
 
-        {/* Filters Interface Container */}
         <div className="mb-6 space-y-4">
           <div className="flex max-w-[650px] gap-2">
             <div className="relative flex-1">
@@ -550,7 +662,7 @@ export default function CareersPage() {
                 setAppliedKeyword(keyword);
                 setCurrentPage(1);
               }}
-              className="h-10 px-6 bg-[#164e9a] hover:bg-[#1a365d] text-white font-semibold text-sm rounded transition tracking-wide"
+              className="h-10 px-6 bg-[#164e9a] hover:bg-[#1a365d] text-white font-semibold text-sm rounded transition tracking-wide cursor-pointer"
             >
               Search
             </button>
@@ -598,7 +710,7 @@ export default function CareersPage() {
                   </div>
                 ))}
               </div>
-              <button onClick={clearFilters} className="text-sm font-semibold text-[#0066cc] hover:underline underline-offset-2 ml-1">
+              <button onClick={clearFilters} className="text-sm font-semibold text-[#0066cc] hover:underline underline-offset-2 ml-1 cursor-pointer">
                 Clear All ({activeFilters.length})
               </button>
             </div>
@@ -610,16 +722,8 @@ export default function CareersPage() {
           <strong className="text-[#1a365d]">{totalJobs.toLocaleString()}</strong> matching jobs
         </p>
 
-        {/*
-          Indeed-style split view:
-          - The whole section is capped at viewport height, so the PAGE stops where the panels end
-          - LEFT: job cards scroll inside their own column (independent scrollbar)
-          - RIGHT: job description scrolls inside the detail panel
-          - Benefits card (no job selected) sizes to its content via h-fit self-start
-        */}
         <div ref={jobsSectionRef} className="flex gap-5 items-stretch w-full" style={{ height: "calc(100vh - 120px)" }}>
 
-          {/* Left Job Cards Column — independently scrollable */}
           <div
             ref={jobsListRef}
             data-lenis-prevent
@@ -687,8 +791,6 @@ export default function CareersPage() {
                         </div>
                       </div>
                     </div>
-
-              
                   </div>
                 );
               })}
@@ -700,7 +802,6 @@ export default function CareersPage() {
               )}
             </div>
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-6 pb-2">
                 <div className="flex items-center gap-1.5">
@@ -708,8 +809,7 @@ export default function CareersPage() {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded text-sm transition ${currentPage === page ? "bg-[#1a365d] text-white" : "hover:bg-gray-100 text-gray-700"
-                        }`}
+                      className={`w-8 h-8 rounded text-sm transition cursor-pointer ${currentPage === page ? "bg-[#1a365d] text-white" : "hover:bg-gray-100 text-gray-700"}`}
                     >
                       {page}
                     </button>
@@ -719,9 +819,6 @@ export default function CareersPage() {
             )}
           </div>
 
-          {/* Right Column: Benefits / Detailed View Component
-              — Detail view: full height, content scrolls inside
-              — Benefits card: hugs its content (h-fit self-start), no empty space below */}
           <div
             ref={detailPanelRef}
             className={`border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${selectedJob

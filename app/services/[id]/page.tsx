@@ -188,7 +188,7 @@ function RelatedServicesSlider({ related }: { related: typeof services }) {
         </button>
 
         <span className="text-sm font-medium text-slate-500">
-          {page + 1} of {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+          {page + 1} of {totalPages} {totalPages === 1 ? "Page" : "Services"}
         </span>
 
         <button
@@ -255,18 +255,22 @@ export default function ServiceDetailPage({ params }: PageProps) {
 
       {/* ═══════════════════════════════════════════
           HERO
+          - Mobile (< lg): text on white, then the full image below (uncropped).
+          - Desktop (lg+): image is the background with text overlaid + left fade.
       ═══════════════════════════════════════════ */}
-    <section className="relative overflow-hidden bg-white min-h-[400px] sm:min-h-[440px] lg:aspect-[16/6] lg:min-h-0">
-        <div className="absolute inset-0">
-     <img
-  src={(service as any).image}
-  alt={service.title}
-  className="h-full w-full object-cover object-[75%_20%] lg:object-[right_20%]"
-/>
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
+      <section className="relative overflow-hidden bg-white flex flex-col lg:block lg:aspect-[16/6] lg:min-h-0">
+        {/* Image — full block below text on mobile; absolute background on desktop */}
+        <div className="relative order-2 lg:order-none lg:absolute lg:inset-0 w-full h-[300px] sm:h-[380px] lg:h-auto">
+          <img
+            src={(service as any).image}
+            alt={service.title}
+            className="h-full w-full object-cover object-[center_25%] lg:object-[right_20%]"
+          />
+          {/* Desktop-only left fade to keep the overlaid text legible */}
+          <div className="absolute inset-0 hidden lg:block bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
         </div>
 
-<div className="relative ml-0 max-w-7xl pl-14 pr-4 py-10 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
+        <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl pl-6 pr-4 py-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
 
 
           <div className="max-w-[540px] text-left">
@@ -283,7 +287,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
               {(service as any).tagline || service.description}
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-6">
+            <div className="mt-7 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
               {([
                 [Users2,      "Compassionate", "Caregivers"],
                 [ShieldCheck, "Background",    "Checked"],
@@ -301,11 +305,11 @@ export default function ServiceDetailPage({ params }: PageProps) {
               ))}
             </div>
 
-            <div className="mt-8 flex gap-4">
-              <a href="/get-started" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <a href="/get-started" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
                 Request a Free Consultation <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="tel:+14436273806" className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
+              <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
                 <Phone className="h-4 w-4" /> Call (443) 6273806
               </a>
             </div>

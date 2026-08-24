@@ -1,8 +1,10 @@
 "use client";
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ALL_JOBS } from '@/app/data/jobs';
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/maewzrry";
 
 /*
  * Default export wraps the form in a Suspense boundary.
@@ -22,6 +24,84 @@ function ApplicationFormContent() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
   const job = ALL_JOBS.find((j) => j.id.toString() === jobId);
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    location: "",
+    disabilityStatus: "",
+    veteranStatus: "",
+    race: "",
+    gender: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Every field (text inputs + dropdowns) must be filled for the form to be valid.
+  const isValid = Object.values(form).every((v) => v.trim() !== "");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isValid || submitting) return;
+
+    setSubmitting(true);
+    setError("");
+
+    const payload = {
+      ...form,
+      jobTitle: job ? job.title : "General Application",
+      jobId: job ? job.id : "N/A",
+      jobLocation: job ? job.location : "N/A",
+      appliedFor: job ? `${job.title} (Ref #${job.id}) — ${job.location}` : "General Application",
+    };
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(
+          data?.errors?.map((err) => err.message).join(", ") ||
+            "Something went wrong. Please try again."
+        );
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display flex items-center justify-center">
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-sm border border-gray-200 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#159BA1]/10 text-[#159BA1] text-2xl">✓</div>
+          <h1 className="text-xl font-bold text-[#0E162B] mt-4 font-display">Application Submitted</h1>
+          <p className="text-sm text-gray-600 mt-2 font-display">
+            Thank you for applying{job ? ` for ${job.title}` : ""}. We&apos;ll be in touch soon.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
@@ -52,7 +132,7 @@ function ApplicationFormContent() {
           </p>
         </header>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
 
           {/* Section 1: Your Information & Location */}
           <div className="bg-[#159BA1]/5 p-6 rounded-lg shadow-sm border border-[#159BA1]/30 space-y-4">
@@ -61,45 +141,38 @@ function ApplicationFormContent() {
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">First Name <span className="text-[#E57531]">*</span></label>
-                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input type="text" name="firstName" value={form.firstName} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Last Name <span className="text-[#E57531]">*</span></label>
-                <input type="text" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input type="text" name="lastName" value={form.lastName} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Email <span className="text-[#E57531]">*</span></label>
-                <input type="email" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input type="email" name="email" value={form.email} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Phone <span className="text-[#E57531]">*</span></label>
-                <input type="tel" required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input type="tel" name="phone" value={form.phone} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Location <span className="text-[#E57531]">*</span></label>
                 <input
                   type="text"
+                  name="location"
+                  value={form.location}
+                  onChange={handleChange}
                   required
                   placeholder="City, State (e.g. Philadelphia, PA)"
                   className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
                 <p className="text-xs text-gray-500 mt-1 font-display">Enter the city and state where you&apos;re looking for work.</p>
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 font-display">Resume/CV <span className="text-[#E57531]">*</span></label>
-                <input type="file" required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#0D2D52] file:text-white hover:file:bg-[#005B8E] bg-white border border-gray-300 rounded p-1 font-display" />
-                <p className="text-xs text-gray-500 mt-1 font-display">We accept doc, docx, pdf, txt, and rtf files.</p>
-              </div>
-
-
             </div>
-
-
           </div>
 
           {/* Section 2: Voluntary Self-Identification Forms */}
@@ -155,8 +228,8 @@ function ApplicationFormContent() {
               </ul>
 
               <div className="pt-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Disability Status</label>
-                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Disability Status <span className="text-[#E57531]">*</span></label>
+                <select name="disabilityStatus" value={form.disabilityStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="yes">Yes, I Have A Disability, Or Have A History/Record Of Having A Disability</option>
                   <option value="no">No, I Don&apos;t Have A Disability, Or A History/Record Of Having A Disability</option>
@@ -184,8 +257,8 @@ function ApplicationFormContent() {
               </p>
 
               <div className="pt-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Veteran Status</label>
-                <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Veteran Status <span className="text-[#E57531]">*</span></label>
+                <select name="veteranStatus" value={form.veteranStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="protected">I identify as one or more of the classifications of protected veteran</option>
                   <option value="not_veteran">I am not a protected veteran</option>
@@ -206,8 +279,8 @@ function ApplicationFormContent() {
 
               <div className="grid grid-cols-1 gap-4 pt-2">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Race</label>
-                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Race <span className="text-[#E57531]">*</span></label>
+                  <select name="race" value={form.race} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="white">White (Not Hispanic or Latino)</option>
                     <option value="black">Black or African American (Not Hispanic or Latino)</option>
@@ -221,8 +294,8 @@ function ApplicationFormContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Gender</label>
-                  <select className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Gender <span className="text-[#E57531]">*</span></label>
+                  <select name="gender" value={form.gender} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -234,10 +307,18 @@ function ApplicationFormContent() {
 
           </div>
 
+          {error && (
+            <p className="text-sm text-red-600 font-display">{error}</p>
+          )}
+
           {/* Action Button */}
           <div className="pt-2">
-            <button type="submit" className="bg-[#E57531] hover:bg-[#0C447C] text-white font-bold text-sm py-3 px-6 rounded shadow transition w-full sm:w-auto font-display">
-              Submit Application
+            <button
+              type="submit"
+              disabled={!isValid || submitting}
+              className="bg-[#E57531] hover:bg-[#0C447C] text-white font-bold text-sm py-3 px-6 rounded shadow transition w-full sm:w-auto font-display disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#E57531]"
+            >
+              {submitting ? "Submitting..." : "Submit Application"}
             </button>
           </div>
         </form>

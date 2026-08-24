@@ -274,40 +274,40 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white font-display">
       {/* ---------------------------------------------------------------- */}
-      {/* Hero — matched to Home hero text sizes, spacing & positioning     */}
+      {/* Hero — stacked on mobile/tablet, overlay on desktop, text left    */}
       {/* ---------------------------------------------------------------- */}
-      <section className="relative h-[55vh] min-h-[500px] max-h-[550px] 2xl:min-h-[620px] 2xl:max-h-[680px] overflow-hidden bg-white font-display">
-        <Image
-          src="/images/About/hero.png"
-          alt="Caregiver sharing a warm moment with a senior client"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[85%_20%] lg:object-[right_10%]"
-        />
+      <section className="relative bg-white font-display overflow-hidden flex flex-col lg:block lg:h-[55vh] lg:min-h-[500px] lg:max-h-[550px] 2xl:min-h-[620px] 2xl:max-h-[680px]">
 
-        {/* Gradient overlay */}
-        {/* Desktop */}
-        <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[50%]" />
+        {/* IMAGE — full block below text on mobile/tablet; absolute background on desktop */}
+        <div className="relative order-2 lg:order-none lg:absolute lg:inset-0 w-full h-[300px] sm:h-[380px] lg:h-full">
+          <Image
+            src="/images/About/hero.png"
+            alt="Caregiver sharing a warm moment with a senior client"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[right_20%] lg:object-[right_10%]"
+          />
 
-        {/* Mobile */}
-        <div className="absolute inset-0 z-[1] pointer-events-none lg:hidden bg-gradient-to-t from-white via-white/60 to-transparent" />
+          {/* Desktop-only left-to-right white gradient */}
+          <div className="absolute inset-0 z-[1] pointer-events-none hidden lg:block bg-gradient-to-r from-white via-white/50 via-[45%] to-transparent to-[50%]" />
 
-        {/* Accent stripe */}
-        <div
-          className="absolute bottom-0 right-0 z-[2] w-full h-2.5 sm:h-3 pointer-events-none bg-gradient-to-r from-[#E57531] via-[#159BA1] to-[#046e4c]"
-          style={{ clipPath: "polygon(20% 100%, 100% 0%, 100% 100%)" }}
-        />
+          {/* Accent stripe — desktop only (needs the overlay layout) */}
+          <div
+            className="absolute bottom-0 right-0 z-[2] w-full h-2.5 sm:h-3 pointer-events-none hidden lg:block bg-gradient-to-r from-[#E57531] via-[#159BA1] to-[#046e4c]"
+            style={{ clipPath: "polygon(20% 100%, 100% 0%, 100% 100%)" }}
+          />
+        </div>
 
-        {/* CONTENT */}
-        <div className="absolute inset-0 z-[10]">
-          <div className="w-full h-full px-6 lg:px-16 xl:px-24 2xl:px-40 mx-auto max-w-[1920px]">
-            <div className="max-w-[600px] 2xl:max-w-[820px] h-full flex flex-col justify-center items-start text-left">
-              <div className="space-y-6 2xl:space-y-9">
+        {/* CONTENT — on white above the image on mobile/tablet; overlaid + left on desktop */}
+        <div className="relative order-1 lg:order-none z-[10] lg:absolute lg:inset-0">
+          <div className="w-full h-full px-6 lg:px-8 xl:px-12 2xl:px-20 mx-auto max-w-[1920px]">
+            <div className="max-w-full lg:max-w-[600px] 2xl:max-w-[820px] h-full flex flex-col justify-center items-start text-left pt-8 pb-8 lg:py-0">
+              <div className="space-y-4 sm:space-y-6 2xl:space-y-9">
 
                 {/* HEADLINE */}
                 <h1
-                  className="font-display font-black text-[#0C447C] text-[clamp(28px,3.8vw,40px)] 2xl:text-[54px]"
+                  className="font-display font-black text-[#0C447C] text-[clamp(28px,6.5vw,40px)] 2xl:text-[54px]"
                   style={{
                     lineHeight: 1.12,
                     letterSpacing: "-0.5px",
@@ -320,7 +320,7 @@ export default function AboutPage() {
 
                 {/* SUBTEXT */}
                 <p
-                  className="font-display text-[#3E4C63] text-[clamp(13px,1vw,15px)] 2xl:text-[19px] max-w-[460px] 2xl:max-w-[620px]"
+                  className="font-display text-[#3E4C63] text-[clamp(13px,3.4vw,15px)] 2xl:text-[19px] max-w-[460px] 2xl:max-w-[620px]"
                   style={{
                     lineHeight: 1.6,
                   }}
@@ -332,12 +332,12 @@ export default function AboutPage() {
                 </p>
 
                 {/* ICON BADGE ROW */}
-                <div className="flex flex-wrap items-start gap-x-6 gap-y-4 2xl:gap-x-9 2xl:gap-y-5 pt-1">
+                <div className="flex flex-wrap items-start gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4 2xl:gap-x-9 2xl:gap-y-5 pt-1">
                   {HERO_BADGES.map((b, i) => (
                     <div key={i} className="flex items-center gap-2 2xl:gap-3">
                       <b.icon
                         strokeWidth={1.75}
-                        className="flex-shrink-0 w-[20px] h-[20px] 2xl:w-7 2xl:h-7"
+                        className="flex-shrink-0 w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] 2xl:w-7 2xl:h-7"
                         style={{ color: b.color }}
                       />
                       <span className="font-display font-semibold text-[#1A1A2E] whitespace-pre-line leading-tight text-[11px] 2xl:text-[14px]">
@@ -348,19 +348,19 @@ export default function AboutPage() {
                 </div>
 
                 {/* BUTTONS */}
-                <div className="flex gap-3 2xl:gap-4 flex-wrap items-center pt-2">
+                <div className="flex gap-3 2xl:gap-4 flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center pt-2 w-full sm:w-auto">
                   <Link
                     href="/get-started"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all shadow-md text-[13px] 2xl:text-base cursor-pointer"
+                    className="font-display inline-flex justify-center items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#E57531] hover:bg-[#0C447C] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all shadow-md text-[13px] 2xl:text-base cursor-pointer"
                   >
                     Request a Free Consultation
                   </Link>
                   <Link
                     href="tel:+14436273806"
-                    className="font-display inline-flex items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all text-[13px] 2xl:text-base cursor-pointer"
+                    className="font-display inline-flex justify-center items-center gap-2 px-6 py-3 2xl:px-9 2xl:py-4 bg-[#0C447C] border-2 border-[#0C447C] hover:bg-[#046e4c] hover:border-[#046e4c] text-white font-bold rounded-xl 2xl:rounded-2xl transition-all text-[13px] 2xl:text-base cursor-pointer"
                   >
                     <Phone className="w-[14px] h-[14px] 2xl:w-[18px] 2xl:h-[18px]" />
-                    Call (443) 6273806
+                    Call (443) 627-3806
                   </Link>
                 </div>
 
