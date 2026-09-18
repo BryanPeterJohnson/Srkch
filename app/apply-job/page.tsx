@@ -4,7 +4,14 @@ import React, { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ALL_JOBS } from '@/app/data/jobs';
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/maewzrry";
+// ─── File upload constraints (CV / resume) ──────────────────────────────────
+const MAX_CV_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_CV_TYPES = [
+  "application/pdf",
+  "application/msword", // .doc
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+];
+const ALLOWED_CV_EXTENSIONS = [".pdf", ".doc", ".docx"];
 
 /*
  * Default export wraps the form in a Suspense boundary.
@@ -36,6 +43,8 @@ function ApplicationFormContent() {
     race: "",
     gender: "",
   });
+  const [cv, setCv] = useState<File | null>(null); // ← NEW: CV file state
+  const [cvError, setCvError] = useState("");        // ← NEW: inline file error
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
@@ -45,8 +54,40 @@ function ApplicationFormContent() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Every field (text inputs + dropdowns) must be filled for the form to be valid.
-  const isValid = Object.values(form).every((v) => v.trim() !== "");
+  // ─── NEW: validate the chosen file (type + extension + size) ──────────────
+  const handleFileChange = (e) => {
+    setCvError("");
+    const file = e.target.files?.[0] ?? null;
+
+    if (!file) {
+      setCv(null);
+      return;
+    }
+
+    const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+    const typeOk = ALLOWED_CV_TYPES.includes(file.type);
+    const extOk = ALLOWED_CV_EXTENSIONS.includes(ext);
+
+    if (!typeOk && !extOk) {
+      setCv(null);
+      e.target.value = ""; // reset the input so the same bad file can be re-picked
+      setCvError("Only PDF or Word (.doc, .docx) files are allowed.");
+      return;
+    }
+
+    if (file.size > MAX_CV_SIZE) {
+      setCv(null);
+      e.target.value = "";
+      setCvError("File is too large. Maximum size is 5MB.");
+      return;
+    }
+
+    setCv(file);
+  };
+
+  // Every field (text inputs + dropdowns) must be filled, and a valid CV attached.
+  const isValid =
+    Object.values(form).every((v) => v.trim() !== "") && cv !== null; // ← CV now required
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,32 +96,30 @@ function ApplicationFormContent() {
     setSubmitting(true);
     setError("");
 
-    const payload = {
-      ...form,
-      jobTitle: job ? job.title : "General Application",
-      jobId: job ? job.id : "N/A",
-      jobLocation: job ? job.location : "N/A",
-      appliedFor: job ? `${job.title} (Ref #${job.id}) — ${job.location}` : "General Application",
-    };
+    // ─── CHANGED: build multipart FormData (needed to send the file) ────────
+    const fd = new FormData();
+    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
+    fd.append("jobTitle", job ? job.title : "General Application");
+    fd.append("jobId", job ? job.id.toString() : "N/A");
+    fd.append("jobLocation", job ? job.location : "N/A");
+    fd.append(
+      "appliedFor",
+      job ? `${job.title} (Ref #${job.id}) — ${job.location}` : "General Application"
+    );
+    if (cv) fd.append("cv", cv); // ← attach the file
 
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      // ─── CHANGED: post to your own backend route instead of Formspree ─────
+      const res = await fetch("/api/apply", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
+        body: fd, // NOTE: do not set Content-Type — the browser sets the multipart boundary
       });
 
       if (res.ok) {
         setSubmitted(true);
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(
-          data?.errors?.map((err) => err.message).join(", ") ||
-            "Something went wrong. Please try again."
-        );
+        setError(data?.error || "Something went wrong. Please try again.");
       }
     } catch {
       setError("Network error. Please try again.");
@@ -171,6 +210,32 @@ function ApplicationFormContent() {
                   className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
                 <p className="text-xs text-gray-500 mt-1 font-display">Enter the city and state where you&apos;re looking for work.</p>
+              </div>
+
+              {/* ─── NEW: CV / Resume upload (PDF or Word, max 5MB) ─────────── */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 font-display">
+                  Upload CV / Resume <span className="text-[#E57531]">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="cv"
+                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  onChange={handleFileChange}
+                  required
+                  className="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:rounded file:border-0 file:bg-[#159BA1] file:px-3 file:py-2 file:text-white file:font-semibold hover:file:bg-[#0C447C] file:cursor-pointer font-display"
+                />
+                <p className="text-xs text-gray-500 mt-1 font-display">
+                  PDF or Word document (.pdf, .doc, .docx). Maximum size 5MB.
+                </p>
+                {cv && !cvError && (
+                  <p className="text-xs text-[#159BA1] mt-1 font-display">
+                    Selected: {cv.name} ({(cv.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                )}
+                {cvError && (
+                  <p className="text-xs text-red-600 mt-1 font-display">{cvError}</p>
+                )}
               </div>
             </div>
           </div>

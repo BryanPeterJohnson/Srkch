@@ -112,9 +112,9 @@ function SelectField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         style={{
-          width: "100%", padding: "10px 14px", fontSize: 13, color: value ? "#1A2B3C" : "#8A9BAC",
+          width: "100%", padding: "10px 14px", fontSize: 16, color: value ? "#1A2B3C" : "#8A9BAC",
           border: `1px solid ${error ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6,
-          background: "#fff", appearance: "none", outline: "none",
+          background: "#fff", appearance: "none", outline: "none", boxSizing: "border-box",
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A6A7A' strokeWidth='1.5' fill='none' strokeLinecap='round'/%3E%3C/svg%3E")`,
           backgroundRepeat: "no-repeat", backgroundPosition: "right 14px center",
         }}
@@ -146,7 +146,7 @@ function TextInput({
         placeholder={placeholder || label}
         autoComplete={autoComplete}
         style={{
-          width: "100%", padding: "10px 14px", fontSize: 13, color: "#1A2B3C",
+          width: "100%", padding: "10px 14px", fontSize: 16, color: "#1A2B3C",
           border: `1px solid ${error ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6,
           background: "#fff", outline: "none", boxSizing: "border-box",
         }}
@@ -203,6 +203,30 @@ export default function GetStartedPage() {
   return (
     <div style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif", color: "#1A2B3C", background: "#F7F8FA", minHeight: "100vh" }}>
 
+      {/* ── Responsive rules (inline styles can't hold media queries) ────────── */}
+      <style>{`
+        .gs-grid {
+          display: grid;
+          grid-template-columns: minmax(0,1.1fr) minmax(0,0.9fr);
+          gap: 40px;
+          align-items: start;
+        }
+        .gs-name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .gs-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+        .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 52px 24px; text-align: center; position: relative; }
+        @media (max-width: 860px) {
+          .gs-grid { grid-template-columns: 1fr; gap: 28px; }
+          .gs-main { padding: 32px 16px; }
+          .gs-hero-inner { padding: 40px 16px; }
+        }
+        @media (max-width: 480px) {
+          .gs-name-grid { grid-template-columns: 1fr; }
+          .gs-main { padding: 24px 14px; }
+          .gs-form { padding: 20px !important; }
+          .gs-card { padding: 22px !important; }
+        }
+      `}</style>
+
       {/* ── Hero banner ─────────────────────────────────────────────────────── */}
       <div style={{ position: "relative", background: "#003A5C", overflow: "hidden" }}>
         {/* Decorative pattern */}
@@ -214,7 +238,7 @@ export default function GetStartedPage() {
             }} />
           ))}
         </div>
-        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "52px 24px", textAlign: "center" }}>
+        <div className="gs-hero-inner">
           <h1 style={{ color: "#fff", fontSize: "clamp(22px, 4vw, 38px)", fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
             Get Started with Home Care in New Jersey
           </h1>
@@ -225,24 +249,24 @@ export default function GetStartedPage() {
       </div>
 
       {/* ── Main content ────────────────────────────────────────────────────── */}
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.1fr) minmax(0,0.9fr)", gap: 40, alignItems: "start" }}>
+      <main className="gs-main">
+        <div className="gs-grid">
 
           {/* ── LEFT: Form ──────────────────────────────────────────────────── */}
           <div>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6, font:'Playfair Display'}}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6, font: 'Playfair Display' }}>
               Speak With Our 24/7 Care Team
             </h2>
             <p style={{ fontSize: 14, color: "#5A6A7A", marginBottom: 28, lineHeight: 1.6 }}>
-            No matter what time of day, our Care Services Center is always available, 365 days a year. Give us a call and our team will aim to pick up within 30 seconds. 
-            Or fill out the form to book your Caring Consult.
+              No matter what time of day, our Care Services Center is always available, 365 days a year. Give us a call and our team will aim to pick up within 30 seconds.
+              Or fill out the form to book your Caring Consult.
             </p>
 
             {submitted ? (
-              <div style={{ background: "#fff", borderRadius: 10, padding: 40, textAlign: "center", border: "1px solid #D8DFE8" }}>
+              <div className="gs-card" style={{ background: "#fff", borderRadius: 10, padding: 40, textAlign: "center", border: "1px solid #D8DFE8" }}>
                 <div style={{ width: 56, height: 56, background: "#E8F5E9", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l4 4L19 7" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M5 13l4 4L19 7" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1A2B3C", margin: "0 0 8px" }}>Thank You!</h3>
@@ -254,7 +278,7 @@ export default function GetStartedPage() {
                 </a>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate style={{ background: "#fff", borderRadius: 10, padding: 28, border: "1px solid #D8DFE8", display: "flex", flexDirection: "column", gap: 18 }}>
+              <form onSubmit={handleSubmit} noValidate className="gs-form" style={{ background: "#fff", borderRadius: 10, padding: 28, border: "1px solid #D8DFE8", display: "flex", flexDirection: "column", gap: 18 }}>
 
                 <SelectField label="Who Needs Care?" value={form.whoNeedsCare} onChange={(v) => setField("whoNeedsCare", v)} options={WHO_OPTIONS} error={errors.whoNeedsCare} />
                 <SelectField label="Male or Female?" value={form.gender} onChange={(v) => setField("gender", v)} options={GENDER_OPTIONS} error={errors.gender} placeholder="Male or Female?" />
@@ -285,7 +309,7 @@ export default function GetStartedPage() {
                 </div>
 
                 {/* Name */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div className="gs-name-grid">
                   <TextInput label="First Name" value={form.firstName} onChange={(v) => setField("firstName", v)} error={errors.firstName} autoComplete="given-name" />
                   <TextInput label="Last Name" value={form.lastName} onChange={(v) => setField("lastName", v)} error={errors.lastName} autoComplete="family-name" />
                 </div>
@@ -298,7 +322,7 @@ export default function GetStartedPage() {
                     Phone <span style={{ color: "#C0392B" }}>*</span>
                   </label>
                   <div style={{ display: "flex", border: `1px solid ${errors.phone ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6, overflow: "hidden", background: "#fff" }}>
-                    <div style={{ padding: "10px 12px", background: "#F7F8FA", borderRight: "1px solid #D8DFE8", fontSize: 13, color: "#5A6A7A", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                    <div style={{ padding: "10px 12px", background: "#F7F8FA", borderRight: "1px solid #D8DFE8", fontSize: 14, color: "#5A6A7A", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
                       🇺🇸 +1
                     </div>
                     <input
@@ -308,7 +332,7 @@ export default function GetStartedPage() {
                       onChange={(e) => setField("phone", e.target.value)}
                       placeholder="(555) 000-0000"
                       autoComplete="tel"
-                      style={{ flex: 1, padding: "10px 14px", fontSize: 13, border: "none", outline: "none", color: "#1A2B3C" }}
+                      style={{ flex: 1, minWidth: 0, padding: "10px 14px", fontSize: 16, border: "none", outline: "none", color: "#1A2B3C" }}
                     />
                   </div>
                   <FieldError msg={errors.phone} />
@@ -330,7 +354,7 @@ export default function GetStartedPage() {
                   </label>
                   <FieldError msg={errors.optInConsent} />
 
-                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5 }}>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5, flexWrap: "wrap" }}>
                     <input
                       type="checkbox"
                       required
@@ -338,11 +362,13 @@ export default function GetStartedPage() {
                       onChange={(e) => setField("privacyConsent", e.target.checked)}
                       style={{ accentColor: "#005B8E", width: 15, height: 15, marginTop: 2, flexShrink: 0 }}
                     />
-                    I agree to the{" "}
-                    <Link href="/privacy-policy" style={{ color: "#005B8E", textDecoration: "underline" }}>
-                      privacy policy
-                    </Link>
-                    . (Bottom of Page)
+                    <span>
+                      I agree to the{" "}
+                      <Link href="/privacy-policy" style={{ color: "#005B8E", textDecoration: "underline" }}>
+                        privacy policy
+                      </Link>
+                      . (Bottom of Page)
+                    </span>
                   </label>
                   <FieldError msg={errors.privacyConsent} />
                 </div>
@@ -377,14 +403,14 @@ export default function GetStartedPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {/* Caregiver photo */}
             <div style={{ borderRadius: 10, overflow: "hidden" }}>
-              <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover" }} />
+              <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }} />
             </div>
 
             {/* Assessment Card */}
-            <div style={{ 
-              background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)", 
-              borderRadius: 16, 
-              padding: 32, 
+            <div className="gs-card" style={{
+              background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)",
+              borderRadius: 16,
+              padding: 32,
               textAlign: "center",
               boxShadow: "0 4px 24px rgba(0,91,142,0.18)"
             }}>
@@ -393,7 +419,7 @@ export default function GetStartedPage() {
             </div>
 
             {/* What You Can Expect */}
-            <div style={{ background: "#fff", borderRadius: 10, padding: 32, border: "1px solid #D8DFE8" }}>
+            <div className="gs-card" style={{ background: "#fff", borderRadius: 10, padding: 32, border: "1px solid #D8DFE8" }}>
               <h3 style={{ color: "#005B8E", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>What you can Expect</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {[

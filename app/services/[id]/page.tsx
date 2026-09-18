@@ -52,32 +52,17 @@ function PromiseCard() {
     {
       icon: ShieldCheck,
       title: "100% Satisfaction Guarantee",
-      desc: (
-        <>
-          If you're not satisfied, we make <br />
-          it right — no questions asked.
-        </>
-      ),
+      desc: "If you're not satisfied, we make it right — no questions asked.",
     },
     {
       icon: Clock,
       title: "Available Around the Clock 24/7",
-      desc: (
-        <>
-          Care when you need it, day or night, <br />
-          weekends and holidays.
-        </>
-      ),
+      desc: "Care when you need it, day or night, weekends and holidays.",
     },
     {
       icon: FileCheck,
       title: "No Long-Term Contracts",
-      desc: (
-        <>
-          Flexible care arrangements with no <br />
-          binding commitments required.
-        </>
-      ),
+      desc: "Flexible care arrangements with no binding commitments required.",
     },
   ];
 
@@ -146,7 +131,7 @@ function RelatedServicesSlider({ related }: { related: typeof services }) {
 
   return (
     <div>
-      <h2 className="font-display font-black text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
+      <h2 className="font-display font-black text-xl sm:text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
 
       <div className="grid grid-cols-2 mt-4 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         {pageItems.map((item) => (
@@ -260,7 +245,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
       ═══════════════════════════════════════════ */}
       <section className="relative overflow-hidden bg-white flex flex-col lg:block lg:aspect-[16/6] lg:min-h-0">
         {/* Image — full block below text on mobile; absolute background on desktop */}
-        <div className="relative order-2 lg:order-none lg:absolute lg:inset-0 w-full h-[300px] sm:h-[380px] lg:h-auto">
+        <div className="relative order-2 lg:order-none lg:absolute lg:inset-0 w-full h-[220px] sm:h-[380px] lg:h-auto">
           <img
             src={(service as any).image}
             alt={service.title}
@@ -270,24 +255,24 @@ export default function ServiceDetailPage({ params }: PageProps) {
           <div className="absolute inset-0 hidden lg:block bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
         </div>
 
-        <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl pl-6 pr-4 py-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
+        <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl px-6 py-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
 
 
           <div className="max-w-[540px] text-left">
 
-            <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[#159BA1]">
+            <p className="mb-3 text-xs sm:text-sm font-black uppercase tracking-[0.18em] text-[#159BA1]">
               {(service as any).category || "Companion Care Services"}
             </p>
 
-<h1 className="font-display font-black text-4xl leading-tight text-[#143e75] sm:text-5xl">
+            <h1 className="font-display font-black text-3xl leading-tight text-[#143e75] sm:text-4xl md:text-5xl">
                 {service.title}
             </h1>
 
-            <p className="mt-5 text-base leading-7 text-slate-600">
+            <p className="mt-4 sm:mt-5 text-sm sm:text-base leading-7 text-slate-600">
               {(service as any).tagline || service.description}
             </p>
 
-            <div className="mt-7 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
+            <div className="mt-7 grid grid-cols-1 min-[420px]:grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
               {([
                 [Users2,      "Compassionate", "Caregivers"],
                 [ShieldCheck, "Background",    "Checked"],
@@ -305,11 +290,11 @@ export default function ServiceDetailPage({ params }: PageProps) {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <a href="/get-started" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-7 py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <a href="/get-started" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-6 sm:px-7 py-3.5 sm:py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
                 Request a Free Consultation <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-7 py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
+              <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#0C447C] bg-white/80 px-6 sm:px-7 py-3.5 sm:py-4 text-sm font-black text-[#0C447C] transition hover:bg-white">
                 <Phone className="h-4 w-4" /> Call (443) 6273806
               </a>
             </div>
@@ -329,26 +314,26 @@ export default function ServiceDetailPage({ params }: PageProps) {
             {/* Services grid */}
             <div>
 <div className="mb-4 text-center">
-  <h2 className="font-display font-black text-3xl text-[#0B2D5B]">Our {service.shortTitle} Services</h2>
-    <p className="mt-5 text-sm leading-7 text-slate-600 max-w-3xl mx-auto ">
+  <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">Our {service.shortTitle} Services</h2>
+    <p className="mt-4 sm:mt-5 text-sm leading-7 text-slate-600 max-w-3xl mx-auto ">
       {service.description}
     </p>
   <p className="mt-3 text-m font-bold text-[#0B2D5B]">Our Services Includes</p>
   <HeartDivider />
 
 </div>
-<div className="grid grid-cols-1 gap-x-3 gap-y-5 md:grid-cols-2 xl:grid-cols-3">
+<div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                 {categories.map((cat, idx) => {
                   const Icon = cat.icon || defaultServiceIcons[idx % defaultServiceIcons.length];
                   return (
                     <article
                       key={cat.title}
-                      className="group flex flex-col rounded-2xl border border-slate-100 bg-white px-8 pb-4 pt-1 text-center shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+                      className="group flex flex-col rounded-2xl border border-slate-100 bg-white px-6 sm:px-8 pb-4 pt-1 text-center shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
                     >
                       <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#159BA1] text-white shadow-md group-hover:bg-[#0C447C]">
                         <Icon className="h-5 w-5" />
                       </div>
-                      <h3 className="mb-1 text-base font-black text-sm leading-6 text-[#0B2D5B]">{cat.title}</h3>
+                      <h3 className="mb-1 text-sm font-black leading-6 text-[#0B2D5B]">{cat.title}</h3>
                       <p className="text-xs leading-5 text-slate-600 hyphens-auto">{cat.items.join(", ")}</p>
                     </article>
                   );
@@ -364,10 +349,10 @@ export default function ServiceDetailPage({ params }: PageProps) {
     [Star,        "98%",       "Client Satisfaction"],
     [ShieldCheck, "Certified", "& Insured Caregivers"],
   ] as [React.ElementType, string, string][]).map(([Icon, value, label]) => (
-    <div key={value} className="flex items-center gap-3 p-5">
-      <Icon className="h-8 w-8 shrink-0 text-[#0C447C]" />
+    <div key={value} className="flex items-center gap-3 p-4 sm:p-5">
+      <Icon className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-[#0C447C]" />
       <div>
-        <p className="text-xl font-black text-[#0B2D5B]">{value}</p>
+        <p className="text-lg sm:text-xl font-black text-[#0B2D5B]">{value}</p>
         <p className="text-xs text-slate-600">{label}</p>
       </div>
     </div>
@@ -377,18 +362,18 @@ export default function ServiceDetailPage({ params }: PageProps) {
             {/* How It Works */}
             <div className="mt-6 lg:mt-8">
       <div className="mb-4 text-center">
-  <h2 className="font-display font-black text-3xl text-[#0B2D5B]">How It Works</h2>
+  <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">How It Works</h2>
   <HeartDivider />
 </div>
-              <div className="flex items-start justify-center">
+              <div className="grid grid-cols-2 gap-6 sm:flex sm:items-start sm:justify-center">
                 {howItWorks.map((step: any, idx: number) => {
                   const Icon = stepIcons[idx % stepIcons.length];
                   const isLast = idx === howItWorks.length - 1;
                   return (
                     <div key={step.step ?? idx} className="flex items-start">
-                      <div className="flex w-36 flex-col items-center text-center sm:w-44">
-                        <div className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#0C447C] text-white shadow-md">
-                          <Icon className="h-7 w-7" />
+                      <div className="flex w-full flex-col items-center text-center sm:w-44">
+                        <div className="mb-4 flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-full bg-[#0C447C] text-white shadow-md">
+                          <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
                         </div>
                         <p className="mb-1.5 text-sm font-black text-[#0B2D5B]">{idx + 1}. {step.title}</p>
                         <p className="text-xs leading-5 text-slate-600">{step.desc}</p>
@@ -440,7 +425,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
 <section className="bg-[#FAFCFE] pt-3 pb-3 lg:pt-2 lg:pb-3"> 
 <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_2fr] lg:px-8">
   <div>
-    <h2 className="font-display font-black mb-0 text-2xl text-[#0B2D5B]">Frequently Asked Questions</h2>
+    <h2 className="font-display font-black mb-0 text-xl sm:text-2xl text-[#0B2D5B]">Frequently Asked Questions</h2>
     {[
       "How often can a caregiver visit?",
       "Do you provide transportation for outings?",
@@ -471,11 +456,11 @@ export default function ServiceDetailPage({ params }: PageProps) {
           <div className="flex items-center gap-5">
             <HeartHandshake className="hidden h-14 w-14 text-white/80 sm:block" />
             <div>
-              <h2 className="font-display font-black text-2xl">Ready to Improve Your Loved One's Quality of Life?</h2>
-              <p className="mt-2 text-blue-100">Our compassionate team is here to help — call or schedule your free consultation today.</p>
+              <h2 className="font-display font-black text-xl sm:text-2xl">Ready to Improve Your Loved One's Quality of Life?</h2>
+              <p className="mt-2 text-sm sm:text-base text-blue-100">Our compassionate team is here to help — call or schedule your free consultation today.</p>
             </div>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
 <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
               <Phone className="h-4 w-4" /> Call (443) 627-3806
             </a>

@@ -44,13 +44,13 @@ const LOCATION_OPTIONS = ["All Locations", ...Array.from(new Set(ALL_JOBS.map(jo
 
 function HeroSection({ onScroll }: { onScroll: () => void }) {
   return (
-    <div className="w-full bg-gradient-to-r from-[#112240] via-[#1a365d] to-[#0f172a] text-white py-14 md:py-20 relative overflow-hidden border-b border-gray-800 left-0 right-0">
+    <div className="w-full bg-gradient-to-r from-[#112240] via-[#1a365d] to-[#0f172a] text-white py-12 md:py-20 relative overflow-hidden border-b border-gray-800 left-0 right-0">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
       <div className="absolute -top-40 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
           <div className="lg:col-span-7 space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold uppercase tracking-wider">
@@ -58,25 +58,25 @@ function HeroSection({ onScroll }: { onScroll: () => void }) {
               Direct Network Hiring
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
-              Find Your Next Meaningful <br />
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]">
+              Find Your Next Meaningful <br className="hidden sm:block" />
               <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-white bg-clip-text text-transparent">
                 Healthcare Role
               </span>
             </h1>
 
-            <p className="text-gray-300 text-base md:text-lg max-w-2xl leading-relaxed">
+            <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
               Explore fully verified nursing, therapy, and community support positions. Connect directly with premier care facilities and independent home care networks built around your life.
             </p>
           </div>
 
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4 relative">
+          <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4 relative">
             <div className="p-4 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 flex flex-col justify-between">
               <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3">
                 <Activity className="w-4 h-4 text-blue-400" />
               </div>
               <div>
-                <span className="block text-2xl font-bold tracking-tight text-white">500+</span>
+                <span className="block text-xl sm:text-2xl font-bold tracking-tight text-white">500+</span>
                 <span className="text-xs text-gray-400 font-medium">Active Openings This Week</span>
               </div>
             </div>
@@ -86,7 +86,7 @@ function HeroSection({ onScroll }: { onScroll: () => void }) {
                 <CheckCircle className="w-4 h-4 text-emerald-400" />
               </div>
               <div>
-                <span className="block text-2xl font-bold tracking-tight text-white">Direct</span>
+                <span className="block text-xl sm:text-2xl font-bold tracking-tight text-white">Direct</span>
                 <span className="text-xs text-gray-400 font-medium">To Facility Management</span>
               </div>
             </div>
@@ -156,16 +156,16 @@ function MultiSelectFilter({
           if (open) setSearchQuery("");
           setOpen(!open);
         }}
-        className="flex items-center gap-2 px-4 h-10 border border-gray-300 rounded bg-white text-black text-sm font-medium transition hover:bg-gray-50 focus:outline-none"
+        className="flex items-center justify-between gap-2 w-full sm:w-auto px-4 h-10 border border-gray-300 rounded bg-white text-black text-sm font-medium transition hover:bg-gray-50 focus:outline-none"
       >
-        <span className="max-w-[240px] truncate">
+        <span className="max-w-[200px] sm:max-w-[240px] truncate">
           {values.length ? values.join(", ") : label}
         </span>
-        <ChevronDown className="w-4 h-4 text-gray-500" />
+        <ChevronDown className="w-4 h-4 text-gray-500 flex-shrink-0" />
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-20 min-w-[240px] max-h-72 flex flex-col overflow-hidden">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-20 w-full min-w-[240px] max-h-72 flex flex-col overflow-hidden">
           <div className="p-2 border-b border-gray-100 sticky top-0 bg-white z-10 flex items-center gap-1.5">
             <Search className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 ml-1" />
             <input
@@ -247,13 +247,13 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-white">
-      <div className="px-6 pt-6 pb-5 border-b border-gray-100 flex-shrink-0">
+    <div className="h-full min-h-0 flex flex-col overflow-hidden bg-white">
+      <div className="px-4 sm:px-6 pt-20 sm:pt-6 pb-5 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <span className="text-xs font-mono text-gray-500 block mb-1">Job ID: #{job.id}</span>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-bold text-[#1a365d] leading-tight">
+              <h2 className="text-lg sm:text-xl font-bold text-[#1a365d] leading-tight">
                 {job.title}
               </h2>
               <button
@@ -289,12 +289,19 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
                 {job.license}
               </span>
             </div>
+
+            {/* Apply button — inline on mobile (moved out of the top-right column) */}
+            <button
+              onClick={() => router.push(`/apply-job?jobId=${job.id}`)}
+              className="sm:hidden mt-4 w-full px-6 h-11 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide cursor-pointer"
+            >
+              Apply Now
+            </button>
           </div>
 
           {/* Action Column Top-Right */}
           <div className="flex flex-col items-end flex-shrink-0">
             <div className="flex items-center gap-2 relative">
-      
 
               {/* Share Button & Popover Dialog Box */}
               <div className="relative">
@@ -309,7 +316,7 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
                 {isShareOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setIsShareOpen(false)} />
-                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 p-4 text-left">
+                    <div className="absolute right-0 mt-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-100 z-50 p-4 text-left">
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="font-semibold text-gray-900 text-sm">Share this job</h3>
                         <button 
@@ -401,9 +408,10 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
               </button>
             </div>
 
+            {/* Apply button — desktop only (mobile version is inline above) */}
             <button
               onClick={() => router.push(`/apply-job?jobId=${job.id}`)}
-              className="mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap cursor-pointer"
+              className="hidden sm:block mt-8 px-6 h-13 bg-[#1a365d] hover:bg-[#2a4a7f] text-white font-bold text-sm rounded transition shadow-sm tracking-wide whitespace-nowrap cursor-pointer"
             >
               Apply Now
             </button>
@@ -411,7 +419,7 @@ function JobDetail({ job, onClose, contentRef }: { job: Job; onClose: () => void
         </div>
       </div>
 
-      <div ref={contentRef} className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 space-y-6" data-lenis-prevent>
+      <div ref={contentRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-6 space-y-6" data-lenis-prevent>
         {job.tagline && (
           <div className="bg-[#f0f6fb] rounded-lg px-4 py-3.5 border border-blue-50">
             <p className="text-[11px] text-[#164e9a] font-bold uppercase tracking-wider mb-0.5">Opportunity</p>
@@ -538,6 +546,19 @@ export default function CareersPage() {
   const [savedJobs, setSavedJobs] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
+  // Lock body scroll when the mobile full-screen detail overlay is open
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+    if (selectedJob && isMobile) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [selectedJob]);
+
   useLayoutEffect(() => {
     if (!selectedJob) return;
     const el = jobDescriptionRef.current;
@@ -638,9 +659,9 @@ export default function CareersPage() {
 
       <HeroSection onScroll={scrollToJobs} />
 
-      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-16">
 
-        <h1 className="text-4xl md:text-5xl font-bold text-[#1a365d] mb-6">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-[#1a365d] mb-6">
           Explore Career Opportunities
         </h1>
 
@@ -662,13 +683,13 @@ export default function CareersPage() {
                 setAppliedKeyword(keyword);
                 setCurrentPage(1);
               }}
-              className="h-10 px-6 bg-[#164e9a] hover:bg-[#1a365d] text-white font-semibold text-sm rounded transition tracking-wide cursor-pointer"
+              className="h-10 px-5 sm:px-6 bg-[#164e9a] hover:bg-[#1a365d] text-white font-semibold text-sm rounded transition tracking-wide cursor-pointer flex-shrink-0"
             >
               Search
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3">
             <MultiSelectFilter
               label="Location"
               values={selectedLocations}
@@ -702,7 +723,7 @@ export default function CareersPage() {
             <div className="pt-1 flex flex-col items-start gap-2.5">
               <div className="flex flex-wrap items-center gap-2">
                 {activeFilters.map((filter) => (
-                  <div key={filter.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 text-sm text-black bg-white border border-gray-300 rounded transition max-w-[340px]">
+                  <div key={filter.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 text-sm text-black bg-white border border-gray-300 rounded transition max-w-[240px] sm:max-w-[340px]">
                     <span className="truncate">{filter.label}</span>
                     <button onClick={filter.reset} className="text-gray-400 hover:text-black transition flex-shrink-0">
                       <X className="w-3.5 h-3.5" />
@@ -722,12 +743,16 @@ export default function CareersPage() {
           <strong className="text-[#1a365d]">{totalJobs.toLocaleString()}</strong> matching jobs
         </p>
 
-        <div ref={jobsSectionRef} className="flex gap-5 items-stretch w-full" style={{ height: "calc(100vh - 120px)" }}>
+        {/* On mobile the two panels stack (detail becomes a fixed overlay); on lg+ they sit side by side with a fixed viewport height. */}
+        <div
+          ref={jobsSectionRef}
+          className="flex flex-col lg:flex-row gap-5 lg:items-stretch w-full lg:h-[calc(100vh-120px)]"
+        >
 
           <div
             ref={jobsListRef}
             data-lenis-prevent
-            className={`min-w-0 h-full overflow-y-auto overscroll-contain pr-1 transition-all duration-200 ${selectedJob ? "w-[320px] flex-shrink-0" : "flex-1"}`}
+            className={`min-w-0 w-full lg:h-full lg:overflow-y-auto overscroll-contain lg:pr-1 transition-all duration-200 ${selectedJob ? "lg:w-[320px] lg:flex-shrink-0" : "lg:flex-1"}`}
           >
             <div className="space-y-3">
               {paginatedJobs.map((job) => {
@@ -757,7 +782,7 @@ export default function CareersPage() {
                     </button>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className={`font-bold leading-snug text-[#1a365d] break-words ${selectedJob ? "text-sm pr-2" : "text-base pr-24"}`}>
+                      <h3 className={`font-bold leading-snug text-[#1a365d] break-words ${selectedJob ? "text-sm pr-2" : "text-base pr-4 sm:pr-24"}`}>
                         {job.title}
                       </h3>
 
@@ -804,7 +829,7 @@ export default function CareersPage() {
 
             {totalPages > 1 && (
               <div className="flex justify-center mt-6 pb-2">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap justify-center">
                   {pageNumbers.map((page) => (
                     <button
                       key={page}
@@ -819,11 +844,15 @@ export default function CareersPage() {
             )}
           </div>
 
+          {/* Detail / benefits panel:
+              - mobile: when a job is selected, render as a fixed full-screen overlay; otherwise hide the benefits card (list-first UX).
+              - lg+: normal side panel, either the detail or the benefits card. */}
           <div
             ref={detailPanelRef}
-            className={`border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden transition-all duration-200 ${selectedJob
-                ? "h-full flex-1 min-w-0"
-                : "h-fit self-start w-[360px] flex-shrink-0"
+            className={`border-gray-200 bg-white overflow-hidden transition-all duration-200
+              ${selectedJob
+                ? "fixed inset-0 z-50 lg:static lg:z-auto lg:h-full lg:flex-1 lg:min-w-0 lg:border lg:rounded-lg lg:shadow-sm"
+                : "hidden lg:block lg:h-fit lg:self-start lg:w-[360px] lg:flex-shrink-0 lg:border lg:rounded-lg lg:shadow-sm"
               }`}
           >
             {selectedJob ? (
