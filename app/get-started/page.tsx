@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, FormEvent, useEffect } from "react";
 import Link from "next/link";
 
 // ─── Color tokens (SRK Care at Home brand) ────────────────────────────────────
@@ -55,7 +55,6 @@ const CARE_TYPES = [
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s\-().]{7,}$/;
 const ZIP_RE = /^\d{5}(-\d{4})?$/;
-// Allows alphabets, spaces, hyphens, and apostrophes only (rejects numbers and special symbols like @, #, $, etc.)
 const NAME_RE = /^[a-zA-Zà-úÀ-Ú\s'-]+$/;
 
 function validate(s: FormState): FormErrors {
@@ -65,7 +64,6 @@ function validate(s: FormState): FormErrors {
   if (!s.livingSituation) e.livingSituation = "Please select a living situation.";
   if (!s.careNeeds.length) e.careNeeds = "Please select at least one type of care.";
 
-  // First Name validation (Presence, Character restriction, Min/Max length)
   if (!s.firstName.trim()) {
     e.firstName = "First name is required.";
   } else if (!NAME_RE.test(s.firstName)) {
@@ -74,7 +72,6 @@ function validate(s: FormState): FormErrors {
     e.firstName = "First name must be between 2 and 50 characters.";
   }
 
-  // Last Name validation (Presence, Character restriction, Min/Max length)
   if (!s.lastName.trim()) {
     e.lastName = "Last name is required.";
   } else if (!NAME_RE.test(s.lastName)) {
@@ -91,7 +88,6 @@ function validate(s: FormState): FormErrors {
   return e;
 }
 
-// Every required field filled + both checkboxes → button enabled.
 function isComplete(s: FormState): boolean {
   return (
     s.whoNeedsCare !== "" &&
@@ -192,6 +188,15 @@ export default function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Reference to scroll up smoothly when submitted
+  const formContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitted && formContainerRef.current) {
+      formContainerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [submitted]);
+
   function setField<K extends keyof FormState>(k: K, v: FormState[K]) {
     setForm((p) => ({ ...p, [k]: v }));
     setErrors((p) => ({ ...p, [k]: undefined }));
@@ -210,7 +215,10 @@ export default function GetStartedPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const errs = validate(form);
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) { 
+      setErrors(errs); 
+      return; 
+    }
 
     setSubmitting(true);
     setError(null);
@@ -250,7 +258,6 @@ export default function GetStartedPage() {
   return (
     <div style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif", color: "#1A2B3C", background: "#F7F8FA", minHeight: "100vh" }}>
 
-      {/* ── Responsive media query enhancements ────────────────────────────── */}
       <style>{`
         .gs-grid {
           display: grid;
@@ -299,8 +306,8 @@ export default function GetStartedPage() {
       <main className="gs-main">
         <div className="gs-grid">
 
-          {/* ── LEFT: Form ──────────────────────────────────────────────────── */}
-          <div>
+          {/* ── LEFT: Form / Success Area (Ref attached here) ──────────────── */}
+          <div ref={formContainerRef}>
             <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6 }}>
               Speak With Our 24/7 Care Team
             </h2>
@@ -364,7 +371,6 @@ export default function GetStartedPage() {
                   <FieldError msg={errors.careNeeds} />
                 </div>
 
-                {/* Name fields with character constraints */}
                 <div className="gs-name-grid">
                   <TextInput label="First Name" value={form.firstName} onChange={(v) => setField("firstName", v)} error={errors.firstName} autoComplete="given-name" maxLength={50} />
                   <TextInput label="Last Name" value={form.lastName} onChange={(v) => setField("lastName", v)} error={errors.lastName} autoComplete="family-name" maxLength={50} />
@@ -372,7 +378,6 @@ export default function GetStartedPage() {
 
                 <TextInput label="Email" value={form.email} type="email" onChange={(v) => setField("email", v)} error={errors.email} autoComplete="email" placeholder="you@example.com" />
 
-                {/* Phone input */}
                 <div>
                   <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1A2B3C", marginBottom: 6 }}>
                     Phone <span style={{ color: "#C0392B" }}>*</span>
@@ -396,7 +401,6 @@ export default function GetStartedPage() {
 
                 <TextInput label="Zipcode" value={form.zipcode} onChange={(v) => setField("zipcode", v)} error={errors.zipcode} placeholder="07001" autoComplete="postal-code" maxLength={10} />
 
-                {/* Consent */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5 }}>
                     <input
