@@ -55,6 +55,8 @@ const CARE_TYPES = [
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s\-().]{7,}$/;
 const ZIP_RE = /^\d{5}(-\d{4})?$/;
+// Allows alphabets, spaces, hyphens, and apostrophes only (rejects numbers and special symbols like @, #, $, etc.)
+const NAME_RE = /^[a-zA-Zà-úÀ-Ú\s'-]+$/;
 
 function validate(s: FormState): FormErrors {
   const e: FormErrors = {};
@@ -62,8 +64,25 @@ function validate(s: FormState): FormErrors {
   if (!s.gender) e.gender = "Please select a gender.";
   if (!s.livingSituation) e.livingSituation = "Please select a living situation.";
   if (!s.careNeeds.length) e.careNeeds = "Please select at least one type of care.";
-  if (!s.firstName.trim()) e.firstName = "First name is required.";
-  if (!s.lastName.trim()) e.lastName = "Last name is required.";
+
+  // First Name validation (Presence, Character restriction, Min/Max length)
+  if (!s.firstName.trim()) {
+    e.firstName = "First name is required.";
+  } else if (!NAME_RE.test(s.firstName)) {
+    e.firstName = "First name should only contain letters, spaces, hyphens, or apostrophes.";
+  } else if (s.firstName.trim().length < 2 || s.firstName.trim().length > 50) {
+    e.firstName = "First name must be between 2 and 50 characters.";
+  }
+
+  // Last Name validation (Presence, Character restriction, Min/Max length)
+  if (!s.lastName.trim()) {
+    e.lastName = "Last name is required.";
+  } else if (!NAME_RE.test(s.lastName)) {
+    e.lastName = "Last name should only contain letters, spaces, hyphens, or apostrophes.";
+  } else if (s.lastName.trim().length < 2 || s.lastName.trim().length > 50) {
+    e.lastName = "Last name must be between 2 and 50 characters.";
+  }
+
   if (!EMAIL_RE.test(s.email)) e.email = "Enter a valid email address.";
   if (!PHONE_RE.test(s.phone)) e.phone = "Enter a valid phone number.";
   if (!ZIP_RE.test(s.zipcode)) e.zipcode = "Enter a valid 5-digit zip code.";
@@ -79,8 +98,12 @@ function isComplete(s: FormState): boolean {
     s.gender !== "" &&
     s.livingSituation !== "" &&
     s.careNeeds.length > 0 &&
-    s.firstName.trim() !== "" &&
-    s.lastName.trim() !== "" &&
+    s.firstName.trim().length >= 2 &&
+    s.firstName.trim().length <= 50 &&
+    NAME_RE.test(s.firstName) &&
+    s.lastName.trim().length >= 2 &&
+    s.lastName.trim().length <= 50 &&
+    NAME_RE.test(s.lastName) &&
     EMAIL_RE.test(s.email) &&
     PHONE_RE.test(s.phone) &&
     ZIP_RE.test(s.zipcode) &&
@@ -127,10 +150,10 @@ function SelectField({
 }
 
 function TextInput({
-  label, value, onChange, error, type = "text", placeholder, autoComplete,
+  label, value, onChange, error, type = "text", placeholder, autoComplete, maxLength,
 }: {
   label: string; value: string; onChange: (v: string) => void;
-  error?: string; type?: string; placeholder?: string; autoComplete?: string;
+  error?: string; type?: string; placeholder?: string; autoComplete?: string; maxLength?: number;
 }) {
   return (
     <div>
@@ -144,6 +167,7 @@ function TextInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder || label}
         autoComplete={autoComplete}
+        maxLength={maxLength}
         style={{
           width: "100%", padding: "10px 14px", fontSize: 16, color: "#1A2B3C",
           border: `1px solid ${error ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6,
@@ -164,7 +188,6 @@ export default function GetStartedPage() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // Submission state (previously provided by useFormspree).
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -203,7 +226,6 @@ export default function GetStartedPage() {
       body.append("email", form.email);
       body.append("phone", form.phone);
       body.append("zipcode", form.zipcode);
-      // Honeypot field — kept empty by real users.
       body.append("website", "");
 
       const res = await fetch("/api/get-started", {
@@ -228,7 +250,7 @@ export default function GetStartedPage() {
   return (
     <div style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif", color: "#1A2B3C", background: "#F7F8FA", minHeight: "100vh" }}>
 
-      {/* ── Responsive rules (inline styles can't hold media queries) ────────── */}
+      {/* ── Responsive media query enhancements ────────────────────────────── */}
       <style>{`
         .gs-grid {
           display: grid;
@@ -237,8 +259,9 @@ export default function GetStartedPage() {
           align-items: start;
         }
         .gs-name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .gs-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
-        .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 52px 24px; text-align: center; position: relative; }
+        .gs-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; width: 100%; box-sizing: border-box; }
+        .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 52px 24px; text-align: center; position: relative; box-sizing: border-box; }
+        
         @media (max-width: 860px) {
           .gs-grid { grid-template-columns: 1fr; gap: 28px; }
           .gs-main { padding: 32px 16px; }
@@ -246,15 +269,14 @@ export default function GetStartedPage() {
         }
         @media (max-width: 480px) {
           .gs-name-grid { grid-template-columns: 1fr; }
-          .gs-main { padding: 24px 14px; }
-          .gs-form { padding: 20px !important; }
-          .gs-card { padding: 22px !important; }
+          .gs-main { padding: 20px 12px; }
+          .gs-form { padding: 16px !important; }
+          .gs-card { padding: 18px !important; }
         }
       `}</style>
 
       {/* ── Hero banner ─────────────────────────────────────────────────────── */}
       <div style={{ position: "relative", background: "#003A5C", overflow: "hidden" }}>
-        {/* Decorative pattern */}
         <div style={{ position: "absolute", inset: 0, opacity: 0.07 }}>
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} style={{
@@ -279,7 +301,7 @@ export default function GetStartedPage() {
 
           {/* ── LEFT: Form ──────────────────────────────────────────────────── */}
           <div>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6, font: 'Playfair Display' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6 }}>
               Speak With Our 24/7 Care Team
             </h2>
             <p style={{ fontSize: 14, color: "#5A6A7A", marginBottom: 28, lineHeight: 1.6 }}>
@@ -305,7 +327,6 @@ export default function GetStartedPage() {
             ) : (
               <form onSubmit={handleSubmit} noValidate className="gs-form" style={{ background: "#fff", borderRadius: 10, padding: 28, border: "1px solid #D8DFE8", display: "flex", flexDirection: "column", gap: 18 }}>
 
-                {/* Honeypot — hidden from users, catches bots. */}
                 <input
                   type="text"
                   name="website"
@@ -343,15 +364,15 @@ export default function GetStartedPage() {
                   <FieldError msg={errors.careNeeds} />
                 </div>
 
-                {/* Name */}
+                {/* Name fields with character constraints */}
                 <div className="gs-name-grid">
-                  <TextInput label="First Name" value={form.firstName} onChange={(v) => setField("firstName", v)} error={errors.firstName} autoComplete="given-name" />
-                  <TextInput label="Last Name" value={form.lastName} onChange={(v) => setField("lastName", v)} error={errors.lastName} autoComplete="family-name" />
+                  <TextInput label="First Name" value={form.firstName} onChange={(v) => setField("firstName", v)} error={errors.firstName} autoComplete="given-name" maxLength={50} />
+                  <TextInput label="Last Name" value={form.lastName} onChange={(v) => setField("lastName", v)} error={errors.lastName} autoComplete="family-name" maxLength={50} />
                 </div>
 
                 <TextInput label="Email" value={form.email} type="email" onChange={(v) => setField("email", v)} error={errors.email} autoComplete="email" placeholder="you@example.com" />
 
-                {/* Phone with flag indicator */}
+                {/* Phone input */}
                 <div>
                   <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1A2B3C", marginBottom: 6 }}>
                     Phone <span style={{ color: "#C0392B" }}>*</span>
@@ -373,7 +394,7 @@ export default function GetStartedPage() {
                   <FieldError msg={errors.phone} />
                 </div>
 
-                <TextInput label="Zipcode" value={form.zipcode} onChange={(v) => setField("zipcode", v)} error={errors.zipcode} placeholder="07001" autoComplete="postal-code" />
+                <TextInput label="Zipcode" value={form.zipcode} onChange={(v) => setField("zipcode", v)} error={errors.zipcode} placeholder="07001" autoComplete="postal-code" maxLength={10} />
 
                 {/* Consent */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -408,14 +429,12 @@ export default function GetStartedPage() {
                   <FieldError msg={errors.privacyConsent} />
                 </div>
 
-                {/* Form-wide submit error */}
                 {error && (
                   <div style={{ border: "1px solid rgba(192,57,43,0.3)", background: "rgba(192,57,43,0.05)", borderRadius: 6, padding: "10px 14px" }}>
                     <p style={{ margin: 0, fontSize: 13, color: "#C0392B" }}>{error}</p>
                   </div>
                 )}
 
-                {/* Submit — disabled until every required field + both checkboxes are valid */}
                 <button
                   type="submit"
                   disabled={submitting || !formValid}
@@ -436,12 +455,10 @@ export default function GetStartedPage() {
 
           {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {/* Caregiver photo */}
             <div style={{ borderRadius: 10, overflow: "hidden" }}>
               <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }} />
             </div>
 
-            {/* Assessment Card */}
             <div className="gs-card" style={{
               background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)",
               borderRadius: 16,
@@ -453,7 +470,6 @@ export default function GetStartedPage() {
               <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, margin: 0 }}>Request a free consultation by completing the form and our team can help answer all your questions.</p>
             </div>
 
-            {/* What You Can Expect */}
             <div className="gs-card" style={{ background: "#fff", borderRadius: 10, padding: 32, border: "1px solid #D8DFE8" }}>
               <h3 style={{ color: "#005B8E", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>What you can Expect</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>

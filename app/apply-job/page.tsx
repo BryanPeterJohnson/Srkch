@@ -13,12 +13,6 @@ const ALLOWED_CV_TYPES = [
 ];
 const ALLOWED_CV_EXTENSIONS = [".pdf", ".doc", ".docx"];
 
-/*
- * Default export wraps the form in a Suspense boundary.
- * useSearchParams() lives in the inner component (ApplicationFormContent),
- * which is what Next.js 16 requires to statically prerender this route
- * without the "useSearchParams() should be wrapped in a suspense boundary" error.
- */
 export default function ApplicationForm() {
   return (
     <Suspense fallback={<ApplicationFormSkeleton />}>
@@ -43,18 +37,25 @@ function ApplicationFormContent() {
     race: "",
     gender: "",
   });
-  const [cv, setCv] = useState<File | null>(null); // ← NEW: CV file state
-  const [cvError, setCvError] = useState("");        // ← NEW: inline file error
+  const [cv, setCv] = useState<File | null>(null);
+  const [cvError, setCvError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Restrict first and last name from containing numbers or special characters
+    if (name === "firstName" || name === "lastName") {
+      const filteredValue = value.replace(/[^a-zA-Z\s'-]/g, "");
+      setForm((prev) => ({ ...prev, [name]: filteredValue }));
+      return;
+    }
+
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ─── NEW: validate the chosen file (type + extension + size) ──────────────
   const handleFileChange = (e) => {
     setCvError("");
     const file = e.target.files?.[0] ?? null;
@@ -70,7 +71,7 @@ function ApplicationFormContent() {
 
     if (!typeOk && !extOk) {
       setCv(null);
-      e.target.value = ""; // reset the input so the same bad file can be re-picked
+      e.target.value = "";
       setCvError("Only PDF or Word (.doc, .docx) files are allowed.");
       return;
     }
@@ -85,9 +86,8 @@ function ApplicationFormContent() {
     setCv(file);
   };
 
-  // Every field (text inputs + dropdowns) must be filled, and a valid CV attached.
   const isValid =
-    Object.values(form).every((v) => v.trim() !== "") && cv !== null; // ← CV now required
+    Object.values(form).every((v) => v.trim() !== "") && cv !== null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,7 +96,6 @@ function ApplicationFormContent() {
     setSubmitting(true);
     setError("");
 
-    // ─── CHANGED: build multipart FormData (needed to send the file) ────────
     const fd = new FormData();
     Object.entries(form).forEach(([key, value]) => fd.append(key, value));
     fd.append("jobTitle", job ? job.title : "General Application");
@@ -106,17 +105,18 @@ function ApplicationFormContent() {
       "appliedFor",
       job ? `${job.title} (Ref #${job.id}) — ${job.location}` : "General Application"
     );
-    if (cv) fd.append("cv", cv); // ← attach the file
+    if (cv) fd.append("cv", cv);
 
     try {
-      // ─── CHANGED: post to your own backend route instead of Formspree ─────
       const res = await fetch("/api/apply", {
         method: "POST",
-        body: fd, // NOTE: do not set Content-Type — the browser sets the multipart boundary
+        body: fd,
       });
 
       if (res.ok) {
         setSubmitted(true);
+        // Scroll back to top so user sees the success view clearly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data?.error || "Something went wrong. Please try again.");
@@ -149,7 +149,6 @@ function ApplicationFormContent() {
         {/* Header Section */}
         <header className="text-center bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="flex justify-center">
-            {/* Replace with your actual logo asset */}
             <div className="flex items-center space-x-1 text-[#0C447C] font-bold tracking-wider text-base font-display">
               <span>SRK Care at Home</span>
             </div>
@@ -180,22 +179,54 @@ function ApplicationFormContent() {
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">First Name <span className="text-[#E57531]">*</span></label>
-                <input type="text" name="firstName" value={form.firstName} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input 
+                  type="text" 
+                  name="firstName" 
+                  value={form.firstName} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="e.g. John"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Last Name <span className="text-[#E57531]">*</span></label>
-                <input type="text" name="lastName" value={form.lastName} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input 
+                  type="text" 
+                  name="lastName" 
+                  value={form.lastName} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="e.g. Doe"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Email <span className="text-[#E57531]">*</span></label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={form.email} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="e.g. john.doe@example.com"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Phone <span className="text-[#E57531]">*</span></label>
-                <input type="tel" name="phone" value={form.phone} onChange={handleChange} required className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display" />
+                <input 
+                  type="tel" 
+                  name="phone" 
+                  value={form.phone} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="e.g. +1 (555) 019-2834"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                />
               </div>
 
               <div>
@@ -207,12 +238,11 @@ function ApplicationFormContent() {
                   onChange={handleChange}
                   required
                   placeholder="City, State (e.g. Philadelphia, PA)"
-                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
                 <p className="text-xs text-gray-500 mt-1 font-display">Enter the city and state where you&apos;re looking for work.</p>
               </div>
 
-              {/* ─── NEW: CV / Resume upload (PDF or Word, max 5MB) ─────────── */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">
                   Upload CV / Resume <span className="text-[#E57531]">*</span>
@@ -294,7 +324,7 @@ function ApplicationFormContent() {
 
               <div className="pt-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Disability Status <span className="text-[#E57531]">*</span></label>
-                <select name="disabilityStatus" value={form.disabilityStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                <select name="disabilityStatus" value={form.disabilityStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="yes">Yes, I Have A Disability, Or Have A History/Record Of Having A Disability</option>
                   <option value="no">No, I Don&apos;t Have A Disability, Or A History/Record Of Having A Disability</option>
@@ -323,7 +353,7 @@ function ApplicationFormContent() {
 
               <div className="pt-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Veteran Status <span className="text-[#E57531]">*</span></label>
-                <select name="veteranStatus" value={form.veteranStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                <select name="veteranStatus" value={form.veteranStatus} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                   <option value="">-- Please Select --</option>
                   <option value="protected">I identify as one or more of the classifications of protected veteran</option>
                   <option value="not_veteran">I am not a protected veteran</option>
@@ -345,7 +375,7 @@ function ApplicationFormContent() {
               <div className="grid grid-cols-1 gap-4 pt-2">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Race <span className="text-[#E57531]">*</span></label>
-                  <select name="race" value={form.race} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                  <select name="race" value={form.race} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="white">White (Not Hispanic or Latino)</option>
                     <option value="black">Black or African American (Not Hispanic or Latino)</option>
@@ -360,7 +390,7 @@ function ApplicationFormContent() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1 font-display">Gender <span className="text-[#E57531]">*</span></label>
-                  <select name="gender" value={form.gender} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
+                  <select name="gender" value={form.gender} onChange={handleChange} required className="block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm focus:border-[#159BA1] focus:ring-[#159BA1] font-display">
                     <option value="">-- Please Select --</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -403,7 +433,6 @@ function ApplicationFormContent() {
   );
 }
 
-/* Skeleton fallback shown while the search params resolve — mirrors the form layout to avoid layout shift */
 function ApplicationFormSkeleton() {
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
