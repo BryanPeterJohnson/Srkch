@@ -2,7 +2,6 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
-import { useFormspree } from "../../components/Useformspree";
 
 // ─── Color tokens (SRK Care at Home brand) ────────────────────────────────────
 // Primary navy:   #005B8E
@@ -165,8 +164,10 @@ export default function GetStartedPage() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // Formspree — replace "myegojrw" if the endpoint ever changes.
-  const { submit, submitting, submitted, error } = useFormspree("myegojrw");
+  // Submission state (previously provided by useFormspree).
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function setField<K extends keyof FormState>(k: K, v: FormState[K]) {
     setForm((p) => ({ ...p, [k]: v }));
@@ -187,17 +188,41 @@ export default function GetStartedPage() {
     e.preventDefault();
     const errs = validate(form);
     if (Object.keys(errs).length) { setErrors(errs); return; }
-    await submit({
-      whoNeedsCare: form.whoNeedsCare,
-      gender: form.gender,
-      livingSituation: form.livingSituation,
-      careNeeds: form.careNeeds.join(", "),
-      firstName: form.firstName,
-      lastName: form.lastName,
-      email: form.email,
-      phone: form.phone,
-      zipcode: form.zipcode,
-    });
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const body = new FormData();
+      body.append("whoNeedsCare", form.whoNeedsCare);
+      body.append("gender", form.gender);
+      body.append("livingSituation", form.livingSituation);
+      body.append("careNeeds", form.careNeeds.join(", "));
+      body.append("firstName", form.firstName);
+      body.append("lastName", form.lastName);
+      body.append("email", form.email);
+      body.append("phone", form.phone);
+      body.append("zipcode", form.zipcode);
+      // Honeypot field — kept empty by real users.
+      body.append("website", "");
+
+      const res = await fetch("/api/get-started", {
+        method: "POST",
+        body,
+      });
+
+      const data = await res.json().catch(() => ({ success: false }));
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -279,6 +304,16 @@ export default function GetStartedPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="gs-form" style={{ background: "#fff", borderRadius: 10, padding: 28, border: "1px solid #D8DFE8", display: "flex", flexDirection: "column", gap: 18 }}>
+
+                {/* Honeypot — hidden from users, catches bots. */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                />
 
                 <SelectField label="Who Needs Care?" value={form.whoNeedsCare} onChange={(v) => setField("whoNeedsCare", v)} options={WHO_OPTIONS} error={errors.whoNeedsCare} />
                 <SelectField label="Male or Female?" value={form.gender} onChange={(v) => setField("gender", v)} options={GENDER_OPTIONS} error={errors.gender} placeholder="Male or Female?" />

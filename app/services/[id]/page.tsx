@@ -240,7 +240,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
 
       {/* ═══════════════════════════════════════════
           HERO
-          - Mobile (< lg): text on white, then the full image below (uncropped).
+          - Mobile (< lg): text on white, then the full image below (uncropped, centered).
           - Desktop (lg+): image is the background with text overlaid + left fade.
       ═══════════════════════════════════════════ */}
       <section className="relative overflow-hidden bg-white flex flex-col lg:block lg:aspect-[16/6] lg:min-h-0">
@@ -249,10 +249,10 @@ export default function ServiceDetailPage({ params }: PageProps) {
           <img
             src={(service as any).image}
             alt={service.title}
-            className="h-full w-full object-cover object-[center_25%] lg:object-[right_20%]"
+            className="h-full w-full object-cover object-center lg:object-[right_20%]"
           />
           {/* Desktop-only left fade to keep the overlaid text legible */}
-          <div className="absolute inset-0 hidden lg:block bg-gradient-to-l from-transparent from-[35%] via-white/50 via-[80%] to-white" />
+          <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-white from-0% via-white/85 via-25% to-transparent to-60%" />
         </div>
 
         <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl px-6 py-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
@@ -269,8 +269,8 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </h1>
 
             <p className="mt-4 sm:mt-5 text-sm sm:text-base leading-7 text-slate-600">
-              {(service as any).tagline || service.description}
-            </p>
+  {(service as any).tagline || service.description}
+</p>
 
             <div className="mt-7 grid grid-cols-1 min-[420px]:grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
               {([

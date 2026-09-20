@@ -572,15 +572,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------------------- */}
+         {/* ---------------------------------------------------------------- */}
       {/* Stats bar                                                         */}
       {/* ---------------------------------------------------------------- */}
       <section className="bg-gradient-to-r from-[#0D2D52] to-[#046e4c] mt-6 md:mt-3 py-8 md:py-10 font-display">
-        <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 flex flex-wrap justify-center sm:justify-between items-center gap-8">
+        <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-6 lg:px-20 2xl:px-12 grid grid-cols-2 gap-x-4 gap-y-6 sm:flex sm:flex-wrap sm:justify-between sm:items-center sm:gap-8">
           {STATS.map((stat) => (
             <div key={stat.label} className="flex items-center gap-3">
-              <stat.icon className="w-6 h-6 text-white" />
-              <div className="leading-tight">
+              <stat.icon className="w-6 h-6 shrink-0 text-white" strokeWidth={1.75} />
+              <div className="flex flex-col justify-center leading-snug">
                 <div className="font-bold text-white text-sm font-display">
                   {stat.value}
                 </div>
@@ -591,14 +591,14 @@ export default function AboutPage() {
             </div>
           ))}
 
-          <div className="flex items-center gap-3">
-            <div className="flex">
+          <div className="col-span-2 sm:col-auto flex items-center gap-3">
+            <div className="flex shrink-0 items-center">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="w-4 h-4 text-white fill-white" />
               ))}
             </div>
-            <div className="leading-tight">
-              <div className="font-bold text-white text-sm font-display">
+            <div className="flex flex-col justify-center leading-snug">
+              <div className="font-bold text-white text-sm font-display whitespace-nowrap">
                 4.9 Customer Rating
               </div>
               <div className="text-white/70 text-xs font-display">

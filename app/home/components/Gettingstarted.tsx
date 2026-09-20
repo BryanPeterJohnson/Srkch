@@ -49,14 +49,13 @@ const steps = [
 export function GettingStarted() {
     return (
         <section
-            className="pt-16 sm:pt-12 pb-14 sm:pb-16 px-4 sm:px-6 lg:px-8 2xl:px-12 font-display"
+            className="py-14 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 2xl:px-12 font-display"
             style={{ background: "#FFFFFF" }}
         >
-            <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto ">
+            <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto">
 
                 {/* Header */}
-                <div className="text-center mb-3 ">
-                  
+                <div className="text-center mb-10 sm:mb-14 lg:mb-16">
 
                     <motion.h2
                         className="font-display"
@@ -74,16 +73,15 @@ export function GettingStarted() {
                     </motion.h2>
 
                     <motion.p
-                        className="font-display mx-auto leading-relaxed"
+                        className="font-display mx-auto leading-relaxed mt-4"
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
                         style={{
-                            fontSize: 12.5,
+                            fontSize: 14,
                             color: "#5B6B85",
-                            maxWidth: 900,
-                            marginTop: 8,
+                            maxWidth: 720,
                         }}
                     >
                         A dedicated SRK Care Manager will help you understand
@@ -97,7 +95,7 @@ export function GettingStarted() {
                 </div>
 
                 {/* Steps row — stacks 2-up on phones, single even row from sm upward */}
-                <div className="relative flex flex-wrap sm:flex-nowrap items-start justify-center sm:justify-between gap-x-6 gap-y-10 sm:gap-x-2">
+                <div className="relative flex flex-wrap sm:flex-nowrap items-start justify-center sm:justify-between gap-x-6 gap-y-12 sm:gap-x-2">
 
                     {/* Dotted connector line — hidden on stacked mobile, shown from sm upward */}
                     <div

@@ -11,7 +11,6 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { useFormspree } from "../../components/Useformspree";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const services = [
@@ -83,8 +82,10 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Formspree — replace "meajvrgk" if the endpoint ever changes.
-  const { submit, submitting, submitted, error } = useFormspree("meajvrgk");
+  // Submission state (previously provided by useFormspree).
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function setField<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -118,13 +119,37 @@ export default function ContactPage() {
       setErrors(errs);
       return;
     }
-    await submit({
-      name: formState.name,
-      phone: formState.phone,
-      email: formState.email,
-      service: formState.service,
-      message: formState.message,
-    });
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const body = new FormData();
+      body.append("name", formState.name);
+      body.append("phone", formState.phone);
+      body.append("email", formState.email);
+      body.append("service", formState.service);
+      body.append("message", formState.message);
+      // Honeypot field — kept empty by real users.
+      body.append("website", "");
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body,
+      });
+
+      const data = await res.json().catch(() => ({ success: false }));
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const inputClass = (field: keyof FormErrors) =>
@@ -197,6 +222,22 @@ export default function ContactPage() {
                 >
                   Send Us a Message
                 </h2>
+
+                {/* Honeypot — hidden from users, catches bots. */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    width: 1,
+                    height: 1,
+                    opacity: 0,
+                  }}
+                />
 
                 {/* Full Name */}
                 <div>

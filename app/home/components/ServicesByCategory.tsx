@@ -200,12 +200,16 @@ export function ServicesByCategory() {
 
     useEffect(() => {
         if (sliderRef.current) {
+            // Scroll to the selected card when a filter option is chosen (so it's
+            // always in view on any screen size), otherwise follow slideIndex for
+            // the desktop pager. Both resolve to the same position on desktop.
+            const targetIndex = openCat !== null ? selectedIndex : slideIndex;
             sliderRef.current.scrollTo({
-                left: slideIndex * (CARD_W + CARD_GAP),
+                left: targetIndex * (CARD_W + CARD_GAP),
                 behavior: "smooth",
             });
         }
-    }, [slideIndex]);
+    }, [slideIndex, selectedIndex, openCat]);
 
     const viewportWidth = CARDS_VISIBLE * CARD_W + (CARDS_VISIBLE - 1) * CARD_GAP;
 
@@ -277,7 +281,7 @@ export function ServicesByCategory() {
                     <aside
                         className={`w-full lg:w-80 flex-shrink-0 lg:ml-6 transition-opacity duration-200 ${isSearching ? "opacity-60" : "opacity-100"}`}
                     >
-                        <h3 className="font-bold text-black mb-6 text-xl font-display">Filter Categories</h3>
+                        <h3 className="font-bold text-black mb-3 text-xl font-display">Filter Categories</h3>
                         <div className="flex flex-col">
 
                             {/* All Services — interactive click sets openCat to null to show all services */}
@@ -287,7 +291,7 @@ export function ServicesByCategory() {
                                     className={`w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group ${!isSearching && openCat === null ? "bg-gray-50 text-[#005B8E]" : "hover:bg-gray-50"}`}
                                 >
                                     <div className="flex items-center gap-3 pr-3">
-                                        <Heart className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${!isSearching && openCat === null ? "text-[#005B8E]" : "text-gray-500 group-hover:text-[#005B8E]"}`} />
+                                        <Heart className={`w-[18px] h-[18px] flex-shrink-0 transition-colors duration-200 ${!isSearching && openCat === null ? "text-[#005B8E]" : "text-gray-500 group-hover:text-[#005B8E]"}`} />
                                         <div className={`font-semibold text-[18px] font-display transition-colors duration-200 ${!isSearching && openCat === null ? "text-[#005B8E]" : "text-[#1A1A2E] group-hover:text-[#005B8E]"}`}>
                                             All Services
                                         </div>
@@ -306,9 +310,9 @@ export function ServicesByCategory() {
                                             onClick={() => handleCatClick(i)}
                                             className="w-full flex items-center justify-between py-5 px-4 transition-all duration-200 cursor-pointer group hover:bg-gray-50"
                                         >
-                                            <div className="flex items-center gap-3 pr-3">
+                                            <div className="flex items-start gap-3 pr-3">
                                                 <CatIcon
-                                                    className={`w-[18px] h-[18px] flex-shrink-0 mt-1 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"
+                                                    className={`w-[18px] h-[18px] flex-shrink-0 mt-0.5 transition-colors duration-200 ${isActive ? "text-[#005B8E]" : "text-gray-500"
                                                         }`}
                                                 />
                                                 <div>
@@ -356,7 +360,7 @@ export function ServicesByCategory() {
                     </aside>
 
                     {/* RIGHT: Search + Slider */}
-                    <div className="w-full flex-1 flex flex-col items-center overflow-hidden">
+                    <div className="w-full flex-1 flex flex-col items-center min-w-0">
 
                         <div className="w-full relative mb-4" style={{ maxWidth: viewportWidth + 16 }}>
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -470,7 +474,7 @@ export function ServicesByCategory() {
                         ) : (
                             /* ── Default slider ── */
                             <>
-                                <div className="overflow-hidden max-w-full" style={{ width: viewportWidth + 16 }}>
+                                <div className="w-full" style={{ maxWidth: viewportWidth + 16 }}>
                                     <div
                                         ref={sliderRef}
                                         className="flex gap-4 overflow-x-auto px-2 pt-2 pb-4 scroll-smooth no-scrollbar"

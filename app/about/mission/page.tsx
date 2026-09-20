@@ -92,7 +92,7 @@ export default function MissionPage() {
       </p>
     </div>
 
-    <div className="grid md:grid-cols-5 gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
       {[
         ["500+", "Families Served With Dignity"],
         ["98%", "Client Satisfaction Rate"],
@@ -102,9 +102,9 @@ export default function MissionPage() {
       ].map(([value, label], i) => (
         <div
           key={i}
-          className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100"
+          className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100 flex flex-col items-center justify-center"
         >
-          <h3 className="text-3xl font-bold text-[#00A693]">{value}</h3>
+          <h3 className="text-2xl sm:text-3xl font-bold text-[#00A693]">{value}</h3>
           <p className="text-sm text-gray-600 mt-3">{label}</p>
         </div>
       ))}
@@ -147,8 +147,8 @@ export default function MissionPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-[#003A5C] mb-6">How We Live Our Values Daily</h2>
             <div className="space-y-6">
               {dailyPractices.map((item, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <div className="p-2.5 bg-white rounded-lg shadow-sm h-fit flex-shrink-0">
+                <div key={idx} className="flex items-start gap-4">
+                  <div className="p-2.5 bg-white rounded-lg shadow-sm shrink-0 flex items-center justify-center">
                     {item.icon}
                   </div>
                   <div>
