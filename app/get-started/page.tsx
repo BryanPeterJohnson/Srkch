@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import Link from "next/link";
 
 // ─── Color tokens (SRK Care at Home brand) ────────────────────────────────────
@@ -51,67 +51,101 @@ const CARE_TYPES = [
   "Transportation Assistance",
 ];
 
+// ─── Field limits ───────────────────────────────────────────────────────────────
+const LIMITS = {
+  name: { min: 2, max: 50 },
+  email: { max: 254 },
+  phone: { min: 10, max: 20 },
+  zip: { max: 10 },
+};
+
 // ─── Validation helpers ─────────────────────────────────────────────────────────
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_RE = /^\+?[\d\s\-().]{7,}$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+// Name: letters (incl. accented), spaces, hyphens, apostrophes only. No digits/symbols.
+const NAME_RE = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ '\-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
 const ZIP_RE = /^\d{5}(-\d{4})?$/;
-const NAME_RE = /^[a-zA-Zà-úÀ-Ú\s'-]+$/;
+
+// Strips any character not allowed in a name, as the user types.
+function sanitizeName(v: string): string {
+  return v.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ '\-]/g, "");
+}
+
+// Keeps only phone-legal characters while typing.
+function sanitizePhone(v: string): string {
+  return v.replace(/[^\d\s\-().+]/g, "");
+}
+
+// Digits count only, for length checks.
+function phoneDigits(v: string): number {
+  return v.replace(/\D/g, "").length;
+}
 
 function validate(s: FormState): FormErrors {
   const e: FormErrors = {};
   if (!s.whoNeedsCare) e.whoNeedsCare = "Please select who needs care.";
-  if (!s.gender) e.gender = "Please select a gender.";
+  if (!s.gender) e.gender = "Please select an option.";
   if (!s.livingSituation) e.livingSituation = "Please select a living situation.";
   if (!s.careNeeds.length) e.careNeeds = "Please select at least one type of care.";
 
-  if (!s.firstName.trim()) {
+  const fn = s.firstName.trim();
+  if (!fn) {
     e.firstName = "First name is required.";
-  } else if (!NAME_RE.test(s.firstName)) {
-    e.firstName = "First name should only contain letters, spaces, hyphens, or apostrophes.";
-  } else if (s.firstName.trim().length < 2 || s.firstName.trim().length > 50) {
-    e.firstName = "First name must be between 2 and 50 characters.";
+  } else if (fn.length < LIMITS.name.min) {
+    e.firstName = "First name must be at least 2 characters.";
+  } else if (fn.length > LIMITS.name.max) {
+    e.firstName = "First name must be 50 characters or fewer.";
+  } else if (!NAME_RE.test(fn)) {
+    e.firstName = "Use letters only — no numbers or symbols.";
   }
 
-  if (!s.lastName.trim()) {
+  const ln = s.lastName.trim();
+  if (!ln) {
     e.lastName = "Last name is required.";
-  } else if (!NAME_RE.test(s.lastName)) {
-    e.lastName = "Last name should only contain letters, spaces, hyphens, or apostrophes.";
-  } else if (s.lastName.trim().length < 2 || s.lastName.trim().length > 50) {
-    e.lastName = "Last name must be between 2 and 50 characters.";
+  } else if (ln.length < LIMITS.name.min) {
+    e.lastName = "Last name must be at least 2 characters.";
+  } else if (ln.length > LIMITS.name.max) {
+    e.lastName = "Last name must be 50 characters or fewer.";
+  } else if (!NAME_RE.test(ln)) {
+    e.lastName = "Use letters only — no numbers or symbols.";
   }
 
-  if (!EMAIL_RE.test(s.email)) e.email = "Enter a valid email address.";
-  if (!PHONE_RE.test(s.phone)) e.phone = "Enter a valid phone number.";
-  if (!ZIP_RE.test(s.zipcode)) e.zipcode = "Enter a valid 5-digit zip code.";
-  if (!s.optInConsent) e.optInConsent = "You must agree to receive communications.";
-  if (!s.privacyConsent) e.privacyConsent = "You must agree to the privacy policy.";
+  const email = s.email.trim();
+  if (!email) {
+    e.email = "Email address is required.";
+  } else if (email.length > LIMITS.email.max) {
+    e.email = "Email address is too long.";
+  } else if (!EMAIL_RE.test(email)) {
+    e.email = "Enter a valid email, e.g. you@example.com.";
+  }
+
+  const digits = phoneDigits(s.phone);
+  if (!s.phone.trim()) {
+    e.phone = "Phone number is required.";
+  } else if (digits < LIMITS.phone.min) {
+    e.phone = "Enter a valid 10-digit phone number.";
+  } else if (digits > 15) {
+    e.phone = "Phone number is too long.";
+  }
+
+  if (!s.zipcode.trim()) {
+    e.zipcode = "Zip code is required.";
+  } else if (!ZIP_RE.test(s.zipcode.trim())) {
+    e.zipcode = "Enter a valid 5-digit zip code.";
+  }
+
+  if (!s.optInConsent) e.optInConsent = "Please agree to be contacted.";
+  if (!s.privacyConsent) e.privacyConsent = "Please agree to the privacy policy.";
   return e;
 }
 
 function isComplete(s: FormState): boolean {
-  return (
-    s.whoNeedsCare !== "" &&
-    s.gender !== "" &&
-    s.livingSituation !== "" &&
-    s.careNeeds.length > 0 &&
-    s.firstName.trim().length >= 2 &&
-    s.firstName.trim().length <= 50 &&
-    NAME_RE.test(s.firstName) &&
-    s.lastName.trim().length >= 2 &&
-    s.lastName.trim().length <= 50 &&
-    NAME_RE.test(s.lastName) &&
-    EMAIL_RE.test(s.email) &&
-    PHONE_RE.test(s.phone) &&
-    ZIP_RE.test(s.zipcode) &&
-    s.optInConsent &&
-    s.privacyConsent
-  );
+  return Object.keys(validate(s)).length === 0;
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function FieldError({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p className="mt-1 text-xs" style={{ color: "#C0392B" }}>{msg}</p>;
+  return <p className="mt-1 text-xs" style={{ color: "#C0392B", fontSize: 12, marginTop: 4 }}>{msg}</p>;
 }
 
 function SelectField({
@@ -146,10 +180,11 @@ function SelectField({
 }
 
 function TextInput({
-  label, value, onChange, error, type = "text", placeholder, autoComplete, maxLength,
+  label, value, onChange, error, type = "text", placeholder, autoComplete, maxLength, inputMode,
 }: {
   label: string; value: string; onChange: (v: string) => void;
-  error?: string; type?: string; placeholder?: string; autoComplete?: string; maxLength?: number;
+  error?: string; type?: string; placeholder?: string; autoComplete?: string;
+  maxLength?: number; inputMode?: "text" | "email" | "numeric" | "tel";
 }) {
   return (
     <div>
@@ -164,6 +199,7 @@ function TextInput({
         placeholder={placeholder || label}
         autoComplete={autoComplete}
         maxLength={maxLength}
+        inputMode={inputMode}
         style={{
           width: "100%", padding: "10px 14px", fontSize: 16, color: "#1A2B3C",
           border: `1px solid ${error ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6,
@@ -188,12 +224,11 @@ export default function GetStartedPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Reference to scroll up smoothly when submitted
-  const formContainerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    if (submitted && formContainerRef.current) {
-      formContainerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (submitted) {
+      // Scroll the whole page to the top so the success message (which renders
+      // where the form was) is in view — on mobile the form sits below the fold.
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [submitted]);
 
@@ -215,9 +250,9 @@ export default function GetStartedPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const errs = validate(form);
-    if (Object.keys(errs).length) { 
-      setErrors(errs); 
-      return; 
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
     }
 
     setSubmitting(true);
@@ -229,11 +264,11 @@ export default function GetStartedPage() {
       body.append("gender", form.gender);
       body.append("livingSituation", form.livingSituation);
       body.append("careNeeds", form.careNeeds.join(", "));
-      body.append("firstName", form.firstName);
-      body.append("lastName", form.lastName);
-      body.append("email", form.email);
-      body.append("phone", form.phone);
-      body.append("zipcode", form.zipcode);
+      body.append("firstName", form.firstName.trim());
+      body.append("lastName", form.lastName.trim());
+      body.append("email", form.email.trim());
+      body.append("phone", form.phone.trim());
+      body.append("zipcode", form.zipcode.trim());
       body.append("website", "");
 
       const res = await fetch("/api/get-started", {
@@ -268,17 +303,28 @@ export default function GetStartedPage() {
         .gs-name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .gs-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; width: 100%; box-sizing: border-box; }
         .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 52px 24px; text-align: center; position: relative; box-sizing: border-box; }
-        
+
         @media (max-width: 860px) {
           .gs-grid { grid-template-columns: 1fr; gap: 28px; }
           .gs-main { padding: 32px 16px; }
           .gs-hero-inner { padding: 40px 16px; }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 560px) {
           .gs-name-grid { grid-template-columns: 1fr; }
-          .gs-main { padding: 20px 12px; }
-          .gs-form { padding: 16px !important; }
+          .gs-main { padding: 24px 14px; }
+          .gs-form { padding: 20px !important; }
+          .gs-card { padding: 22px !important; }
+        }
+        @media (max-width: 430px) {
+          .gs-main { padding: 18px 10px; }
+          .gs-hero-inner { padding: 32px 12px; }
+          .gs-form { padding: 16px !important; gap: 15px !important; }
           .gs-card { padding: 18px !important; }
+          .gs-sidebar-img { height: 200px !important; }
+        }
+        @media (max-width: 360px) {
+          .gs-main { padding: 14px 8px; }
+          .gs-form { padding: 14px !important; }
         }
       `}</style>
 
@@ -293,10 +339,10 @@ export default function GetStartedPage() {
           ))}
         </div>
         <div className="gs-hero-inner">
-          <h1 style={{ color: "#fff", fontSize: "clamp(22px, 4vw, 38px)", fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
+          <h1 style={{ color: "#fff", fontSize: "clamp(20px, 5vw, 38px)", fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
             Get Started with Home Care in New Jersey
           </h1>
-          <p style={{ color: "#A8C4D8", marginTop: 10, fontSize: 15 }}>
+          <p style={{ color: "#A8C4D8", marginTop: 10, fontSize: "clamp(13px, 3.5vw, 15px)" }}>
             Tell us about your needs — we&apos;ll match you with the right care plan.
           </p>
         </div>
@@ -306,9 +352,9 @@ export default function GetStartedPage() {
       <main className="gs-main">
         <div className="gs-grid">
 
-          {/* ── LEFT: Form / Success Area (Ref attached here) ──────────────── */}
-          <div ref={formContainerRef}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6 }}>
+          {/* ── LEFT: Form / Success Area ──────────────── */}
+          <div>
+            <h2 style={{ fontSize: "clamp(19px, 4.5vw, 22px)", fontWeight: 700, color: "#005B8E", marginTop: 0, marginBottom: 6 }}>
               Speak With Our 24/7 Care Team
             </h2>
             <p style={{ fontSize: 14, color: "#5A6A7A", marginBottom: 28, lineHeight: 1.6 }}>
@@ -344,7 +390,7 @@ export default function GetStartedPage() {
                 />
 
                 <SelectField label="Who Needs Care?" value={form.whoNeedsCare} onChange={(v) => setField("whoNeedsCare", v)} options={WHO_OPTIONS} error={errors.whoNeedsCare} />
-                <SelectField label="Male or Female?" value={form.gender} onChange={(v) => setField("gender", v)} options={GENDER_OPTIONS} error={errors.gender} placeholder="Male or Female?" />
+                <SelectField label="Male or Female?" value={form.gender} onChange={(v) => setField("gender", v)} options={GENDER_OPTIONS} error={errors.gender} placeholder="Select an option" />
                 <SelectField label="What is their current living situation?" value={form.livingSituation} onChange={(v) => setField("livingSituation", v)} options={LIVING_OPTIONS} error={errors.livingSituation} />
 
                 {/* Care types checkboxes */}
@@ -372,34 +418,69 @@ export default function GetStartedPage() {
                 </div>
 
                 <div className="gs-name-grid">
-                  <TextInput label="First Name" value={form.firstName} onChange={(v) => setField("firstName", v)} error={errors.firstName} autoComplete="given-name" maxLength={50} />
-                  <TextInput label="Last Name" value={form.lastName} onChange={(v) => setField("lastName", v)} error={errors.lastName} autoComplete="family-name" maxLength={50} />
+                  <TextInput
+                    label="First Name"
+                    value={form.firstName}
+                    onChange={(v) => setField("firstName", sanitizeName(v))}
+                    error={errors.firstName}
+                    autoComplete="given-name"
+                    maxLength={LIMITS.name.max}
+                  />
+                  <TextInput
+                    label="Last Name"
+                    value={form.lastName}
+                    onChange={(v) => setField("lastName", sanitizeName(v))}
+                    error={errors.lastName}
+                    autoComplete="family-name"
+                    maxLength={LIMITS.name.max}
+                  />
                 </div>
 
-                <TextInput label="Email" value={form.email} type="email" onChange={(v) => setField("email", v)} error={errors.email} autoComplete="email" placeholder="you@example.com" />
+                <TextInput
+                  label="Email"
+                  value={form.email}
+                  type="email"
+                  inputMode="email"
+                  onChange={(v) => setField("email", v)}
+                  error={errors.email}
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  maxLength={LIMITS.email.max}
+                />
 
                 <div>
                   <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1A2B3C", marginBottom: 6 }}>
                     Phone <span style={{ color: "#C0392B" }}>*</span>
                   </label>
                   <div style={{ display: "flex", border: `1px solid ${errors.phone ? "#C0392B" : "#D8DFE8"}`, borderRadius: 6, overflow: "hidden", background: "#fff" }}>
-                    <div style={{ padding: "10px 12px", background: "#F7F8FA", borderRight: "1px solid #D8DFE8", fontSize: 14, color: "#5A6A7A", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                    <div style={{ padding: "10px 12px", background: "#F7F8FA", borderRight: "1px solid #D8DFE8", fontSize: 14, color: "#5A6A7A", display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", flexShrink: 0 }}>
                       🇺🇸 +1
                     </div>
                     <input
                       type="tel"
+                      inputMode="tel"
                       required
                       value={form.phone}
-                      onChange={(e) => setField("phone", e.target.value)}
+                      onChange={(e) => setField("phone", sanitizePhone(e.target.value))}
                       placeholder="(555) 000-0000"
                       autoComplete="tel"
-                      style={{ flex: 1, minWidth: 0, padding: "10px 14px", fontSize: 16, border: "none", outline: "none", color: "#1A2B3C" }}
+                      maxLength={LIMITS.phone.max}
+                      style={{ flex: 1, minWidth: 0, width: "100%", padding: "10px 14px", fontSize: 16, border: "none", outline: "none", color: "#1A2B3C", boxSizing: "border-box" }}
                     />
                   </div>
                   <FieldError msg={errors.phone} />
                 </div>
 
-                <TextInput label="Zipcode" value={form.zipcode} onChange={(v) => setField("zipcode", v)} error={errors.zipcode} placeholder="07001" autoComplete="postal-code" maxLength={10} />
+                <TextInput
+                  label="Zipcode"
+                  value={form.zipcode}
+                  onChange={(v) => setField("zipcode", v.replace(/[^\d-]/g, ""))}
+                  error={errors.zipcode}
+                  placeholder="07001"
+                  autoComplete="postal-code"
+                  inputMode="numeric"
+                  maxLength={LIMITS.zip.max}
+                />
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 13, color: "#5A6A7A", lineHeight: 1.5 }}>
@@ -460,7 +541,7 @@ export default function GetStartedPage() {
           {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div style={{ borderRadius: 10, overflow: "hidden" }}>
-              <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }} />
+              <img className="gs-sidebar-img" src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }} />
             </div>
 
             <div className="gs-card" style={{

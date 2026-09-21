@@ -66,8 +66,33 @@ type FormErrors = Partial<Record<keyof FormState, string>>;
 // ─── Shared input style (beats any global CSS) ──────────────────────────────────
 const FIELD_TEXT_COLOR = "#1A1A2E";
 
+// ─── Field limits ───────────────────────────────────────────────────────────────
+const LIMITS = {
+  name: { min: 2, max: 50 },
+  email: { max: 254 },
+  phone: { minDigits: 10, maxDigits: 15, max: 20 },
+  message: { max: 1000 },
+};
+
 // ─── Validation ────────────────────────────────────────────────────────────────
-const EMAIL_RE = /\S+@\S+\.\S+/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+// Letters (incl. accented), spaces, hyphens, apostrophes — no digits/symbols,
+// and no leading/trailing/double separators.
+const NAME_RE = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ '\-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+
+// Strips characters not allowed in a name, as the user types.
+function sanitizeName(v: string): string {
+  return v.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ '\-]/g, "");
+}
+
+// Keeps only phone-legal characters while typing.
+function sanitizePhone(v: string): string {
+  return v.replace(/[^\d\s\-().+]/g, "");
+}
+
+function phoneDigits(v: string): number {
+  return v.replace(/\D/g, "").length;
+}
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function ContactPage() {
@@ -95,22 +120,48 @@ export default function ContactPage() {
 
   function validate(): FormErrors {
     const e: FormErrors = {};
-    if (!formState.name.trim()) e.name = "Full name is required.";
-    if (!formState.phone.trim()) e.phone = "Phone number is required.";
-    if (!formState.email.trim() || !EMAIL_RE.test(formState.email))
-      e.email = "Valid email is required.";
+
+    const name = formState.name.trim();
+    if (!name) {
+      e.name = "Full name is required.";
+    } else if (name.length < LIMITS.name.min) {
+      e.name = "Name must be at least 2 characters.";
+    } else if (name.length > LIMITS.name.max) {
+      e.name = "Name must be 50 characters or fewer.";
+    } else if (!NAME_RE.test(name)) {
+      e.name = "Use letters only — no numbers or symbols.";
+    }
+
+    const digits = phoneDigits(formState.phone);
+    if (!formState.phone.trim()) {
+      e.phone = "Phone number is required.";
+    } else if (digits < LIMITS.phone.minDigits) {
+      e.phone = "Enter a valid 10-digit phone number.";
+    } else if (digits > LIMITS.phone.maxDigits) {
+      e.phone = "Phone number is too long.";
+    }
+
+    const email = formState.email.trim();
+    if (!email) {
+      e.email = "Email address is required.";
+    } else if (email.length > LIMITS.email.max) {
+      e.email = "Email address is too long.";
+    } else if (!EMAIL_RE.test(email)) {
+      e.email = "Enter a valid email, e.g. jane@example.com.";
+    }
+
     if (!formState.service) e.service = "Please select a service.";
+
+    if (formState.message.length > LIMITS.message.max) {
+      e.message = "Message must be 1000 characters or fewer.";
+    }
+
     if (!formState.consent) e.consent = "Please agree to be contacted.";
     return e;
   }
 
-  // All required fields filled + consent checked → button becomes enabled.
-  const isFormValid =
-    formState.name.trim() !== "" &&
-    formState.phone.trim() !== "" &&
-    EMAIL_RE.test(formState.email) &&
-    formState.service !== "" &&
-    formState.consent;
+  // All required fields valid + consent checked → button becomes enabled.
+  const isFormValid = Object.keys(validate()).length === 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -125,11 +176,11 @@ export default function ContactPage() {
 
     try {
       const body = new FormData();
-      body.append("name", formState.name);
-      body.append("phone", formState.phone);
-      body.append("email", formState.email);
+      body.append("name", formState.name.trim());
+      body.append("phone", formState.phone.trim());
+      body.append("email", formState.email.trim());
       body.append("service", formState.service);
-      body.append("message", formState.message);
+      body.append("message", formState.message.trim());
       // Honeypot field — kept empty by real users.
       body.append("website", "");
 
@@ -247,12 +298,13 @@ export default function ContactPage() {
                   <input
                     type="text"
                     required
+                    maxLength={LIMITS.name.max}
                     className={inputClass("name")}
                     style={{ color: FIELD_TEXT_COLOR }}
                     placeholder="Jane Smith"
                     autoComplete="name"
                     value={formState.name}
-                    onChange={(e) => setField("name", e.target.value)}
+                    onChange={(e) => setField("name", sanitizeName(e.target.value))}
                   />
                   {errors.name && (
                     <p className="text-xs text-[#D94F3D] mt-1">{errors.name}</p>
@@ -267,13 +319,15 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="tel"
+                      inputMode="tel"
                       required
+                      maxLength={LIMITS.phone.max}
                       className={inputClass("phone")}
                       style={{ color: FIELD_TEXT_COLOR }}
                       placeholder="(212) 555-0100"
                       autoComplete="tel"
                       value={formState.phone}
-                      onChange={(e) => setField("phone", e.target.value)}
+                      onChange={(e) => setField("phone", sanitizePhone(e.target.value))}
                     />
                     {errors.phone && (
                       <p className="text-xs text-[#D94F3D] mt-1">{errors.phone}</p>
@@ -285,7 +339,9 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="email"
+                      inputMode="email"
                       required
+                      maxLength={LIMITS.email.max}
                       className={inputClass("email")}
                       style={{ color: FIELD_TEXT_COLOR }}
                       placeholder="jane@example.com"
@@ -332,12 +388,23 @@ export default function ContactPage() {
                   </label>
                   <textarea
                     rows={4}
+                    maxLength={LIMITS.message.max}
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm outline-none transition-all focus:border-[#005B8E] focus:ring-2 focus:ring-[#005B8E]/20 resize-none placeholder-gray-400"
                     style={{ color: FIELD_TEXT_COLOR }}
                     placeholder="Tell us a bit about your care needs..."
                     value={formState.message}
                     onChange={(e) => setField("message", e.target.value)}
                   />
+                  <div className="flex justify-between mt-1">
+                    {errors.message ? (
+                      <p className="text-xs text-[#D94F3D]">{errors.message}</p>
+                    ) : (
+                      <span />
+                    )}
+                    <span className="text-xs text-[#9CA3AF]">
+                      {formState.message.length}/{LIMITS.message.max}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Consent */}
