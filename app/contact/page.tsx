@@ -529,7 +529,7 @@ export default function ContactPage() {
 
               <div className="mt-5 pt-5 border-t border-gray-200">
                 <a
-                  href="https://wa.me/18005752273"
+                  href="https://wa.me/14436273806"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-white font-semibold text-sm transition-all hover:opacity-90"
