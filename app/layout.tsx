@@ -3,6 +3,7 @@ import Header from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
 import LenisProvider from "../components/animations/LenisProvider";
 import ScrollToTopButton from "../components/layout/ScrollToTopButton";
+import BackButton from "../components/layout/BackButton";
 
 export const metadata = {
   title: "SRKCH",
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className="pt-[64px]">
         <LenisProvider>
           <Header />
+          <BackButton />
           {children}
           <Footer />
           <ScrollToTopButton />

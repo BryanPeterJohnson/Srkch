@@ -143,7 +143,7 @@ function ApplicationFormContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
+    <div className="min-h-screen bg-gray-100 pt-16 pb-10 px-4 sm:px-6 lg:px-8 font-display">
       <div className="max-w-3xl mx-auto space-y-6">
 
         {/* Header Section */}
@@ -179,53 +179,53 @@ function ApplicationFormContent() {
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">First Name <span className="text-[#E57531]">*</span></label>
-                <input 
-                  type="text" 
-                  name="firstName" 
-                  value={form.firstName} 
-                  onChange={handleChange} 
-                  required 
+                <input
+                  type="text"
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  required
                   placeholder="e.g. John"
-                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Last Name <span className="text-[#E57531]">*</span></label>
-                <input 
-                  type="text" 
-                  name="lastName" 
-                  value={form.lastName} 
-                  onChange={handleChange} 
-                  required 
+                <input
+                  type="text"
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  required
                   placeholder="e.g. Doe"
-                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Email <span className="text-[#E57531]">*</span></label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={form.email} 
-                  onChange={handleChange} 
-                  required 
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
                   placeholder="e.g. john.doe@example.com"
-                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 font-display">Phone <span className="text-[#E57531]">*</span></label>
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  value={form.phone} 
-                  onChange={handleChange} 
-                  required 
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
                   placeholder="e.g. +1 (555) 019-2834"
-                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display" 
+                  className="mt-1 block w-full rounded border-gray-300 bg-white p-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-[#159BA1] focus:ring-[#159BA1] font-display"
                 />
               </div>
 
@@ -435,7 +435,7 @@ function ApplicationFormContent() {
 
 function ApplicationFormSkeleton() {
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-display">
+    <div className="min-h-screen bg-gray-100 pt-16 pb-10 px-4 sm:px-6 lg:px-8 font-display">
       <div className="max-w-3xl mx-auto space-y-6 animate-pulse">
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center space-y-3">
           <div className="h-4 w-40 bg-gray-200 rounded" />

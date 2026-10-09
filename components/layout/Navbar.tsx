@@ -3,6 +3,7 @@
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { useScrollLock } from "../ui/use-scroll-lock";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -52,10 +53,7 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+  useScrollLock(mobileOpen);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -80,10 +78,6 @@ export default function Header() {
         </div>
 
         <nav className="px-6 py-4 divide-y divide-gray-100">
-          <a href="tel:+14436273806" className="flex items-center gap-2 py-4 text-[#005B8E] font-bold text-[16px]">
-            <Phone size={18} /> (443) 627-3806
-          </a>
-
           {NAV_ITEMS.map((item) => (
             <div key={item.label} className="py-2">
               {"links" in item ? (
@@ -143,6 +137,14 @@ export default function Header() {
               className="block w-full text-center py-3.5 rounded-xl font-bold text-white text-[15px] bg-[#005B8E] hover:bg-[#004770] transition-colors shadow-sm"
             >
               Contact Us
+            </a>
+
+            <a
+              href="tel:+14436273806"
+              onClick={() => setMobileOpen(false)}
+              className="mt-3 flex w-full items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-[#005B8E] text-[#005B8E] font-bold text-[15px] hover:bg-[#F3F8FC] transition-colors"
+            >
+              <Phone size={18} /> (443) 627-3806
             </a>
           </div>
         </nav>

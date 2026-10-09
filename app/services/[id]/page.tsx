@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useMemo } from "react";
+import { use, useState, useMemo, useEffect, useRef } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
@@ -21,9 +21,11 @@ import {
   Sparkles,
   Star,
   Users2,
-  ChevronLeft
+  ChevronLeft,
+  Check
 } from "lucide-react";
-import { services } from "../data";
+import { services, GROUP_NAMES, type PatientGroup } from "../data";
+import BackButton from "../../../components/layout/BackButton";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -115,80 +117,155 @@ function HeartDivider() {
   );
 }
 
-/* ─────────────────────── RELATED SERVICES SLIDER ───────────────────────
-   Paginates the related services into pages of PER_PAGE cards. The prev/next
-   buttons move between pages and the counter reflects the live page. When
-   everything fits on one page the controls disable themselves. */
-function RelatedServicesSlider({ related }: { related: typeof services }) {
-  const PER_PAGE = 5;
-  const [page, setPage] = useState(0);
+/* ─────────────────────── ALL SERVICES SLIDER ───────────────────────
+   Shows every service for the current age group INCLUDING the one being
+   viewed. The open service is highlighted ("Viewing") and the one after it is
+   tagged "Next".
 
-  const totalPages = Math.max(1, Math.ceil(related.length / PER_PAGE));
-  const canPrev = page > 0;
-  const canNext = page < totalPages - 1;
+   The number of cards is based on the slider's OWN width (not the screen
+   breakpoint), so the cards always fill complete rows. That way there are no
+   half-empty rows on laptops with display scaling or on tablets. Prev/next move
+   one "page" at a time, and the last page is clamped so it is always full. */
+function RelatedServicesSlider({
+  items,
+  currentId,
+  groupLabel,
+}: {
+  items: typeof services;
+  currentId: number;
+  groupLabel?: string;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cols, setCols] = useState(3);
 
-  const pageItems = related.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => {
+      const w = el.clientWidth;
+      // ~170px min per card, between 2 and 4 columns
+      setCols(w < 520 ? 2 : w < 720 ? 3 : 4);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Phones (2 columns) get 2 rows so 4 cards are visible; wider = 1 row.
+  const rows = cols === 2 ? 2 : 1;
+  const perPage = Math.min(items.length, cols * rows);
+  const maxStart = Math.max(0, items.length - perPage);
+
+  const currentIndex = Math.max(0, items.findIndex((s) => s.id === currentId));
+  const nextId = items.length > 1 ? items[(currentIndex + 1) % items.length].id : null;
+
+  // Open with the current service in view (one card before it when possible, so
+  // the "Next" card is visible too).
+  const initialStart = (pp: number) =>
+    Math.min(Math.max(0, currentIndex - 1), Math.max(0, items.length - pp));
+  const [start, setStart] = useState(() => initialStart(perPage));
+
+  // Re-anchor when the column count changes (resize / rotate).
+  useEffect(() => {
+    setStart(initialStart(perPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [perPage]);
+
+  const safeStart = Math.min(start, maxStart);
+  const canPrev = safeStart > 0;
+  const canNext = safeStart < maxStart;
+  const pageItems = items.slice(safeStart, safeStart + perPage);
 
   return (
-    <div>
-      <h2 className="font-display font-black text-xl sm:text-2xl text-[#0B2D5B]">You May Also Be Interested In</h2>
+    <div ref={containerRef} className="min-w-0">
+      <h2 className="font-display font-black text-xl sm:text-2xl text-[#0B2D5B]">
+        {groupLabel ? `All ${groupLabel} Services` : "All Services"}
+      </h2>
+      <p className="mt-1 text-xs sm:text-sm text-slate-500">
+        You&apos;re viewing service {currentIndex + 1} of {items.length}. Pick another to explore what&apos;s next.
+      </p>
 
-      <div className="grid grid-cols-2 mt-4 gap-3 sm:grid-cols-3 xl:grid-cols-5">
-        {pageItems.map((item) => (
-          <a
-            key={item.id}
-            href={`/services/${item.slug}?group=${(item as any).group}`}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <div className="h-28 overflow-hidden">
-              <img
-                src={(item as any).image}
-                alt={item.title}
-                className="h-full w-full object-cover transition group-hover:scale-105"
-                style={{ objectPosition: (item as any).objectPosition ?? "right 10%" }}
-              />
-            </div>
-            <div className="flex flex-1 items-center justify-between gap-2 p-3">
-              <span className="text-xs font-black leading-snug text-[#0B2D5B] line-clamp-2">
-                {item.title}
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
-            </div>
-          </a>
-        ))}
+      <div
+        className="grid mt-4 gap-3"
+        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+      >
+        {pageItems.map((item) => {
+          const isCurrent = item.id === currentId;
+          const isNext = item.id === nextId;
+          return (
+            <a
+              key={item.id}
+              href={`/services/${item.slug}?group=${(item as any).group}`}
+              aria-current={isCurrent ? "page" : undefined}
+              onClick={isCurrent ? (e) => e.preventDefault() : undefined}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition ${isCurrent
+                ? "border-[#159BA1] ring-2 ring-[#159BA1] cursor-default"
+                : "border-slate-100 hover:-translate-y-1 hover:shadow-lg"
+                }`}
+            >
+              {(isCurrent || isNext) && (
+                <span
+                  className={`absolute left-2 top-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white shadow ${isCurrent ? "bg-[#159BA1]" : "bg-[#0B2D5B]"
+                    }`}
+                >
+                  {isCurrent ? "Viewing" : "Next"}
+                </span>
+              )}
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src={(item as any).image}
+                  alt={item.title}
+                  className={`h-full w-full object-cover transition ${isCurrent ? "" : "group-hover:scale-105"}`}
+                  style={{ objectPosition: (item as any).objectPosition ?? "right 10%" }}
+                />
+              </div>
+              <div className={`flex flex-1 items-center justify-between gap-2 p-3 ${isCurrent ? "bg-[#EEF9F7]" : ""}`}>
+                <span className="text-xs font-black leading-snug text-[#0B2D5B] line-clamp-2">
+                  {item.title}
+                </span>
+                {isCurrent ? (
+                  <Check className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
+                ) : (
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#159BA1]" />
+                )}
+              </div>
+            </a>
+          );
+        })}
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-4">
-        <button
-          onClick={() => canPrev && setPage((p) => p - 1)}
-          disabled={!canPrev}
-          aria-label="Previous services"
-          className={`flex h-10 w-10 items-center justify-center rounded-full border transition ${
-            canPrev
+      {maxStart > 0 && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <button
+            onClick={() => canPrev && setStart(Math.max(0, safeStart - perPage))}
+            disabled={!canPrev}
+            aria-label="Previous services"
+            className={`flex h-10 w-10 items-center justify-center rounded-full border transition ${canPrev
               ? "border-slate-200 text-[#0B2D5B] hover:bg-slate-50 cursor-pointer"
               : "border-slate-200 text-slate-300 cursor-not-allowed"
-          }`}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+              }`}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
 
-        <span className="text-sm font-medium text-slate-500">
-          {page + 1} of {totalPages} {totalPages === 1 ? "Page" : "Services"}
-        </span>
+          <span className="text-sm font-medium text-slate-500">
+            {safeStart + 1}–{safeStart + pageItems.length} of {items.length}
+          </span>
 
-        <button
-          onClick={() => canNext && setPage((p) => p + 1)}
-          disabled={!canNext}
-          aria-label="Next services"
-          className={`flex h-10 w-10 items-center justify-center rounded-full transition ${
-            canNext
+          <button
+            onClick={() => canNext && setStart(Math.min(maxStart, safeStart + perPage))}
+            disabled={!canNext}
+            aria-label="Next services"
+            className={`flex h-10 w-10 items-center justify-center rounded-full transition ${canNext
               ? "bg-[#0B2D5B] text-white hover:bg-[#08345F] cursor-pointer"
               : "bg-slate-200 text-slate-400 cursor-not-allowed"
-          }`}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
+              }`}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -221,19 +298,16 @@ export default function ServiceDetailPage({ params }: PageProps) {
       ? (service as any).howItWorks
       : fallbackHowItWorks;
 
-  /* Related services — services that share at least one patientGroup
-     (seniors / adults / children) with the current service, current one excluded.
-     Falls back to any other services if there aren't enough matches. */
+  /* All services for the current age group (seniors / adults / children),
+     INCLUDING the current one so it can be highlighted in the slider.
+     Falls back to every service if the group has too few entries. */
   const currentGroups: string[] = (service as any).patientGroups || [];
-  const relatedByGroup = services.filter(
-    (s) =>
-      s.id !== service.id &&
-      (s as any).patientGroups?.some((g: string) => currentGroups.includes(g))
+  const sameGroup = services.filter((s) =>
+    (s as any).patientGroups?.some((g: string) => currentGroups.includes(g))
   );
-  const related =
-    relatedByGroup.length >= 3
-      ? relatedByGroup
-      : services.filter((s) => s.id !== service.id);
+  const sliderItems = sameGroup.length >= 3 ? sameGroup : services;
+  const sliderGroupLabel =
+    sameGroup.length >= 3 ? GROUP_NAMES[(service as any).group as PatientGroup] : undefined;
 
   return (
     <main className="min-h-screen bg-white font-sans text-[#102A43]">
@@ -243,7 +317,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
           - Mobile (< lg): text on white, then the full image below (uncropped, centered).
           - Desktop (lg+): image is the background with text overlaid + left fade.
       ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-white flex flex-col lg:block lg:aspect-[16/6] lg:min-h-0">
+      <section className="relative overflow-hidden bg-white flex flex-col lg:block lg:min-h-[37.5vw] short:min-h-0!">
         {/* Image — full block below text on mobile; absolute background on desktop */}
         <div className="relative order-2 lg:order-none lg:absolute lg:inset-0 w-full h-[220px] sm:h-[380px] lg:h-auto">
           <img
@@ -252,31 +326,35 @@ export default function ServiceDetailPage({ params }: PageProps) {
             className="h-full w-full object-cover object-center lg:object-[right_20%]"
           />
           {/* Desktop-only left fade to keep the overlaid text legible */}
-          <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-white from-0% via-white/85 via-25% to-transparent to-60%" />
+          <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-white from-0% via-white/90 via-35% to-transparent to-70%" />
         </div>
 
-        <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl px-6 py-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:py-14">
+        <div className="relative order-1 lg:order-none z-10 ml-0 max-w-7xl px-6 pt-5 pb-8 sm:pl-16 sm:pr-6 lg:pl-20 lg:pr-8 lg:pt-8 lg:pb-14 short:pt-5! short:pb-12!">
 
 
-          <div className="max-w-[540px] text-left">
+          <div className="max-w-[480px] xl:max-w-[540px] text-left">
 
-            <p className="mb-3 text-xs sm:text-sm font-black uppercase tracking-[0.18em] text-[#159BA1]">
+            <div className="mb-5 lg:mb-6 short:mb-3! [@media(min-width:1200px)_and_(max-width:1300px)_and_(max-height:650px)]:mt-3">
+              <BackButton inline />
+            </div>
+
+            <p className="mb-3 short:mb-2! text-xs sm:text-sm font-black uppercase tracking-[0.18em] text-[#159BA1]">
               {(service as any).category || "Companion Care Services"}
             </p>
 
-            <h1 className="font-display font-black text-3xl leading-tight text-[#143e75] sm:text-4xl md:text-5xl">
-                {service.title}
+            <h1 className="font-display font-black text-3xl leading-tight text-[#143e75] sm:text-4xl md:text-5xl lg:text-[42px] xl:text-5xl short:text-[38px]! short:leading-[1.15]!">
+              {service.title}
             </h1>
 
-            <p className="mt-4 sm:mt-5 text-sm sm:text-base leading-7 text-slate-600">
-  {(service as any).tagline || service.description}
-</p>
+            <p className="mt-4 sm:mt-5 text-sm sm:text-base leading-7 text-slate-600 short:mt-3! short:text-[15px]! short:leading-6!">
+              {(service as any).tagline || service.description}
+            </p>
 
-            <div className="mt-7 grid grid-cols-1 min-[420px]:grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
+            <div className="mt-7 short:mt-4! grid grid-cols-1 min-[420px]:grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6">
               {([
-                [Users2,      "Compassionate", "Caregivers"],
-                [ShieldCheck, "Background",    "Checked"],
-                [Clock,       "Available",     "24/7"],
+                [Users2, "Compassionate", "Caregivers"],
+                [ShieldCheck, "Background", "Checked"],
+                [Clock, "Available", "24/7"],
               ] as [React.ElementType, string, string][]).map(([Icon, line1, line2]) => (
                 <div key={line1} className="flex items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0C447C] shadow-sm">
@@ -290,7 +368,7 @@ export default function ServiceDetailPage({ params }: PageProps) {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="mt-8 short:mt-5! flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a href="/get-started" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#0C447C] px-6 sm:px-7 py-3.5 sm:py-4 text-sm font-black text-white shadow-md transition hover:bg-[#08345F]">
                 Request a Free Consultation <ArrowRight className="h-4 w-4" />
               </a>
@@ -309,20 +387,20 @@ export default function ServiceDetailPage({ params }: PageProps) {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_380px] lg:items-start lg:px-8">
 
           {/* ── LEFT COLUMN ── */}
-       <div className="flex flex-col">
+          <div className="flex flex-col">
 
             {/* Services grid */}
             <div>
-<div className="mb-4 text-center">
-  <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">Our {service.shortTitle} Services</h2>
-    <p className="mt-4 sm:mt-5 text-sm leading-7 text-slate-600 max-w-3xl mx-auto ">
-      {service.description}
-    </p>
-  <p className="mt-3 text-m font-bold text-[#0B2D5B]">Our Services Includes</p>
-  <HeartDivider />
+              <div className="mb-4 text-center">
+                <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">Our {service.shortTitle} Services</h2>
+                <p className="mt-4 sm:mt-5 text-sm leading-7 text-slate-600 max-w-3xl mx-auto ">
+                  {service.description}
+                </p>
+                <p className="mt-3 text-m font-bold text-[#0B2D5B]">Our Services Includes</p>
+                <HeartDivider />
 
-</div>
-<div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
+              </div>
+              <div className="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">
                 {categories.map((cat, idx) => {
                   const Icon = cat.icon || defaultServiceIcons[idx % defaultServiceIcons.length];
                   return (
@@ -342,29 +420,29 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </div>
 
             {/* Stats row */}
-<div className="mt-6 lg:mt-8 grid grid-cols-2 rounded-2xl border border-slate-100 bg-[#F5F9FC] sm:grid-cols-4">
-  {([
-    [Users2,      "500+",      "Families Served"],
-    [Clock,       "24/7",      "Care Available"],
-    [Star,        "98%",       "Client Satisfaction"],
-    [ShieldCheck, "Certified", "& Insured Caregivers"],
-  ] as [React.ElementType, string, string][]).map(([Icon, value, label]) => (
-    <div key={value} className="flex items-center gap-3 p-4 sm:p-5">
-      <Icon className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-[#0C447C]" />
-      <div>
-        <p className="text-lg sm:text-xl font-black text-[#0B2D5B]">{value}</p>
-        <p className="text-xs text-slate-600">{label}</p>
-      </div>
-    </div>
-  ))}
-</div>
+            <div className="mt-6 lg:mt-8 grid grid-cols-2 rounded-2xl border border-slate-100 bg-[#F5F9FC] sm:grid-cols-4">
+              {([
+                [Users2, "500+", "Families Served"],
+                [Clock, "24/7", "Care Available"],
+                [Star, "98%", "Client Satisfaction"],
+                [ShieldCheck, "Certified", "& Insured Caregivers"],
+              ] as [React.ElementType, string, string][]).map(([Icon, value, label]) => (
+                <div key={value} className="flex items-center gap-3 p-4 sm:p-5">
+                  <Icon className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-[#0C447C]" />
+                  <div>
+                    <p className="text-lg sm:text-xl font-black text-[#0B2D5B]">{value}</p>
+                    <p className="text-xs text-slate-600">{label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {/* How It Works */}
             <div className="mt-6 lg:mt-8">
-      <div className="mb-4 text-center">
-  <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">How It Works</h2>
-  <HeartDivider />
-</div>
+              <div className="mb-4 text-center">
+                <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B2D5B]">How It Works</h2>
+                <HeartDivider />
+              </div>
               <div className="grid grid-cols-2 gap-6 sm:flex sm:items-start sm:justify-center">
                 {howItWorks.map((step: any, idx: number) => {
                   const Icon = stepIcons[idx % stepIcons.length];
@@ -422,31 +500,31 @@ export default function ServiceDetailPage({ params }: PageProps) {
       {/* ═══════════════════════════════════════════
           FAQ (left) + RELATED SERVICES (right)
       ═══════════════════════════════════════════ */}
-<section className="bg-[#FAFCFE] pt-3 pb-3 lg:pt-2 lg:pb-3"> 
-<div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_2fr] lg:px-8">
-  <div>
-    <h2 className="font-display font-black mb-0 text-xl sm:text-2xl text-[#0B2D5B]">Frequently Asked Questions</h2>
-    {[
-      "How often can a caregiver visit?",
-      "Do you provide transportation for outings?",
-      "Is companion care covered by insurance?",
-      "Can care start immediately?",
-      "Can I change my caregiver if needed?",
-    ].map((question) => (
-      <details key={question} className="mb-3 mt-4 rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-sm">
-        <summary className="flex cursor-pointer items-center justify-between text-xs font-black text-[#102A43]">
-          {question}
-          <span className="ml-3 shrink-0 text-slate-400">+</span>
-        </summary>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          Please contact our care coordinator for details based on your family's needs and schedule.
-        </p>
-      </details>
-    ))}
-  </div>
+      <section className="bg-[#FAFCFE] pt-3 pb-3 lg:pt-2 lg:pb-3">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_2fr] lg:px-8">
+          <div>
+            <h2 className="font-display font-black mb-0 text-xl sm:text-2xl text-[#0B2D5B]">Frequently Asked Questions</h2>
+            {[
+              "How often can a caregiver visit?",
+              "Do you provide transportation for outings?",
+              "Is companion care covered by insurance?",
+              "Can care start immediately?",
+              "Can I change my caregiver if needed?",
+            ].map((question) => (
+              <details key={question} className="mb-3 mt-4 rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-sm">
+                <summary className="flex cursor-pointer items-center justify-between text-xs font-black text-[#102A43]">
+                  {question}
+                  <span className="ml-3 shrink-0 text-slate-400">+</span>
+                </summary>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Please contact our care coordinator for details based on your family's needs and schedule.
+                </p>
+              </details>
+            ))}
+          </div>
 
-  <RelatedServicesSlider related={related} />
-    </div>
+          <RelatedServicesSlider key={service.id} items={sliderItems} currentId={service.id} groupLabel={sliderGroupLabel} />
+        </div>
       </section>
       {/* ═══════════════════════════════════════════
           BOTTOM CTA BANNER
@@ -461,11 +539,11 @@ export default function ServiceDetailPage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-<a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
+            <a href="tel:+14436273806" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-4 font-black text-white whitespace-nowrap">
               <Phone className="h-4 w-4" /> Call (443) 627-3806
             </a>
-<a href="/get-started" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap">            
-   Request a Free Consultation <ArrowRight className="h-4 w-4" />
+            <a href="/get-started" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-black text-[#0B2D5B] whitespace-nowrap">
+              Request a Free Consultation <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </div>

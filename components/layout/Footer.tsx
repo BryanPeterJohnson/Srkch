@@ -8,15 +8,13 @@ import {
     FaYoutube,
     FaLinkedinIn,
 } from "react-icons/fa";
-const services = [
-    { name: "Personal Care", path: "/services/personal-care" },
-    { name: "Companion Care", path: "/services/companion-care" },
-    { name: "Senior Transportation", path: "/services/senior-transportation" },
-    { name: "Respite Care", path: "/services/respite-care" },
-    { name: "Meal Preparation", path: "/services/meal-preparation" },
-    { name: "Skilled Nursing Care", path: "/services/skilled-nursing" },
-    { name: "24-Hour Home Care", path: "/services/24-hour-care" },
-];
+import { services as allServices } from "../../app/services/data";
+
+// Footer lists the Senior services, generated from the same data the service
+// pages use, so every link always points at a real page (no more 404s).
+const services = allServices
+    .filter((s) => s.group === "seniors")
+    .map((s) => ({ name: s.shortTitle, path: s.href }));
 
 const socials = [
     {
@@ -97,7 +95,7 @@ export function Footer() {
 
                     {/* Col 3 */}
                     <div>
-                        <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-wide" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>Our Services</h4>
+                        <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-wide" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>Senior Services</h4>
                         <ul className="space-y-2.5">
                             {services.map((svc) => (
                                 <li key={svc.path}>

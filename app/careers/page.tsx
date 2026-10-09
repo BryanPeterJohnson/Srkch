@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { FaLinkedinIn as Linkedin, FaTwitter as Twitter, FaFacebookF as Facebook } from "react-icons/fa";
+import { useScrollLock } from "../../components/ui/use-scroll-lock";
 import {
   Heart,
   X,
@@ -25,9 +27,6 @@ import {
   Check,
   Copy,
   Mail,
-  Linkedin,
-  Twitter,
-  Facebook,
 } from "lucide-react";
 
 // ── Real Data Import ─────────────────────────────────────────────────────────
@@ -546,18 +545,18 @@ export default function CareersPage() {
   const [savedJobs, setSavedJobs] = useState<Set<number>>(new Set());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  // Lock body scroll when the mobile full-screen detail overlay is open
+  // Lock the page behind the mobile full-screen job overlay (also stops Lenis and
+  // works on iOS Safari). Re-evaluated on resize so rotating / resizing past lg
+  // unlocks it when the overlay becomes a normal side panel.
+  const [isMobileView, setIsMobileView] = useState(false);
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isMobile = window.matchMedia("(max-width: 1023px)").matches;
-    if (selectedJob && isMobile) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }
-  }, [selectedJob]);
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsMobileView(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  useScrollLock(!!selectedJob && isMobileView);
 
   useLayoutEffect(() => {
     if (!selectedJob) return;
@@ -851,7 +850,7 @@ export default function CareersPage() {
             ref={detailPanelRef}
             className={`border-gray-200 bg-white overflow-hidden transition-all duration-200
               ${selectedJob
-                ? "fixed inset-0 z-50 lg:static lg:z-auto lg:h-full lg:flex-1 lg:min-w-0 lg:border lg:rounded-lg lg:shadow-sm"
+                ? "fixed inset-0 z-50 overscroll-none lg:static lg:z-auto lg:h-full lg:flex-1 lg:min-w-0 lg:border lg:rounded-lg lg:shadow-sm"
                 : "hidden lg:block lg:h-fit lg:self-start lg:w-[360px] lg:flex-shrink-0 lg:border lg:rounded-lg lg:shadow-sm"
               }`}
           >

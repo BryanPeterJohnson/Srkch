@@ -28,8 +28,8 @@ function ApplyCard({
   setLiked: (v: boolean) => void;
   onApply: () => void;
   // Update this line:
-  leftColRef: React.RefObject<HTMLDivElement | null>; 
-}){
+  leftColRef: React.RefObject<HTMLDivElement | null>;
+}) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const initialTopRef = useRef<number | null>(null);
@@ -122,9 +122,8 @@ function ApplyCard({
             className="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-xl hover:bg-gray-50 transition flex-shrink-0"
           >
             <Heart
-              className={`w-5 h-5 transition-colors ${
-                liked ? "fill-red-500 text-red-500" : "text-gray-400"
-              }`}
+              className={`w-5 h-5 transition-colors ${liked ? "fill-red-500 text-red-500" : "text-gray-400"
+                }`}
             />
           </button>
         </div>
@@ -177,16 +176,16 @@ export default function JobDetailPage() {
   return (
     <div className="w-full bg-[#f8fafc] min-h-screen">
       {/* ── Breadcrumb bar ── */}
-   
+
 
       {/* ── Full Width Hero Section ── */}
       <div className="w-full bg-[#0f2443] bg-gradient-to-r from-[#0f2443] via-[#1a365d] to-[#254675] relative text-white overflow-hidden border-b border-gray-200">
         {/* Subtle Background Pattern Overlay */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 relative">
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
+
             {/* Left Content Column */}
             <div className="lg:col-span-7 space-y-4 z-10">
               <div className="flex flex-wrap gap-2">
@@ -207,7 +206,7 @@ export default function JobDetailPage() {
                     </span>
                   )}
                 </h1>
-                
+
                 <p className="text-base font-semibold text-blue-100 flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-blue-300" />
                   SRK Care at Home
@@ -250,13 +249,13 @@ export default function JobDetailPage() {
             <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
               <div className="relative w-full max-w-sm lg:max-w-md h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xl border border-white/10 bg-slate-800/50">
                 {/* Fallback pattern / image element container */}
-                <img 
-                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" 
+                <img
+                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
                   alt="Healthcare professional providing modern clinical assistance support"
                   className="w-full h-full object-cover object-center brightness-95 contrast-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0f2443]/80 via-transparent to-transparent" />
-                
+
                 {/* Floating Initial Badge */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md text-[#1a365d] px-3 py-1.5 rounded-xl flex items-center gap-2 font-black text-sm shadow-md border border-white">
                   <span className="w-7 h-7 rounded-lg bg-[#1a365d] text-white flex items-center justify-center text-xs">
@@ -274,7 +273,7 @@ export default function JobDetailPage() {
                   >
                     <Heart className="w-4 h-4" fill={saved ? "#ef4444" : "none"} stroke={saved ? "#ef4444" : "currentColor"} />
                   </button>
-                  <button 
+                  <button
                     className="p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl hover:bg-white/20 transition-all text-white shadow-sm"
                     aria-label="Share position specification"
                   >

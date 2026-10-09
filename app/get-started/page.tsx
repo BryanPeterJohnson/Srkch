@@ -302,12 +302,12 @@ export default function GetStartedPage() {
         }
         .gs-name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .gs-main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; width: 100%; box-sizing: border-box; }
-        .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 52px 24px; text-align: center; position: relative; box-sizing: border-box; }
+        .gs-hero-inner { max-width: 1100px; margin: 0 auto; padding: 72px 24px 52px; text-align: center; position: relative; box-sizing: border-box; }
 
         @media (max-width: 860px) {
           .gs-grid { grid-template-columns: 1fr; gap: 28px; }
           .gs-main { padding: 32px 16px; }
-          .gs-hero-inner { padding: 40px 16px; }
+          .gs-hero-inner { padding: 64px 16px 40px; }
         }
         @media (max-width: 560px) {
           .gs-name-grid { grid-template-columns: 1fr; }
@@ -317,7 +317,7 @@ export default function GetStartedPage() {
         }
         @media (max-width: 430px) {
           .gs-main { padding: 18px 10px; }
-          .gs-hero-inner { padding: 32px 12px; }
+          .gs-hero-inner { padding: 60px 12px 32px; }
           .gs-form { padding: 16px !important; gap: 15px !important; }
           .gs-card { padding: 18px !important; }
           .gs-sidebar-img { height: 200px !important; }
@@ -541,9 +541,19 @@ export default function GetStartedPage() {
           {/* ── RIGHT: Sidebar ───────────────────────────────────────────────── */}
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div style={{ borderRadius: 10, overflow: "hidden" }}>
-              <img className="gs-sidebar-img" src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=700&h=420&fit=crop&q=80" alt="Caregiver" style={{ width: "100%", height: 240, objectFit: "cover", display: "block" }} />
+              <img
+                className="gs-sidebar-img"
+                src="/images/Free_Consultation/free_consultation.jpg"
+                alt="Caregiver"
+                style={{
+                  width: "100%",
+                  height: 240,
+                  objectFit: "cover",
+                  objectPosition: "30% center",
+                  display: "block",
+                }}
+              />
             </div>
-
             <div className="gs-card" style={{
               background: "linear-gradient(135deg, #005B8E 0%, #003A5C 100%)",
               borderRadius: 16,
